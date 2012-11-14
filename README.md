@@ -3,7 +3,7 @@ portal-rodent-dispersal
 
 Research on rodent dispersal patterns near Portal AZ. Contains code for reproducing the results of analyses using individual-level tag dat for common rodent species at the Portal Project site. Collaborators on this project include Sarah R. Supp, S. K. Morgan Ernest, and David Koons. Code was written by Sarah R. Supp.
 
-The code and data in this repository all for the analyses and figures to be fully replicated using a subset of the published Portal dataset which includes individual-level rodent data from 2000-2009. Species evaluated include: Peromyscus eremicus (PE), Peromyscus maniculatus (PM), Onychomys torridus (OT), Onychomys leucogaster (OL), Dipodomys merriami (DM), Dipodomys ordii (DO), Sigmodon hispidus (SH), Sigmodon fulviventer (SF), Neotoma albigula (NAO), and Reithrodontomys montanus (RM).
+The code and data in this repository all for the analyses and figures to be fully replicated using a subset of the published Portal dataset which includes individual-level rodent data from 2000-2009. Species evaluated include: Peromyscus eremicus (PE), Peromyscus maniculatus (PM), Onychomys torridus (OT), Onychomys leucogaster (OL), Dipodomys merriami (DM), Dipodomys ordii (DO), Chaetodipus baileyi (PB), Chaetodipus penicillatus (PP), Sigmodon hispidus (SH), Sigmodon fulviventer (SF), Neotoma albigula (NAO), and Reithrodontomys montanus (RM).
 
 NOTE: The project and code in this repository is still under development. 
 
