@@ -1,3 +1,4 @@
+# Code for working with individual-level rodent data
 # movement with stakes
 wd = "C:/Users//sarah//Desktop//Dropbox//Active Research Projects//Rodent Movement"
 setwd(wd)
