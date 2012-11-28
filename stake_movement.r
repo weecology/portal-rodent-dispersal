@@ -114,11 +114,11 @@ insec = c(ot_meters, ol_meters)
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
 #create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not continuous
 v6 = seq(-3,500,6)
-Hgcount = hist(Hgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
-Cgcount = hist(Cgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'Cricetids - PE, PM, RM')
+Hgcount = hist(Hgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
+Cgcount = hist(Cgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
 focount = hist(foli, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'folivores - SH, SF, NA')
 nacount = hist(nao_meters, breaks = v6, col = 'mediumpurple4', xlim = c(0,500) main = 'neotoma - NA')
-incount = hist(insec, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'insectivores - OT, OL')
+incount = hist(insec, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
 
 # plot density of all consecutive movement from rodents within a species 2000-2009
 plot(density(pf_meters), main = paste("P. flavus (", length(pftags), " = i, ", length(pf_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
