@@ -190,5 +190,18 @@ stakemoves = examine_stake_moves(stationary_hets, tags, 5, 6, 7, 8, 9)
 plot_stake_moves(stationary_hets, tags, 5, 4, 8, 9)
 
 
-
+#### Make an occupancy plot for 2000-2009 (similar to Morgan)
+pfyr = length(unique(PF$year))
+ppyr = length(unique(PP$year))
+pbyr = length(unique(PB$year))
+peyr = length(unique(PE$yr))
+pmyr = length(unique(PM$yr))
+otyr = length(unique(OT$yr))
+olyr = length(unique(OL$yr))
+doyr = length(unique(DO$yr))
+dmyr = length(unique(DM$yr))
+shyr = length(unique(SH$yr))
+sfyr = length(unique(SF$yr))
+naoyr = length(unique(NAO$yr))
+rmyr = length(unique(RM$yr))
 
