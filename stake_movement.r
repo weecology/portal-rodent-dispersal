@@ -1,5 +1,8 @@
 # Code for working with individual-level rodent data
 # movement with stakes
+
+library(calibrate)
+
 wd = "C://Users//sarah//Desktop//Dropbox//Active Research Projects//Rodent Movement"
 setwd(wd)
 source("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//movement_fxns.R")
@@ -151,19 +154,19 @@ plot_stake_moves(stationary_hets, tags, 5, 4, 8, 9)
 
 #### Make an occupancy plot for 2000-2009 (similar to Morgan)
 #proportion of years they were seen in
-pfyr = length(unique(PF$year))
-ppyr = length(unique(PP$year))
-pbyr = length(unique(PB$year))
-peyr = length(unique(PE$yr))
-pmyr = length(unique(PM$yr))
-otyr = length(unique(OT$yr))
-olyr = length(unique(OL$yr))
-doyr = length(unique(DO$yr))
-dmyr = length(unique(DM$yr))
-shyr = length(unique(SH$yr))
-sfyr = length(unique(SF$yr))
-naoyr = length(unique(NAO$yr))
-rmyr = length(unique(RM$yr))
+pfyr = length(unique(PF$year))/10
+ppyr = length(unique(PP$year))/10
+pbyr = length(unique(PB$year))/10
+peyr = length(unique(PE$yr))/10
+pmyr = length(unique(PM$yr))/10
+otyr = length(unique(OT$yr))/10
+olyr = length(unique(OL$yr))/10
+doyr = length(unique(DO$yr))/10
+dmyr = length(unique(DM$yr))/10
+shyr = length(unique(SH$yr))/10
+sfyr = length(unique(SF$yr))/10
+naoyr = length(unique(NAO$yr))/10
+rmyr = length(unique(RM$yr))/10
 
 #proportion of within-year trapping periods they were seen in 
 pfmo = mean_win_yr_occ(PF)
@@ -180,27 +183,35 @@ sfmo = mean_win_yr_occ(SF)
 naomo = mean_win_yr_occ(NAO)
 rmmo = mean_win_yr_occ(RM)  
 
-#function to find mean proportion of months per year
-  mean_win_yr_occ = function(sp_data){
-    
-    years = c(2000:2009)
-    numprds = c(10, 9, 11, 12, 8, 9, 11, 10,13, 12)
-    yr_mo = as.matrix(cbind(years, numprds))
-    
-    mo_occ = c()
-    
-    for (y in 1:length(years)){
-      dat = subset(sp_data, sp_data[,1] == years[y])
-      if(length(dat) > 0) {
-        mos = sort(unique(dat[,2]))
-        yr_num = yr_mo[y,2]
-        prop = length(mos)/yr_num
-        mo_occ = append(mo_occ, prop)
-    }
-  }
-    avg_occ = mean(mo_occ)
-    return (avg_occ)
-}
+plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "acros-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
+    #textxy(pfyr, pfmo, "PF")
+  points(ppyr, ppmo, pch = 19, col = "hotpink")
+    #textxy(ppyr, ppmo, "PP")
+  points(pbyr, pbmo, pch = 19, col = "hotpink")
+    #textxy(pbyr, pbmo, "PB")
+  points(doyr, domo, pch = 19, col = "hotpink")
+    #textxy(doyr, domo, "DO")
+  points(dmyr, dmmo, pch = 19, col = "hotpink")
+    #textxy(dmyr, dmmo, "DM")
+  points(peyr, pemo, pch = 19)
+    textxy(peyr, pemo, "Cgran")
+  points(pmyr, pmmo, pch = 19)
+    textxy(pmyr, pmmo, "Cgran")
+  points(otyr, otmo, pch = '*', cex = 1.5)
+    textxy(otyr, otmo, "insectiv")
+  points(olyr, olmo, pch = '*', cex = 1.5)
+    textxy(olyr, olmo, "insectiv")
+  points(shyr, shmo, pch = 19)
+    textxy(shyr, shmo, "foliv")
+  points(sfyr, sfmo, pch = 19)
+    textxy(sfyr, sfmo, "foliv")
+  points(naoyr, naomo, pch = 19, col = "purple")
+    textxy(naoyr, naomo, "NA")
+  points(rmyr, rmmo, pch = 19)
+    textxy(rmyr, rmmo, "Cgran")
+  abline(v = 0.5, lty = 2, col = 'gray40', lwd = 2)
+  abline(h = 0.5, lty = 2, col = 'gray40', lwd = 2)
+
 
 #matrix with period and month matchup
 
