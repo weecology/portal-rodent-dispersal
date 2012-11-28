@@ -120,24 +120,6 @@ focount = hist(foli, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main =
 nacount = hist(nao_meters, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'neotoma - NA')
 incount = hist(insec, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
 
-# plot density of all consecutive movement from rodents within a species 2000-2009
-plot(density(pf_meters), main = paste("P. flavus (", length(pftags), " = i, ", length(pf_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(pp_meters), main = paste("C. penicillatus (", length(pptags), " = i, ", length(pp_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(pb_meters), main = paste("C. baileyi (", length(pbtags), " = i, ", length(pb_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(do_meters), main = paste("D. ordii (", length(dotags), " = i, ", length(do_meters), " = N)", sep = ''), lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(dm_meters), main = paste("D. merriami (", length(dmtags), "= i, ", length(dm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-
-plot(density(pe_meters), main = paste("P. eremicus (", length(petags), " = i, ", length(pe_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(pm_meters), main = paste("P. maniculatus (", length(pmtags), " = i, ", length(pm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(rm_meters), main = paste("R. megalotis (", length(rmtags), "= i, ", length(rm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-
-plot(density(sh_meters), main = paste("S. hispidus (", length(shtags), " = i, ", length(sh_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(sf_meters), main = paste("S. fulviventer (", length(sftags), " = i, ", length(sf_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(nao_meters), main = paste("N. albigula (", length(naotags), " = i, ", length(nao_meters), " = N)", sep = ''), lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-
-plot(density(ot_meters), main = paste("O. torridus (", length(ottags), " = i, ", length(ot_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-plot(density(ol_meters), main = paste("O. leucogaster (", length(oltags), " = i, ", length(ol_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
-
 # plot density of movment by guild for 2000-2009
 plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2, col = 'hotpink2')
   lines(density(Cgran), col = 'deepskyblue3', lwd = 3, lty = 6)
@@ -145,29 +127,6 @@ plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2
   lines(density(insec), col = 'darkgreen', lwd = 2)
   legend('topright', c('Hgran', 'foliv', 'Cgran', 'insec'), bty = 'n', lty = c(1,6,3,1), lwd = 5, seg.len = 2,
          col = c('hotpink2', 'mediumpurple4', 'deepskyblue3', 'darkgreen'))
-
-
-#plot all together
-plot(density(pb_meters), main = 'Portal rodent movement', xlab = 'meters', lwd = 2, col = 'peru')
-  lines(density(pp_meters), col = 'black', lwd = 2)
-  lines(density(do_meters), col = 'mediumpurple4', lwd = 4, lty = 3)
-  lines(density(dm_meters), col = 'maroon4', lwd = 4, lty = 3)
-  lines(density(pf_meters), col = 'hotpink', lwd = 2)
-
-  lines(density(pe_meters), col = 'deepskyblue3', lwd = 3, lty = 6)
-  lines(density(pm_meters), col = 'royalblue4', lwd = 3, lty = 6)
-  lines(density(rm_meters), col = 'cadetblue', lwd = 3, lty = 6)
-
-  lines(density(sh_meters), col = 'indianred', lwd = 3)
-  lines(density(sf_meters), col = 'brown', lwd = 3)
-  lines(density(nao_meters), col = 'gray60', lwd = 3)
-
-  lines(density(ot_meters), col = 'darkgreen', lwd = 2)
-  lines(density(ol_meters), col = 'darkolivegreen', lwd = 2)
-
-legend('topright', c('PB','PP','DO','DM','PE','PM','OT','OL'), bty = 'n', lty = c(1,1,3,3,6,6,1,1), lwd = 10, seg.len = 2, 
-        col = c('peru', 'black', 'mediumpurple4','maroon4','deepskyblue3', 'royalblue3','darkgreen', 'darkolivegreen'))
-abline(v = 70.71, lty = 2, col = 'gray60', lwd = 2)
 
 
 
@@ -191,6 +150,7 @@ plot_stake_moves(stationary_hets, tags, 5, 4, 8, 9)
 
 
 #### Make an occupancy plot for 2000-2009 (similar to Morgan)
+#proportion of years they were seen in
 pfyr = length(unique(PF$year))
 ppyr = length(unique(PP$year))
 pbyr = length(unique(PB$year))
@@ -205,9 +165,94 @@ sfyr = length(unique(SF$yr))
 naoyr = length(unique(NAO$yr))
 rmyr = length(unique(RM$yr))
 
+#proportion of within-year trapping periods they were seen in 
+pfmo = mean_win_yr_occ(PF)
+ppmo = mean_win_yr_occ(PP)
+pbmo = mean_win_yr_occ(PB)
+pemo = mean_win_yr_occ(PE)
+pmmo = mean_win_yr_occ(PM)
+otmo = mean_win_yr_occ(OT)
+olmo = mean_win_yr_occ(OL)
+domo = mean_win_yr_occ(DO)
+dmmo = mean_win_yr_occ(DM)
+shmo = mean_win_yr_occ(SH)
+sfmo = mean_win_yr_occ(SF)
+naomo = mean_win_yr_occ(NAO)
+rmmo = mean_win_yr_occ(RM)  
+
+#function to find mean proportion of months per year
+  mean_win_yr_occ = function(sp_data){
+    
+    years = c(2000:2009)
+    numprds = c(10, 9, 11, 12, 8, 9, 11, 10,13, 12)
+    yr_mo = as.matrix(cbind(years, numprds))
+    
+    mo_occ = c()
+    
+    for (y in 1:length(years)){
+      dat = subset(sp_data, sp_data[,1] == years[y])
+      if(length(dat) > 0) {
+        mos = sort(unique(dat[,2]))
+        yr_num = yr_mo[y,2]
+        prop = length(mos)/yr_num
+        mo_occ = append(mo_occ, prop)
+    }
+  }
+    avg_occ = mean(mo_occ)
+    return (avg_occ)
+}
+
 #matrix with period and month matchup
 
 years = c(2000:2009)
-prds = c()
+numprds = c(10, 9, 11, 12, 8, 9, 11, 10,13, 12)
+
+yr_mo = as.matrix(cbind(years, numprds))
+
+prds = period[period != 267 & period != 277 & period != 278 & period != 283 &
+  period != 284 & period != 300 & period != 311 & period != 313 &
+  period != 314 & period != 318 & period != 321 & period != 323 &
+  period != 337 & period != 339 & period != 344 & period != 351]
+
+######################### EXTRA STUFF, PROBABLY DON'T NEED.... ##############################
+
+# plot density of all consecutive movement from rodents within a species 2000-2009
+plot(density(pf_meters), main = paste("P. flavus (", length(pftags), " = i, ", length(pf_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(pp_meters), main = paste("C. penicillatus (", length(pptags), " = i, ", length(pp_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(pb_meters), main = paste("C. baileyi (", length(pbtags), " = i, ", length(pb_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(do_meters), main = paste("D. ordii (", length(dotags), " = i, ", length(do_meters), " = N)", sep = ''), lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(dm_meters), main = paste("D. merriami (", length(dmtags), "= i, ", length(dm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+
+plot(density(pe_meters), main = paste("P. eremicus (", length(petags), " = i, ", length(pe_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(pm_meters), main = paste("P. maniculatus (", length(pmtags), " = i, ", length(pm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(rm_meters), main = paste("R. megalotis (", length(rmtags), "= i, ", length(rm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+
+plot(density(sh_meters), main = paste("S. hispidus (", length(shtags), " = i, ", length(sh_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(sf_meters), main = paste("S. fulviventer (", length(sftags), " = i, ", length(sf_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(nao_meters), main = paste("N. albigula (", length(naotags), " = i, ", length(nao_meters), " = N)", sep = ''), lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+
+plot(density(ot_meters), main = paste("O. torridus (", length(ottags), " = i, ", length(ot_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+plot(density(ol_meters), main = paste("O. leucogaster (", length(oltags), " = i, ", length(ol_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
 
 
+#plot all together
+plot(density(pb_meters), main = 'Portal rodent movement', xlab = 'meters', lwd = 2, col = 'peru')
+lines(density(pp_meters), col = 'black', lwd = 2)
+lines(density(do_meters), col = 'mediumpurple4', lwd = 4, lty = 3)
+lines(density(dm_meters), col = 'maroon4', lwd = 4, lty = 3)
+lines(density(pf_meters), col = 'hotpink', lwd = 2)
+
+lines(density(pe_meters), col = 'deepskyblue3', lwd = 3, lty = 6)
+lines(density(pm_meters), col = 'royalblue4', lwd = 3, lty = 6)
+lines(density(rm_meters), col = 'cadetblue', lwd = 3, lty = 6)
+
+lines(density(sh_meters), col = 'indianred', lwd = 3)
+lines(density(sf_meters), col = 'brown', lwd = 3)
+lines(density(nao_meters), col = 'gray60', lwd = 3)
+
+lines(density(ot_meters), col = 'darkgreen', lwd = 2)
+lines(density(ol_meters), col = 'darkolivegreen', lwd = 2)
+
+legend('topright', c('PB','PP','DO','DM','PE','PM','OT','OL'), bty = 'n', lty = c(1,1,3,3,6,6,1,1), lwd = 10, seg.len = 2, 
+       col = c('peru', 'black', 'mediumpurple4','maroon4','deepskyblue3', 'royalblue3','darkgreen', 'darkolivegreen'))
+abline(v = 70.71, lty = 2, col = 'gray60', lwd = 2)
