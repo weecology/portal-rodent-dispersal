@@ -184,6 +184,23 @@ sfmo = mean_win_yr_occ(SF)
 naomo = mean_win_yr_occ(NAO)
 rmmo = mean_win_yr_occ(RM)  
 
+#mean abundance within all years
+pfabun = mean_allyrs_abun(PF)
+ppabun = mean_allyrs_abun(PP)
+pbabun = mean_allyrs_abun(PB)
+peabun = mean_allyrs_abun(PE)
+pmabun = mean_allyrs_abun(PM)
+otabun = mean_allyrs_abun(OT)
+olabun = mean_allyrs_abun(OL)
+doabun = mean_allyrs_abun(DO)
+dmabun = mean_allyrs_abun(DM)
+shabun = mean_allyrs_abun(SH)
+sfabun = mean_allyrs_abun(SF)
+naoabun = mean_allyrs_abun(NAO)
+rmabun = mean_allyrs_abun(RM)
+
+
+# plot temporal occupancy - for month and year
 plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "acros-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
     #textxy(pfyr, pfmo, "PF")
   points(ppyr, ppmo, pch = 19, col = "hotpink")
@@ -214,17 +231,7 @@ plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "acros-year occupancy", yl
   abline(h = 0.5, lty = 2, col = 'gray40', lwd = 2)
 
 
-#matrix with period and month matchup
 
-years = c(2000:2009)
-numprds = c(10, 9, 11, 12, 8, 9, 11, 10,13, 12)
-
-yr_mo = as.matrix(cbind(years, numprds))
-
-prds = period[period != 267 & period != 277 & period != 278 & period != 283 &
-  period != 284 & period != 300 & period != 311 & period != 313 &
-  period != 314 & period != 318 & period != 321 & period != 323 &
-  period != 337 & period != 339 & period != 344 & period != 351]
 
 ######################### EXTRA STUFF, PROBABLY DON'T NEED.... ##############################
 
