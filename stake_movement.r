@@ -72,8 +72,9 @@ NAO = subsetDat(NAO)
 RM = subsetDat(RM)
 
 
-# DISTANCES
-#calculate distances moved for a single species
+# DISTANCES, want to calculate distances moved for a single species
+
+# separate the pocketmouse data
 PB = subset(heteros, species == 'PB')
 PP = subset(heteros, species == 'PP')
 PF = subset(heteros, species == 'PF')
