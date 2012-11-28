@@ -1,8 +1,8 @@
 # Code for working with individual-level rodent data
 # movement with stakes
-wd = "C:/Users//sarah//Desktop//Dropbox//Active Research Projects//Rodent Movement"
+wd = "C://Users//sarah//Desktop//Dropbox//Active Research Projects//Rodent Movement"
 setwd(wd)
-source("movement_fxns.R")
+source("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//movement_fxns.R")
 
 heteros = read.csv("PF-PP-PB_2000-2009_w_stakes.csv") #hetero = heteromyid
 PE = read.csv('PE2000_2009.csv')
@@ -117,7 +117,7 @@ v6 = seq(-3,500,6)
 Hgcount = hist(Hgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
 Cgcount = hist(Cgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
 focount = hist(foli, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'folivores - SH, SF, NA')
-nacount = hist(nao_meters, breaks = v6, col = 'mediumpurple4', xlim = c(0,500) main = 'neotoma - NA')
+nacount = hist(nao_meters, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'neotoma - NA')
 incount = hist(insec, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
 
 # plot density of all consecutive movement from rodents within a species 2000-2009
@@ -204,4 +204,10 @@ shyr = length(unique(SH$yr))
 sfyr = length(unique(SF$yr))
 naoyr = length(unique(NAO$yr))
 rmyr = length(unique(RM$yr))
+
+#matrix with period and month matchup
+
+years = c(2000:2009)
+prds = c()
+
 
