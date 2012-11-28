@@ -112,7 +112,7 @@ rm_meters = distance_moved(RM, rmtags)
 #make vectores of distances moved for all recaptured individuals, by GUILD
 Hgran = c(pf_meters, pp_meters, pb_meters, dm_meters, do_meters)
 Cgran = c(pe_meters, pm_meters, rm_meters)
-foli = c(sh_meters, sf_meters, nao_meters) #include NA, or make their own? Different strategy - midden
+foli = c(sh_meters, sf_meters) #doesn't include NA because similar resource, but majorly different strategies - midden
 insec = c(ot_meters, ol_meters)
 
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
@@ -127,31 +127,11 @@ incount = hist(insec, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim 
 # plot density of movment by guild for 2000-2009
 plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2, col = 'hotpink2')
   lines(density(Cgran), col = 'deepskyblue3', lwd = 3, lty = 6)
+  lines(density(nao_meters), col = 'indianred4', lwd = 4, lty = 3)
   lines(density(foli), col = 'mediumpurple4', lwd = 4, lty = 3)
   lines(density(insec), col = 'darkgreen', lwd = 2)
-  legend('topright', c('Hgran', 'foliv', 'Cgran', 'insec'), bty = 'n', lty = c(1,6,3,1), lwd = 5, seg.len = 2,
-         col = c('hotpink2', 'mediumpurple4', 'deepskyblue3', 'darkgreen'))
-
-
-
-############## MOVING
-# get list of indivs that moved plots or treatment, species is included
-moving_rats = find_rats_that_move(heteros, tags, 8, 9, 3, 4)
-
-# subset tags that never leave a plot
-stationary_hets = heteros
-plotmovers = unique(moving_rats$tag)
-for (i in 1:length(plotmovers)) {
-  stationary_hets = subset(stationary_hets, tag != plotmovers[i])
-  }
-  
-# list the stakes it inhabits
-tags = unique(stationary_hets$tag)
-stakemoves = examine_stake_moves(stationary_hets, tags, 5, 6, 7, 8, 9)
-
-# calculate the distances between each trapping location
-plot_stake_moves(stationary_hets, tags, 5, 4, 8, 9)
-
+  legend('topright', c('Hgran', 'Neotoma', 'foliv', 'Cgran', 'insec'), bty = 'n', lty = c(1,3,6,3,1), lwd = 5, seg.len = 2,
+         col = c('hotpink2', 'indianred4', 'mediumpurple4', 'deepskyblue3', 'darkgreen'))
 
 #### Make an occupancy plot for 2000-2009 (similar to Morgan)
 #proportion of years they were seen in
@@ -234,6 +214,26 @@ plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "acros-year occupancy", yl
 
 
 ######################### EXTRA STUFF, PROBABLY DON'T NEED.... ##############################
+
+
+############## MOVING
+# get list of indivs that moved plots or treatment, species is included
+moving_rats = find_rats_that_move(heteros, tags, 8, 9, 3, 4)
+
+# subset tags that never leave a plot
+stationary_hets = heteros
+plotmovers = unique(moving_rats$tag)
+for (i in 1:length(plotmovers)) {
+  stationary_hets = subset(stationary_hets, tag != plotmovers[i])
+}
+
+# list the stakes it inhabits
+tags = unique(stationary_hets$tag)
+stakemoves = examine_stake_moves(stationary_hets, tags, 5, 6, 7, 8, 9)
+
+# calculate the distances between each trapping location
+plot_stake_moves(stationary_hets, tags, 5, 4, 8, 9)
+
 
 # plot density of all consecutive movement from rodents within a species 2000-2009
 plot(density(pf_meters), main = paste("P. flavus (", length(pftags), " = i, ", length(pf_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
