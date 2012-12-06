@@ -71,13 +71,34 @@ SF = subsetDat(SF)
 NAO = subsetDat(NAO)
 RM = subsetDat(RM)
 
-
-# DISTANCES, want to calculate distances moved for a single species
-
 # separate the pocketmouse data
 PB = subset(heteros, species == 'PB')
 PP = subset(heteros, species == 'PP')
 PF = subset(heteros, species == 'PF')
+
+##------- plot number of individuals captured in each period for each group, save in pdf file
+pdf(file="indivs_per_year.pdf",10,10)
+par(mfrow=c(1,1))
+
+plot_freq_by_prd(PB, "PB")
+plot_freq_by_prd(PP, "PP")
+plot_freq_by_prd(PF, "PF")
+plot_freq_by_prd(DM, "DM")
+plot_freq_by_prd(DO, "DO")
+plot_freq_by_prd(PE, "PE")
+plot_freq_by_prd(PM, "PM")
+plot_freq_by_prd(RM, "RM")
+plot_freq_by_prd(NAO, "NAO")
+plot_freq_by_prd(SF, "SF")
+plot_freq_by_prd(SH, "SH")
+plot_freq_by_prd(OT, "OT")
+plot_freq_by_prd(OL, "OL")
+
+dev.off()
+
+
+# DISTANCES, want to calculate distances moved for a single species
+# plot captures to see if MARK is a good way to look at these
 
 # get unique tags for each species
 pftags = unique(PF$tag)

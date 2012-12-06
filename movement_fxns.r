@@ -484,3 +484,14 @@ distance_moved = function (data, tags) {
 return(distance)
   }
 
+
+# plot number of individuals captured in each period (since each record has its own row, we can just count the number
+### of occurences of each period)
+plot_freq_by_prd = function(data, name) {
+  require(plyr)
+  
+  prdcount = count(data, vars = "period")
+  plot(prdcount$period, prdcount$freq, type = "b", pch = 19, xlab = "Period", 
+       ylab = paste("num individual", name, "captured", sep = ' '))
+}
+
