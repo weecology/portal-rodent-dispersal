@@ -215,7 +215,7 @@ plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "acros-year occupancy", yl
 
 ##------- plot number of individuals captured in each period for each group, save in pdf file
 pdf(file="indivs_per_year.pdf",11,7.5)
-par(mfrow=c(3,1))
+par(mfrow=c(3,2))
 
 plot_freq_by_prd(PB, "PB")
 plot_freq_by_prd(PP, "PP")
@@ -233,8 +233,25 @@ plot_freq_by_prd(OL, "OL")
 
 dev.off()
 
+##------ histograms of the number of recaptures (some species are recaptured far less often), save in pdf file
+pdf(file = "recaps_by_species.pdf", 11, 7.5)
+par(mfrow = c(2,4))
 
+plot_recap_hist(PB, "PB")
+plot_recap_hist(PP, "PP")
+plot_recap_hist(PF, "PF")
+plot_recap_hist(DM, "DM")
+plot_recap_hist(DO, "DO")
+plot_recap_hist(PE, "PE")
+plot_recap_hist(PM, "PM")
+plot_recap_hist(RM, "RM")
+plot_recap_hist(NAO, "NAO")
+plot_recap_hist(SF, "SF")
+plot_recap_hist(SH, "SH")
+plot_recap_hist(OT, "OT")
+plot_recap_hist(OL, "OL")
 
+dev.off()
 
 ######################### EXTRA STUFF, PROBABLY DON'T NEED.... ##############################
 

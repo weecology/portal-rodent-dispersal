@@ -495,3 +495,15 @@ plot_freq_by_prd = function(data, name) {
        ylab = paste("num individual", name, "captured", sep = ' '))
 }
 
+
+#plot number of recaptures as a histogram for each species
+plot_recap_hist = function (data, name) {
+  recapcount = count(data, vars = "tag")
+  recaps = recapcount$freq
+  bw = seq(min(recaps), max(recaps), 1)
+  hist(recaps, breaks = bw, xlab = paste("num", name, "recaptures", sep = " "), ylab = "count",
+       col = "gray60", border = "white", main = "")
+}
+
+
+
