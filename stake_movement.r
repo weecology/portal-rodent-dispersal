@@ -77,8 +77,6 @@ PP = subset(heteros, species == 'PP')
 PF = subset(heteros, species == 'PF')
 
 
-
-
 # DISTANCES, want to calculate distances moved for a single species
 # plot captures to see if MARK is a good way to look at these
 
