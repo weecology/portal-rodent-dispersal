@@ -79,6 +79,10 @@ PB = subset(heteros, species == 'PB')
 PP = subset(heteros, species == 'PP')
 PF = subset(heteros, species == 'PF')
 
+# Get MARK capture histories
+periods = c(260,380)
+PE_MARK = noplacelikehome(PE, periods, 70) #NEEDS WORK - DBL CHECK W/DAVE, ADD OTHER SPECIES!!
+
 
 # DISTANCES, want to calculate distances moved for a single species
 # plot captures to see if MARK is a good way to look at these
