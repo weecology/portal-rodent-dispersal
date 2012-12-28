@@ -69,6 +69,51 @@ subsetDat = function(dataset){
   }
 
 
+### Create a set of MARK capture histories by home vs away from home
+noplacelikehome = function (dat, prd, breakpoint){
+  #Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
+  ## with "F" (first capture), "A" (stayed home), and "B" (away from home).
+  
+  tags = unique(dat$tag)
+  MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd))
+  
+  for (t in 1:length(tags)) {
+    capture_history = "" #empty string
+    ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
+    ind_dat = ind_dat[order(ind_dat[,2]),] #order chronologically
+
+    if (nrow(ind_data) > 1) {     # if it was captured more than once
+      p1 = min(ind_dat$period)
+      index = match(p1, prd)
+      MARK_distance[t,index] = "F"  #mark first capture
+      
+      for (i in 1:nrow(ind_dat)){
+        
+        if (i+1 <= nrow(ind_dat)){
+          meters = sqrt((ind_dat[i,7]-ind_dat[i+1,7])**2 + (ind_dat[i,6]-ind_dat[i+1,6])**2)
+          pnext = ind_dat[i+1,]$period
+        }
+          if (meters <= breakpoint) {
+            meters = "A"
+          }
+          
+          else if (meters > breakpoint) {
+            meters = "B"
+          }
+          
+          index = match(pnext, prd)
+          MARK_distance[t,index] = meters #mark subsequent captures 
+          }
+        }
+    else if (nrow(ind_data = 1)) { #if it was captured only once
+      p1 = min(ind_dat$period)
+      index = match(p1, prd)
+      MARK_distance[t,index] = "F" #marks first, and in this case only, capture
+      }   
+    }
+  }
+
+
 ### Create a set of capture histories by treatment type
 create_trmt_hist = function(dat, tags, prd){
 
