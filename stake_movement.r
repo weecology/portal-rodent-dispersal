@@ -45,6 +45,9 @@ heteros$tag = as.character(heteros$tag)
 heteros$sex = as.character(heteros$sex)
 heteros$species = as.character(heteros$species)
 
+#loop through the list of species-level dataframes, so don't have to do everything separately  ##FIXME
+for (df in list(PE, PM, OT, OL, DO, DM, SH, SF, NAO, RM, heteros)) id_unknowns(df,13)
+
 # give untagged indivs unique tag numbers (7 digits)
 heteros = id_unknowns(heteros, 13)
 PE = id_unknowns(PE,13)
