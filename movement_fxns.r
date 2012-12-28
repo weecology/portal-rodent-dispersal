@@ -111,6 +111,8 @@ noplacelikehome = function (dat, prd, breakpoint){
       MARK_distance[t,index] = "F" #marks first, and in this case only, capture
       }   
     }
+  
+  return(MARK_distance)
   }
 
 
