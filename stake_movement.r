@@ -80,7 +80,7 @@ PP = subset(heteros, species == 'PP')
 PF = subset(heteros, species == 'PF')
 
 # Get MARK capture histories
-periods = c(260,380)
+periods = c(260:380)
 PE_MARK = noplacelikehome(PE, periods, 70) #NEEDS WORK - DBL CHECK W/DAVE, ADD OTHER SPECIES!!
 
 
