@@ -78,11 +78,10 @@ noplacelikehome = function (dat, prd, breakpoint){
   MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd))
   
   for (t in 1:length(tags)) {
-    capture_history = "" #empty string
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
     ind_dat = ind_dat[order(ind_dat[,2]),] #order chronologically
 
-    if (nrow(ind_dat) > 1) {     # if it was captured more than once
+    if (nrow(ind_dat) >= 1) {     # if it was captured at least once
       p1 = min(ind_dat$period)
       index = match(p1, prd)
       MARK_distance[t,index] = "A"  #mark first capture with A ("home")
@@ -105,11 +104,11 @@ noplacelikehome = function (dat, prd, breakpoint){
           MARK_distance[t,index] = meters #mark subsequent captures 
           }
         }
-    else if (nrow(ind_data = 1)) { #if it was captured only once
-      p1 = min(ind_dat$period)
-      index = match(p1, prd)
-      MARK_distance[t,index] = "A" #marks first, and in this case only, capture
-      }   
+#     else if (nrow(ind_data = 1)) { #if it was captured only once
+#       p1 = min(ind_dat$period)
+#       index = match(p1, prd)
+#       MARK_distance[t,index] = "A" #marks first, and in this case only, capture
+#       }   
     }
   
   return(MARK_distance)
