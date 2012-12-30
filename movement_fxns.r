@@ -82,10 +82,10 @@ noplacelikehome = function (dat, prd, breakpoint){
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
     ind_dat = ind_dat[order(ind_dat[,2]),] #order chronologically
 
-    if (nrow(ind_data) > 1) {     # if it was captured more than once
+    if (nrow(ind_data) >= 1) {     # if it was captured more than once
       p1 = min(ind_dat$period)
       index = match(p1, prd)
-      MARK_distance[t,index] = "F"  #mark first capture
+      MARK_distance[t,index] = "A"  #mark first capture with A ("home")
       
       for (i in 1:nrow(ind_dat)){
         
@@ -94,11 +94,11 @@ noplacelikehome = function (dat, prd, breakpoint){
           pnext = ind_dat[i+1,]$period
         }
           if (meters <= breakpoint) {
-            meters = "A"
+            meters = "A" #captured close to "home"
           }
           
           else if (meters > breakpoint) {
-            meters = "B"
+            meters = "B" #captured far from "home"
           }
           
           index = match(pnext, prd)
@@ -108,7 +108,7 @@ noplacelikehome = function (dat, prd, breakpoint){
     else if (nrow(ind_data = 1)) { #if it was captured only once
       p1 = min(ind_dat$period)
       index = match(p1, prd)
-      MARK_distance[t,index] = "F" #marks first, and in this case only, capture
+      MARK_distance[t,index] = "A" #marks first, and in this case only, capture
       }   
     }
   
