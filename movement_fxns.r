@@ -100,9 +100,10 @@ noplacelikehome = function (dat, prd, breakpoint){
       MARK_distance[t,index] = "A"  #mark first capture with A ("home")
     
       sex = ind_dat[1,9] #I should account for indivs where sex is disputed -- write a sep fxn ? TODO
-      MARK_distance[t,ncol(MARK_distance)-1] = sex
+      MARK_distance[t,ncol(MARK_distance)-1] = sex # put sex in penultimate col
       
-      
+      sd_mass = sd_avg_mass(dat, ind_dat)
+      MARK_distance[t,ncol(MARK_distance)] = sd_mass #put sd of mass in last col
       
       for (i in 1:nrow(ind_dat)){
         
