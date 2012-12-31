@@ -72,7 +72,7 @@ subsetDat = function(dataset){
 ### Create a set of MARK capture histories by home vs away from home
 noplacelikehome = function (dat, prd, breakpoint){
   #Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
-  ## with "F" (first capture), "A" (stayed home), and "B" (away from home).
+  ##"A" (stayed home), and "B" (away from home). Home is determined using a predetermined breakpoint.
   
   tags = unique(dat$tag)
   MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd))
@@ -81,8 +81,7 @@ noplacelikehome = function (dat, prd, breakpoint){
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
     ind_dat = ind_dat[order(ind_dat[,2]),] #order chronologically
 
-    if (nrow(ind_dat) >= 1) {     # if it was captured at least once
-      p1 = min(ind_dat$period)
+      p1 = min(ind_dat$period) # first capture period
       index = match(p1, prd)
       MARK_distance[t,index] = "A"  #mark first capture with A ("home")
       
@@ -90,25 +89,21 @@ noplacelikehome = function (dat, prd, breakpoint){
         
         if (i+1 <= nrow(ind_dat)){
           meters = sqrt((ind_dat[i,7]-ind_dat[i+1,7])**2 + (ind_dat[i,6]-ind_dat[i+1,6])**2)
-          pnext = ind_dat[i+1,]$period
-        }
+          print(meters)
+          pnext = ind_dat[i+1,]$period #next capture period
+       
           if (meters <= breakpoint) {
-            meters = "A" #captured close to "home"
+            dist = "A" #captured close to "home"
           }
           
           else if (meters > breakpoint) {
-            meters = "B" #captured far from "home"
+            dist = "B" #captured far from "home"
           }
-          
           index = match(pnext, prd)
-          MARK_distance[t,index] = meters #mark subsequent captures 
+          print(c(meters, dist, index))
+          MARK_distance[t,index] = dist #mark subsequent captures 
           }
-        }
-#     else if (nrow(ind_data = 1)) { #if it was captured only once
-#       p1 = min(ind_dat$period)
-#       index = match(p1, prd)
-#       MARK_distance[t,index] = "A" #marks first, and in this case only, capture
-#       }   
+      }  
     }
   
   return(MARK_distance)
