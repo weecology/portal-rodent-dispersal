@@ -89,7 +89,7 @@ noplacelikehome = function (dat, prd, breakpoint){
   ##"A" (stayed home), and "B" (away from home). Home is determined using a predetermined breakpoint.
   
   tags = unique(dat$tag)
-  MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd) + 2)
+  MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd) + 3)
   
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
@@ -98,6 +98,9 @@ noplacelikehome = function (dat, prd, breakpoint){
       p1 = min(ind_dat$period) # first capture period
       index = match(p1, prd)
       MARK_distance[t,index] = "A"  #mark first capture with A ("home")
+    
+      recaps = nrow(ind_dat)
+      MARK_distance[t,ncol(MARK_distance)-2] = recaps
     
       sex = ind_dat[1,9] #I should account for indivs where sex is disputed -- write a sep fxn ? FIXME
         if (sex == "F") {
