@@ -77,9 +77,9 @@ sd_avg_mass = function (dat, ind_dat) {
   spp_sd = sd(dat$wgt, na.rm = TRUE)
   ind_mean = mean(ind_dat$wgt, na.rm = TRUE)
   
-  ind_sd = (ind_mean - spp_mean) / spp_sd
+  ind_sd = round((ind_mean - spp_mean) / spp_sd , 4)
   
-  return(round(ind_sd,4) #number of standard deviations individual is away from capture weight mean
+  return (ind_sd) #number of standard deviations individual is away from capture weight mean
 }
 
 
@@ -99,7 +99,12 @@ noplacelikehome = function (dat, prd, breakpoint){
       index = match(p1, prd)
       MARK_distance[t,index] = "A"  #mark first capture with A ("home")
     
-      sex = ind_dat[1,9] #I should account for indivs where sex is disputed -- write a sep fxn ? TODO
+      sex = ind_dat[1,9] #I should account for indivs where sex is disputed -- write a sep fxn ? FIXME
+        if (sex == "F") {
+          sex = 1 }
+        else if (sex == "M") {
+          sex = 2 }
+        else { sex = 0 }
       MARK_distance[t,ncol(MARK_distance)-1] = sex # put sex in penultimate col
       
       sd_mass = sd_avg_mass(dat, ind_dat)
