@@ -69,13 +69,27 @@ subsetDat = function(dataset){
   }
 
 
+sd_avg_mass = function (dat, ind_dat) {
+  # finds the average of all the masses for all the captures in the species data, as a baseline. 
+  ## Then takes the average mass for an individual and calculates the proportional difference away from that avg. species
+  ## level mass.
+  spp_mean = mean(dat$wgt, na.rm = TRUE)
+  spp_sd = sd(dat$wgt, na.rm = TRUE)
+  ind_mean = mean(ind_dat$wgt, na.rm = TRUE)
+  
+  ind_sd = (ind_mean - spp_mean) / spp_sd
+  
+  return(round(ind_sd,4) #number of standard deviations individual is away from capture weight mean
+}
+
+
 ### Create a set of MARK capture histories by home vs away from home
 noplacelikehome = function (dat, prd, breakpoint){
   #Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
   ##"A" (stayed home), and "B" (away from home). Home is determined using a predetermined breakpoint.
   
   tags = unique(dat$tag)
-  MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd))
+  MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd) + 2)
   
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
@@ -84,6 +98,11 @@ noplacelikehome = function (dat, prd, breakpoint){
       p1 = min(ind_dat$period) # first capture period
       index = match(p1, prd)
       MARK_distance[t,index] = "A"  #mark first capture with A ("home")
+    
+      sex = ind_dat[1,9] #I should account for indivs where sex is disputed -- write a sep fxn ? TODO
+      MARK_distance[t,ncol(MARK_distance)-1] = sex
+      
+      
       
       for (i in 1:nrow(ind_dat)){
         
