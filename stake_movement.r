@@ -79,10 +79,19 @@ PB = subset(heteros, species == 'PB')
 PP = subset(heteros, species == 'PP')
 PF = subset(heteros, species == 'PF')
 
-# Get MARK capture histories
+# Get MARK capture histories; 1 = Female, 2 = Male, 0 = It
+  ## add unique breakpoints for each species based on histogram data of movement
 periods = c(260:380)
-PE_MARK = noplacelikehome(PE, periods, 70) #NEEDS WORK - DBL CHECK W/DAVE, ADD OTHER SPECIES!!
-
+PE_MARK = noplacelikehome(PE, periods, 70) 
+PM_MARK = noplacelikehome(PM, periods, 70)
+OT_MARK = noplacelikehome(OT, periods, 70)
+OL_MARK = noplacelikehome(OL, periods, 70)
+DO_MARK = noplacelikehome(DO, periods, 30)
+DM_MARK = noplacelikehome(DM, periods, 30)
+SH_MARK = noplacelikehome(SH, periods, 50)
+SF_MARK = noplacelikehome(SF, periods, 50)
+NAO_MARK = noplacelikehome(NAO, periods, 50)
+RM_MARK = noplacelikehome(RM, periods, 70)
 
 # DISTANCES, want to calculate distances moved for a single species
 # plot captures to see if MARK is a good way to look at these
