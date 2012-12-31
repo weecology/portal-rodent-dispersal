@@ -89,7 +89,6 @@ noplacelikehome = function (dat, prd, breakpoint){
         
         if (i+1 <= nrow(ind_dat)){
           meters = sqrt((ind_dat[i,7]-ind_dat[i+1,7])**2 + (ind_dat[i,6]-ind_dat[i+1,6])**2)
-          print(meters)
           pnext = ind_dat[i+1,]$period #next capture period
        
           if (meters <= breakpoint) {
@@ -100,7 +99,6 @@ noplacelikehome = function (dat, prd, breakpoint){
             dist = "B" #captured far from "home"
           }
           index = match(pnext, prd)
-          print(c(meters, dist, index))
           MARK_distance[t,index] = dist #mark subsequent captures 
           }
       }  
