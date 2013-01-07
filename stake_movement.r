@@ -15,7 +15,7 @@ insec = read.csv("data//folivores_2000-2009.csv")   # OT, OL
 # change some cols from factor to character class
 het$tag = as.character(het$tag); cricet$tag = as.character(cricet$tag); foliv$tag = as.character(foliv$tag); insec$tag = as.character(insec$tag)
 het$species = as.character(het$species); cricet$species = as.character(cricet$species); foliv$species = as.character(foliv$species); insec$species = as.character(insec$species)
-
+het$sex = as.character(het$sex); cricet$sex = as.character(cricet$sex); foliv$sex = as.character(foliv$sex); insec$sex = as.character(insec$sex)
 
 
 heteros = read.csv("PF-PP-PB_2000-2009_w_stakes.csv") #hetero = heteromyid
