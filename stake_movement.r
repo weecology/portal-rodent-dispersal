@@ -10,11 +10,13 @@ source("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//movement_f
 het = read.csv("data//heteromyids_2000-2009.csv")   # DO, DM, PB, PP, PF
 cricet = read.csv("data//cricetids_2000-2009.csv")  # PE, PM, RM
 foliv = read.csv("data//folivores_2000-2009.csv")   # SH, SF, NA (as NAO)
-insec = read.csv("data//folivores_2000-2009.csv")   # OT, OL
+insec = read.csv("data//onychomys_2000-2009.csv")   # OT, OL
 
-# # list of dataframes                                                  FIXME!
+# # # list of dataframes                                                 WORKS NOW, TO USE? OR NOT TO USE? 
 # datLS = list(het, cricet, foliv, insec)
-# for (df in datLS) datLS[[df]]$tag = as.character(df$tag)
+# names(datLS) = c('het','cricet', 'foliv', 'insec')
+# for (df in seq_along(datLS)) datLS[[df]]$tag = as.character(datLS[[df]]$tag)
+
 
 # change some cols from factor to character class
 het$tag = as.character(het$tag); cricet$tag = as.character(cricet$tag); foliv$tag = as.character(foliv$tag); insec$tag = as.character(insec$tag)
@@ -28,40 +30,21 @@ het = id_unknowns(het, 16); cricet = id_unknowns(cricet, 16); foliv = id_unknown
 het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); insec = subsetDat(insec)
 
 
+# get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
+  #heteromyids
+    dmtags = unique(het[het$species == "DM",]$tag); dotags = unique(het[het$species == "DO",]$tag); pbtags = unique(het[het$species == "PB",]$tag); pptags = unique(het[het$species == "PP",]$tag); pftags = unique(het[het$species == "PF",]$tag)
+    dmmeters = distance_moved(het[het$species == "DM",], dmtags); dometers = distance_moved(het[het$species == "DO",], dotags); pbmeters = distance_moved(het[het$species == "PB",], pbtags); ppmeters = distance_moved(het[het$species == "PP",], pptags); pfmeters = distance_moved(het[het$species == "PF",], pftags)
+#cricetids
+    petags = unique(cricet[cricet$species == "PE",]$tag); pmtags = unique(cricet[cricet$species == "PM",]$tag); rmtags = unique(cricet[cricet$species == "RM",]$tag)
+    pemeters = distance_moved(cricet[cricet$species == "PE",], petags); pmmeters = distance_moved(cricet[cricet$species == "PM",], pmtags); rmmeters = distance_moved(cricet[cricet$species == "RM",], rmtags)
+#folivores
+    shtags = unique(foliv[foliv$species == "SH",]$tag); sftags = unique(foliv[foliv$species == "SF",]$tag); naotags = unique(foliv[foliv$species == "NAO",]$tag)
+    shmeters = distance_moved(foliv[foliv$species == "SH",], shtags); sfmeters = distance_moved(foliv[foliv$species == "SF",], sftags); naometers = distance_moved(foliv[foliv$species == "NAO",], naotags)
+#insectivores
+    oltags = unique(insec[insec$species == "OL",]$tag); ottags = unique(insec[insec$species == "OT",]$tag)
+    olmeters = distance_moved(insec[insec$species == "OL",], oltags); otmeters = distance_moved(insec[insec$species == "OT",], ottags)
 
 
-# DISTANCES, want to calculate distances moved for a single species
-# plot captures to see if MARK is a good way to look at these
-
-# get unique tags for each species
-pftags = unique(PF$tag)
-pptags = unique(PP$tag)
-pbtags = unique(PB$tag)
-petags = unique(PE$tag)
-pmtags = unique(PM$tag)
-ottags = unique(OT$tag)
-oltags = unique(OL$tag)
-dotags = unique(DO$tag)
-dmtags = unique(DM$tag)
-shtags = unique(SH$tag)
-sftags = unique(SF$tag)
-naotags = unique(NAO$tag)
-rmtags = unique(RM$tag)
-
-#make vectors of distances moved for all recaptured individuals, by SPECIES
-pf_meters = distance_moved(PF, pftags)
-pp_meters = distance_moved(PP, pptags)
-pb_meters = distance_moved(PB, pbtags)
-pe_meters = distance_moved(PE, petags)
-pm_meters = distance_moved(PM, pmtags)
-ot_meters = distance_moved(OT, ottags)
-ol_meters = distance_moved(OL, oltags)
-do_meters = distance_moved(DO, dotags)
-dm_meters = distance_moved(DM, dmtags)
-sh_meters = distance_moved(SH, shtags)
-sf_meters = distance_moved(SF, sftags)
-nao_meters = distance_moved(NAO, naotags)
-rm_meters = distance_moved(RM, rmtags)
 
 #make vectores of distances moved for all recaptured individuals, by GUILD
 Hgran = c(pf_meters, pp_meters, pb_meters, dm_meters, do_meters)
