@@ -44,13 +44,14 @@ het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); inse
     oltags = unique(insec[insec$species == "OL",]$tag); ottags = unique(insec[insec$species == "OT",]$tag)
     olmeters = distance_moved(insec[insec$species == "OL",], oltags); otmeters = distance_moved(insec[insec$species == "OT",], ottags)
 
+# concatenate distance vectors for recaptured individuals by GUILD
+Hgran = c(dmmeters, dometers, pbmeters, ppmeters, pfmeters)
+Cgran = c(pemeters, pmmeters, rmmeters)
+foli = c(shmeters, sfmeters, naometers)
+insec = c(otmeters, olmeters)
 
 
-#make vectores of distances moved for all recaptured individuals, by GUILD
-Hgran = c(pf_meters, pp_meters, pb_meters, dm_meters, do_meters)
-Cgran = c(pe_meters, pm_meters, rm_meters)
-foli = c(sh_meters, sf_meters) #doesn't include NA because similar resource, but majorly different strategies - midden
-insec = c(ot_meters, ol_meters)
+
 
 
 # Get MARK capture histories
