@@ -47,44 +47,50 @@ het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); inse
 # concatenate distance vectors for recaptured individuals by GUILD
 Hgran = c(dmmeters, dometers, pbmeters, ppmeters, pfmeters)
 Cgran = c(pemeters, pmmeters, rmmeters)
-foli = c(shmeters, sfmeters, naometers)
-insec = c(otmeters, olmeters)
+foli = c(shmeters, sfmeters) #separate NAO because they use different strategy - MIDDENS
+insectiv = c(otmeters, olmeters)
 
+#plot histogram of all consecutive movement for rodents within a species 2000-2009
+#create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
+v6 = seq(-3,500,6)
+Hgcount = hist(Hgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
+Cgcount = hist(Cgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
+focount = hist(foli, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'folivores - SH, SF')
+nacount = hist(naometers, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'neotoma - NA')
+incount = hist(insectiv, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
 
-
-
+# find breakpoints to use in MARK data structure for future analyses
+  # breakpoint = mean + sd of all the distances traveled by recaptured individuals    #IS THERE A BETTER WAY!?
+Hgran_brkpt = mean(Hgran) + sd(Hgran)
+Cgran_brkpt = mean(Cgran) + sd(Cgran)
+foli_brkpt = mean(foli) + sd(foli)
+nao_brkpt = mean(naometers) + sd(naometers)
+ins_brkpt = mean(insectiv) + sd(insectiv) 
 
 # Get MARK capture histories
 ## add unique breakpoints for each species based on histogram data of movement
 periods = c(261:380)
-DO_MARK = noplacelikehome(subset(het, species == "DO"), periods, 30)
-DM_MARK = noplacelikehome(subset(het, species == "DM"), periods, 30)
-PB_MARK = noplacelikehome(subset(het, species == "PB"), periods, 30)
-PP_MARK = noplacelikehome(subset(het, species == "PP"), periods, 30)
- PF_MARK = noplacelikehome(subset(het, species == "PF"), periods, 30)
+DO_MARK = noplacelikehome(subset(het, species == "DO"), periods, Hgran_brkpt)
+DM_MARK = noplacelikehome(subset(het, species == "DM"), periods, Hgran_brkpt)
+PB_MARK = noplacelikehome(subset(het, species == "PB"), periods, Hgran_brkpt)
+PP_MARK = noplacelikehome(subset(het, species == "PP"), periods, Hgran_brkpt)
+PF_MARK = noplacelikehome(subset(het, species == "PF"), periods, Hgran_brkpt)
                           
-PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, 70) 
-PM_MARK = noplacelikehome(subset(cricet, species == "PM"), periods, 70)
-RM_MARK = noplacelikehome(subset(cricet, species == "RM"), periods, 70)
+PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, Cgran_brkpt) 
+PM_MARK = noplacelikehome(subset(cricet, species == "PM"), periods, Cgran_brkpt)
+RM_MARK = noplacelikehome(subset(cricet, species == "RM"), periods, Cgran_brkpt)
                           
-SH_MARK = noplacelikehome(subset(foliv, species == "SH"), periods, 50)
-SF_MARK = noplacelikehome(subset(foliv, species == "SF"), periods, 50)
-NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, 50)
+SH_MARK = noplacelikehome(subset(foliv, species == "SH"), periods, foli_brkpt)
+SF_MARK = noplacelikehome(subset(foliv, species == "SF"), periods, foli_brkpt)
+
+NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, nao_brkpt)
                           
-OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, 70)
-OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, 70)
+OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, ins_brkpt)
+OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, ins_brkpt)
 
 
 ############### PLOTTING
 
-#plot histogram of all consecutive movement for rodents within a species 2000-2009
-#create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not continuous
-v6 = seq(-3,500,6)
-Hgcount = hist(Hgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
-Cgcount = hist(Cgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
-focount = hist(foli, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'folivores - SH, SF, NA')
-nacount = hist(nao_meters, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'neotoma - NA')
-incount = hist(insec, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
 
 # plot density of movment by guild for 2000-2009
 plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2, col = 'hotpink2')
