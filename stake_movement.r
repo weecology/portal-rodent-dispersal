@@ -7,6 +7,17 @@ wd = "C://Users//sarah//Desktop//Dropbox//Active Research Projects//Rodent Movem
 setwd(wd)
 source("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//movement_fxns.R")
 
+het = read.csv("data//heteromyids_2000-2009.csv")   # DO, DM, PB, PP, PF
+cricet = read.csv("data//cricetids_2000-2009.csv")  # PE, PM, RM
+foliv = read.csv("data//folivores_2000-2009.csv")   # SH, SF, NA (as NAO)
+insec = read.csv("data//folivores_2000-2009.csv")   # OT, OL
+
+# change some cols from factor to character class
+het$tag = as.character(het$tag); cricet$tag = as.character(cricet$tag); foliv$tag = as.character(foliv$tag); insec$tag = as.character(insec$tag)
+het$species = as.character(het$species); cricet$species = as.character(cricet$species); foliv$species = as.character(foliv$species); insec$species = as.character(insec$species)
+
+
+
 heteros = read.csv("PF-PP-PB_2000-2009_w_stakes.csv") #hetero = heteromyid
 PE = read.csv('PE2000_2009.csv')
   PE$tag = as.character(PE$tag)
