@@ -73,11 +73,11 @@ sd_avg_mass = function (dat, ind_dat) {
   # finds the average of all the masses for all the captures in the species data, as a baseline. 
   ## Then takes the average mass for an individual and calculates the proportional difference away from that avg. species
   ## level mass.
-  spp_mean = mean(dat$wgt, na.rm = TRUE)
+  spp_mean = mean(dat$wgt, na.rm = TRUE) #include ALL indivs (should I NOT INCLUDE juveniles and pregnant indivs?)
   spp_sd = sd(dat$wgt, na.rm = TRUE)
   ind_mean = mean(ind_dat$wgt, na.rm = TRUE)
-  
-  ind_sd = round((ind_mean - spp_mean) / spp_sd , 4)
+  # num of standard deviations the indiv's mean wgt is from spp mean wgt
+  ind_sd = round((ind_mean - spp_mean) / spp_sd , 4) 
   
   return (ind_sd) #number of standard deviations individual is away from capture weight mean
 }
@@ -93,21 +93,19 @@ noplacelikehome = function (dat, prd, breakpoint){
   
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
-    ind_dat = ind_dat[order(ind_dat[,2]),] #order chronologically
+    ind_dat = ind_dat[order(ind_dat$period),] #order chronologically
 
       p1 = min(ind_dat$period) # first capture period
-      index = match(p1, prd)
+      index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
       MARK_distance[t,index] = "A"  #mark first capture with A ("home")
     
-      recaps = nrow(ind_dat)
-      MARK_distance[t,ncol(MARK_distance)-2] = recaps
+      numcaps = nrow(ind_dat)
+      MARK_distance[t,ncol(MARK_distance)-2] = numcaps
     
-      sex = ind_dat[1,9] #I should account for indivs where sex is disputed -- write a sep fxn ? FIXME
-        if (sex == "F") {
-          sex = 1 }
-        else if (sex == "M") {
-          sex = 2 }
-        else { sex = 0 }
+      sex = ind_dat[1,]$sex # don't need to acct for disputes in sex b/c should be already deleted (in flagged data fxn)
+        if (sex == "F" | sex == "M") {
+          sex = sex }
+        else { sex = "X" }
       MARK_distance[t,ncol(MARK_distance)-1] = sex # put sex in penultimate col
       
       sd_mass = sd_avg_mass(dat, ind_dat)
@@ -116,8 +114,8 @@ noplacelikehome = function (dat, prd, breakpoint){
       for (i in 1:nrow(ind_dat)){
         
         if (i+1 <= nrow(ind_dat)){
-          meters = sqrt((ind_dat[i,7]-ind_dat[i+1,7])**2 + (ind_dat[i,6]-ind_dat[i+1,6])**2)
-          pnext = ind_dat[i+1,]$period #next capture period
+          meters = sqrt((ind_dat[i,8]-ind_dat[i+1,8])**2 + (ind_dat[i,7]-ind_dat[i+1,7])**2)
+          pnext = ind_dat[i+1,]$period #next capture period, where the distance will be recorded in the matrix
        
           if (meters <= breakpoint) {
             dist = "A" #captured close to "home"
