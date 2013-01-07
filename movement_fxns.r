@@ -83,7 +83,7 @@ distance_moved = function (data, tags) {
     # if it was captured more than once
     if (nrow(ind_data) > 1) { 
       for (i in 1:nrow(ind_data)){
-        if (i+1 < nrow(ind_data)){
+        if (i+1 <= nrow(ind_data)){
           meters = sqrt((ind_data[i,8]-ind_data[i+1,8])**2 + (ind_data[i,7]-ind_data[i+1,7])**2)
           distance=append(distance,meters)
         }
