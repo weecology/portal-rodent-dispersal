@@ -53,11 +53,11 @@ insectiv = c(otmeters, olmeters)
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
 #create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
 v6 = seq(-3,500,6)
-Hgcount = hist(Hgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
-Cgcount = hist(Cgran, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
-focount = hist(foli, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'folivores - SH, SF')
-nacount = hist(naometers, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), main = 'neotoma - NA')
-incount = hist(insectiv, breaks = v6, col = 'mediumpurple4', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
+Hgcount = hist(Hgran, breaks = v6, col = 'gray40', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
+Cgcount = hist(Cgran, breaks = v6, col = 'gray40', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
+focount = hist(foli, breaks = v6, col = 'gray40', xlim = c(0,500), main = 'folivores - SH, SF')
+nacount = hist(naometers, breaks = v6, col = 'gray40', xlim = c(0,500), main = 'neotoma - NA')
+incount = hist(insectiv, breaks = v6, col = 'gray40', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
 
 # find breakpoints to use in MARK data structure for future analyses
   # breakpoint = mean + sd of all the distances traveled by recaptured individuals    #IS THERE A BETTER WAY!?
