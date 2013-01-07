@@ -28,19 +28,7 @@ het = id_unknowns(het, 16); cricet = id_unknowns(cricet, 16); foliv = id_unknown
 het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); insec = subsetDat(insec)
 
 
-# Get MARK capture histories; 1 = Female, 2 = Male, 0 = It
-  ## add unique breakpoints for each species based on histogram data of movement
-periods = c(261:380)
-PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, 70) 
-PM_MARK = noplacelikehome(PM, periods, 70)
-OT_MARK = noplacelikehome(OT, periods, 70)
-OL_MARK = noplacelikehome(OL, periods, 70)
-DO_MARK = noplacelikehome(DO, periods, 30)
-DM_MARK = noplacelikehome(DM, periods, 30)
-SH_MARK = noplacelikehome(SH, periods, 50)
-SF_MARK = noplacelikehome(SF, periods, 50)
-NAO_MARK = noplacelikehome(NAO, periods, 50)
-RM_MARK = noplacelikehome(RM, periods, 70)
+
 
 # DISTANCES, want to calculate distances moved for a single species
 # plot captures to see if MARK is a good way to look at these
@@ -80,6 +68,30 @@ Hgran = c(pf_meters, pp_meters, pb_meters, dm_meters, do_meters)
 Cgran = c(pe_meters, pm_meters, rm_meters)
 foli = c(sh_meters, sf_meters) #doesn't include NA because similar resource, but majorly different strategies - midden
 insec = c(ot_meters, ol_meters)
+
+
+# Get MARK capture histories
+## add unique breakpoints for each species based on histogram data of movement
+periods = c(261:380)
+DO_MARK = noplacelikehome(subset(het, species == "DO"), periods, 30)
+DM_MARK = noplacelikehome(subset(het, species == "DM"), periods, 30)
+PB_MARK = noplacelikehome(subset(het, species == "PB"), periods, 30)
+PP_MARK = noplacelikehome(subset(het, species == "PP"), periods, 30)
+ PF_MARK = noplacelikehome(subset(het, species == "PF"), periods, 30)
+                          
+PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, 70) 
+PM_MARK = noplacelikehome(subset(cricet, species == "PM"), periods, 70)
+RM_MARK = noplacelikehome(subset(cricet, species == "RM"), periods, 70)
+                          
+SH_MARK = noplacelikehome(subset(foliv, species == "SH"), periods, 50)
+SF_MARK = noplacelikehome(subset(foliv, species == "SF"), periods, 50)
+NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, 50)
+                          
+OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, 70)
+OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, 70)
+
+
+############### PLOTTING
 
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
 #create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not continuous
