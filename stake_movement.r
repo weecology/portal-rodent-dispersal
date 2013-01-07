@@ -12,10 +12,21 @@ cricet = read.csv("data//cricetids_2000-2009.csv")  # PE, PM, RM
 foliv = read.csv("data//folivores_2000-2009.csv")   # SH, SF, NA (as NAO)
 insec = read.csv("data//folivores_2000-2009.csv")   # OT, OL
 
+# # list of dataframes                                                  FIXME!
+# datLS = list(het, cricet, foliv, insec)
+# for (df in datLS) datLS[[df]]$tag = as.character(df$tag)
+
 # change some cols from factor to character class
 het$tag = as.character(het$tag); cricet$tag = as.character(cricet$tag); foliv$tag = as.character(foliv$tag); insec$tag = as.character(insec$tag)
 het$species = as.character(het$species); cricet$species = as.character(cricet$species); foliv$species = as.character(foliv$species); insec$species = as.character(insec$species)
 het$sex = as.character(het$sex); cricet$sex = as.character(cricet$sex); foliv$sex = as.character(foliv$sex); insec$sex = as.character(insec$sex)
+
+# give untagged individuals a unique 7-number code
+het = id_unknowns(het, 16); cricet = id_unknowns(cricet, 16); foliv = id_unknowns(foliv, 16); insec = id_unknowns(insec, 16)
+
+# get rid of 'bad data'; deletes data that is not a pit tag, where sex is inconsistent or where species is inconsistent. 
+het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); insec = subsetDat(insec)
+
 
 
 heteros = read.csv("PF-PP-PB_2000-2009_w_stakes.csv") #hetero = heteromyid
