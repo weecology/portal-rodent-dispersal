@@ -55,7 +55,7 @@ return(flagged_rats)
 ##### will find bad data, then delete it from the dataset and get rid of incompletely sampled periods
 subsetDat = function(dataset){
   tags = as.character(unique(dataset$tag)) # get list of unique tags
-  flags = find_bad_data(dataset, tags, 9, 8)   # list of flagged data
+  flags = find_bad_data(dataset, tags, 10, 9)   # list of flagged data
   badtags = unique(flags$tag)    # get list of unique 'bad tags'
   for (i in 1:length(badtags)) {  #deletes bad tags from dataset
     dataset = subset(dataset, tag != badtags[i])
