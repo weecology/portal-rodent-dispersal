@@ -28,17 +28,10 @@ het = id_unknowns(het, 16); cricet = id_unknowns(cricet, 16); foliv = id_unknown
 het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); insec = subsetDat(insec)
 
 
-
-
-# separate the pocketmouse data
-PB = subset(heteros, species == 'PB')
-PP = subset(heteros, species == 'PP')
-PF = subset(heteros, species == 'PF')
-
 # Get MARK capture histories; 1 = Female, 2 = Male, 0 = It
   ## add unique breakpoints for each species based on histogram data of movement
-periods = c(260:380)
-PE_MARK = noplacelikehome(PE, periods, 70) 
+periods = c(261:380)
+PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, 70) 
 PM_MARK = noplacelikehome(PM, periods, 70)
 OT_MARK = noplacelikehome(OT, periods, 70)
 OL_MARK = noplacelikehome(OL, periods, 70)
