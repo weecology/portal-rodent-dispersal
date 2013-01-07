@@ -1,10 +1,11 @@
 # Module containing functions for looking at individual rodent data pertaining to movement
 
-# give unique numbers to blank tags
-# note: these are 7 digit numbers, so they are longer than any other tag type
-# note: in the Portal data, column 12 is tag, so we are looking for blank or "0" tags to rename
-id_unknowns = function(dat, tag_col){
 
+id_unknowns = function(dat, tag_col){
+  # give unique numbers to blank tags
+  # note: these are 7 digit numbers, so they are longer than any other tag type
+  # note: in the Portal data, column 12 is tag, so we are looking for blank or "0" tags to rename
+  
 unk = 1000000
 for (irow in 1:nrow(dat)){
     tag = dat[irow,tag_col]
@@ -18,9 +19,10 @@ for (irow in 1:nrow(dat)){
 return(dat)
 }
 
-# check for consistent sex and species, outputs flagged tags to check
-find_bad_data = function(dat, tags, sex_col, spp_col){
 
+find_bad_data = function(dat, tags, sex_col, spp_col){
+  # check for consistent sex and species, outputs flagged tags to check
+  
 flagged_rats = data.frame("tag"=1, "reason"=1, "occurrences"=1)
 outcount = 0
 
@@ -51,9 +53,10 @@ for (t in 1:length(tags)){
 return(flagged_rats)
 }
 
-## function to subset out proper data 
-##### will find bad data, then delete it from the dataset and get rid of incompletely sampled periods
+
 subsetDat = function(dataset){
+  ## function to subset out proper data 
+  ##### will find bad data, then delete it from the dataset and get rid of incompletely sampled periods
   tags = as.character(unique(dataset$tag)) # get list of unique tags
   flags = find_bad_data(dataset, tags, 10, 9)   # list of flagged data
   badtags = unique(flags$tag)    # get list of unique 'bad tags'
@@ -67,6 +70,28 @@ subsetDat = function(dataset){
                           period != 337 & period != 339 & period != 344 & period != 351)
   return (dataset)
   }
+
+
+
+distance_moved = function (data, tags) {
+  # Calculatemoved from one time frame to the next, for an individual
+  distance = as.numeric()
+  # for each individual
+  for (t in 1:length(tags)){
+    ind_data = data[which(data$tag == tags[t]),] #get data for indiv with tag t
+    ind_data = ind_data[order(ind_data$period),] #order chronologically
+    # if it was captured more than once
+    if (nrow(ind_data) > 1) { 
+      for (i in 1:nrow(ind_data)){
+        if (i+1 < nrow(ind_data)){
+          meters = sqrt((ind_data[i,8]-ind_data[i+1,8])**2 + (ind_data[i,7]-ind_data[i+1,7])**2)
+          distance=append(distance,meters)
+        }
+      }
+    }
+  }
+  return(distance)
+}
 
 
 
@@ -464,26 +489,6 @@ for (t in 1:length(tags)){
     points(coords[1,1], coords[1,2], pch = 17, col = "indianred") #start
     points(coords[nrow(coords),1],coords[nrow(coords),2],pch = 15, col = "blue") #stop
   }}}
-
-distance_moved = function (data, tags) {
-  # Calculatemoved from one time frame to the next, for an individual
-  distance = as.numeric()
-  # for each individual
-  for (t in 1:length(tags)){
-    ind_data = data[which(data$tag == tags[t]),] #get data for indiv with tag t
-    ind_data = ind_data[order(ind_data[,2]),] #order chronologically
-    # if it was captured more than once
-    if (nrow(ind_data) > 1) { 
-      for (i in 1:nrow(ind_data)){
-        if (i+1 < nrow(ind_data)){
-        meters = sqrt((ind_data[i,7]-ind_data[i+1,7])**2 + (ind_data[i,6]-ind_data[i+1,6])**2)
-        distance=append(distance,meters)
-        }
-      }
-    }
-  }
-return(distance)
-  }
 
 
 # plot number of individuals captured in each period (since each record has its own row, we can just count the number
