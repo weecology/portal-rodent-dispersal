@@ -18,8 +18,12 @@ Data use: Data is provided in this supplement for the purposes of replication. I
 Included Files
 stake_movment.R script -- cleans up the data, runs the statistical analyses, and outputs figures.
 movement_fxns.R script -- holds the relevant functions for executing the stake_movement.R script.
+life_history_analyses.R -- scripts for extracting life-history trait related data such as fecundity for all the species.
 rodent_data. R  -- 
-data.csv -- DATA TO BE ADDED
+cricetids_2000-2009.csv -- individual level data for granivores in the family Cricetidae. Includes the species Peromyscus eremicus, Peromyscus maniculatus, and Reithrodontomys megalotis
+folivores_2000-2009.csv -- individual level data for folivores in the family Cricetidae. Includes the species Sigmodon hispidus, Sigmodon fulviventer, and Neotoma albigula.
+heteromyids_2000-2009.csv -- individual level data for granivores in the family Heteromyidae. Includes the species Dipodomys merriami, Dipodomys ordii, Chaetodipus baileyi, Chaetodipus penicillatus, and Perognathus flavus.
+onychomys_2000-2009.csv -- individual level data for carnivores in the family Cricetidae. Includes the species Onychomys leucogaster and Onychomys torridus.
 
 License
 This code is available under a BSD 2-Clause License.
