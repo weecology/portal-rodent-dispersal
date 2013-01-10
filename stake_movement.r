@@ -126,7 +126,7 @@ otabun = mean_allyrs_abun(OT); olabun = mean_allyrs_abun(OL)
 
 
 # plot temporal occupancy - for month and year
-plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "acros-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
+plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
     #textxy(pfyr, pfmo, "PF")
   points(ppyr, ppmo, pch = 19, col = "hotpink")
     #textxy(ppyr, ppmo, "PP")
