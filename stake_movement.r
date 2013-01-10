@@ -61,15 +61,15 @@ ins_brkpt = mean(insectiv) + sd(insectiv)
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
 #create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
 v6 = seq(-3,500,6)
-Hgcount = hist(Hgran, breaks = v6, col = 'gray40', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
+Hgcount = hist(Hgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
   xline(Hgran_brkpt, lwd = 2, col = "indianred")
-Cgcount = hist(Cgran, breaks = v6, col = 'gray40', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
+Cgcount = hist(Cgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
   xline(Cgran_brkpt, lwd = 2, col = "indianred")
-focount = hist(foli, breaks = v6, col = 'gray40', xlim = c(0,500), main = 'folivores - SH, SF')
+focount = hist(foli, breaks = v6, col = 'gray60', xlim = c(0,500), main = 'folivores - SH, SF')
   xline(foli_brkpt, lwd = 2, col = "indianred")
-nacount = hist(naometers, breaks = v6, col = 'gray40', xlim = c(0,500), main = 'neotoma - NA')
+nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), main = 'neotoma - NA')
   xline(nao_brkpt, lwd = 2, col = "indianred")
-incount = hist(insectiv, breaks = v6, col = 'gray40', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
+incount = hist(insectiv, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
   xline(ins_brkpt, lwd = 2, col = "indianred")
 
 # Get MARK capture histories
