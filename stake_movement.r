@@ -93,6 +93,21 @@ NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, nao_brkpt)
 OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, ins_brkpt)
 OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, ins_brkpt)
 
+#write files to local folder for MARK analysis
+write.csv(DO_MARK, file = "MARK_datafiles//do_mark.csv", row.names = F)
+write.csv(DM_MARK, file = "MARK_datafiles//dm_mark.csv", row.names = F)
+write.csv(PB_MARK, file = "MARK_datafiles//pb_mark.csv", row.names = F)
+write.csv(PP_MARK, file = "MARK_datafiles//pp_mark.csv", row.names = F)
+write.csv(PF_MARK, file = "MARK_datafiles//pf_mark.csv", row.names = F)
+write.csv(PE_MARK, file = "MARK_datafiles//pe_mark.csv", row.names = F)
+write.csv(PM_MARK, file = "MARK_datafiles//pm_mark.csv", row.names = F)
+write.csv(RM_MARK, file = "MARK_datafiles//rm_mark.csv", row.names = F)
+write.csv(SH_MARK, file = "MARK_datafiles//sh_mark.csv", row.names = F)
+write.csv(SF_MARK, file = "MARK_datafiles//sf_mark.csv", row.names = F)
+write.csv(NAO_MARK, file = "MARK_datafiles//nao_mark.csv", row.names = F)
+write.csv(OT_MARK, file = "MARK_datafiles//ot_mark.csv", row.names = F)
+write.csv(OL_MARK, file = "MARK_datafiles//ol_mark.csv", row.names = F)
+
 
 ############### PLOTTING
 
@@ -105,7 +120,7 @@ plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2
   legend('topright', c('Hgran', 'Neotoma', 'foliv', 'Cgran', 'insec'), bty = 'n', lty = c(1,3,6,3,1), lwd = 5, seg.len = 2,
          col = c('hotpink2', 'indianred4', 'mediumpurple4', 'deepskyblue3', 'darkgreen'))
 
-#### Make an occupancy plot for 2000-2009 (similar to Morgan) #FIX ME - REFERS TO OLD DATAFRAMES
+#### Make an occupancy plot for 2000-2009 (similar to Morgan) #######FIX ME - REFERS TO OLD DATAFRAMES
 #proportion of years they were seen in
 doyr = length(unique(DO$yr))/10; dmyr = length(unique(DM$yr))/10; pfyr = length(unique(PF$year))/10; ppyr = length(unique(PP$year))/10; pbyr = length(unique(PB$year))/10
 peyr = length(unique(PE$yr))/10; pmyr = length(unique(PM$yr))/10; rmyr = length(unique(RM$yr))/10
