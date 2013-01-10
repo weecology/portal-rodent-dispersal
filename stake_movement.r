@@ -50,6 +50,14 @@ Cgran = c(pemeters, pmmeters, rmmeters)
 foli = c(shmeters, sfmeters) #separate NAO because they use different strategy - MIDDENS
 insectiv = c(otmeters, olmeters)
 
+# find breakpoints to use in MARK data structure for future analyses
+# breakpoint = mean + sd of all the distances traveled by recaptured individuals    #IS THERE A BETTER WAY!?
+Hgran_brkpt = mean(Hgran) + sd(Hgran)
+Cgran_brkpt = mean(Cgran) + sd(Cgran)
+foli_brkpt = mean(foli) + sd(foli)
+nao_brkpt = mean(naometers) + sd(naometers)
+ins_brkpt = mean(insectiv) + sd(insectiv)
+
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
 #create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
 v6 = seq(-3,500,6)
@@ -63,14 +71,6 @@ nacount = hist(naometers, breaks = v6, col = 'gray40', xlim = c(0,500), main = '
   xline(nao_brkpt, lwd = 2, col = "indianred")
 incount = hist(insectiv, breaks = v6, col = 'gray40', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
   xline(ins_brkpt, lwd = 2, col = "indianred")
-
-# find breakpoints to use in MARK data structure for future analyses
-  # breakpoint = mean + sd of all the distances traveled by recaptured individuals    #IS THERE A BETTER WAY!?
-Hgran_brkpt = mean(Hgran) + sd(Hgran)
-Cgran_brkpt = mean(Cgran) + sd(Cgran)
-foli_brkpt = mean(foli) + sd(foli)
-nao_brkpt = mean(naometers) + sd(naometers)
-ins_brkpt = mean(insectiv) + sd(insectiv) 
 
 # Get MARK capture histories
 ## add unique breakpoints for each species based on histogram data of movement
