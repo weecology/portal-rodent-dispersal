@@ -99,13 +99,13 @@ OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, ins_brkpt)
 # plot density of movment by guild for 2000-2009
 plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2, col = 'hotpink2')
   lines(density(Cgran), col = 'deepskyblue3', lwd = 3, lty = 6)
-  lines(density(nao_meters), col = 'indianred4', lwd = 4, lty = 3)
+  lines(density(naometers), col = 'indianred4', lwd = 4, lty = 3)
   lines(density(foli), col = 'mediumpurple4', lwd = 4, lty = 3)
-  lines(density(insec), col = 'darkgreen', lwd = 2)
+  lines(density(insectiv), col = 'darkgreen', lwd = 2)
   legend('topright', c('Hgran', 'Neotoma', 'foliv', 'Cgran', 'insec'), bty = 'n', lty = c(1,3,6,3,1), lwd = 5, seg.len = 2,
          col = c('hotpink2', 'indianred4', 'mediumpurple4', 'deepskyblue3', 'darkgreen'))
 
-#### Make an occupancy plot for 2000-2009 (similar to Morgan)
+#### Make an occupancy plot for 2000-2009 (similar to Morgan) #FIX ME - REFERS TO OLD DATAFRAMES
 #proportion of years they were seen in
 doyr = length(unique(DO$yr))/10; dmyr = length(unique(DM$yr))/10; pfyr = length(unique(PF$year))/10; ppyr = length(unique(PP$year))/10; pbyr = length(unique(PB$year))/10
 peyr = length(unique(PE$yr))/10; pmyr = length(unique(PM$yr))/10; rmyr = length(unique(RM$yr))/10
