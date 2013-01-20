@@ -2,10 +2,16 @@
 # movement with stakes
 
 library(calibrate)
+library(fields)
 
 wd = "C://Users//sarah//Desktop//Dropbox//Active Research Projects//Rodent Movement"
 setwd(wd)
 source("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//movement_fxns.R")
+
+#mac access
+wd = "/Users/sarah/Desktop/portal-rodent-dispersal/"
+setwd(wd)
+source("movement_fxns.r")
 
 het = read.csv("data//heteromyids_2000-2009.csv")   # DO, DM, PB, PP, PF
 cricet = read.csv("data//cricetids_2000-2009.csv")  # PE, PM, RM
