@@ -19,19 +19,19 @@ MS.ddl <- make.design.data(MS.process)
 
 # Add dynamic dummy variable age class fields to the design data for Psi and p
 MS.ddl$Psi$hy=0
-MS.ddl$Psi$hy[MS.ddl$Psi$age==0&MS.ddl$Psi$stratum=="A"]=1
+MS.ddl$Psi$hy[MS.ddl$Psi$sex==0&MS.ddl$Psi$stratum=="A"]=1
 MS.ddl$Psi$ahy=0
-MS.ddl$Psi$ahy[MS.ddl$Psi$Age>=1&MS.ddl$Psi$stratum=="A"]=1
+MS.ddl$Psi$ahy[MS.ddl$Psi$sex>=1&MS.ddl$Psi$stratum=="A"]=1
 
 MS.ddl$p$hy=0
-MS.ddl$p$hy[MS.ddl$p$age==1&MS.ddl$p$stratum=="A"]=1
-MS.ddl$p$hy[MS.ddl$p$age==1&MS.ddl$p$stratum=="B"]=1
+MS.ddl$p$hy[MS.ddl$p$sex==1&MS.ddl$p$stratum=="A"]=1
+MS.ddl$p$hy[MS.ddl$p$sex==1&MS.ddl$p$stratum=="B"]=1
 MS.ddl$p$sy=0
-MS.ddl$p$sy[MS.ddl$p$age==2&MS.ddl$p$stratum=="A"]=1
+MS.ddl$p$sy[MS.ddl$p$sex==2&MS.ddl$p$stratum=="A"]=1
 MS.ddl$p$asy=0
-MS.ddl$p$asy[MS.ddl$p$Age>=3&MS.ddl$p$stratum=="A"]=1
+MS.ddl$p$asy[MS.ddl$p$sex>=3&MS.ddl$p$stratum=="A"]=1
 MS.ddl$p$ahy=0
-MS.ddl$p$ahy[MS.ddl$p$Age>=2&MS.ddl$p$stratum=="B"]=1
+MS.ddl$p$ahy[MS.ddl$p$sex>=2&MS.ddl$p$stratum=="B"]=1
 
 ##### Add dummy variables for operating on specific states or transitions
   # A = 1 (home), B = 2 (away)
