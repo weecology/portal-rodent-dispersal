@@ -81,23 +81,25 @@ incount = hist(insectiv, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(
 # Get MARK capture histories
 ## add unique breakpoints for each species based on histogram data of movement
 periods = c(261:380)
-DO_MARK = noplacelikehome(subset(het, species == "DO"), periods, Hgran_brkpt)
-DM_MARK = noplacelikehome(subset(het, species == "DM"), periods, Hgran_brkpt)
-PB_MARK = noplacelikehome(subset(het, species == "PB"), periods, Hgran_brkpt)
-PP_MARK = noplacelikehome(subset(het, species == "PP"), periods, Hgran_brkpt)
-PF_MARK = noplacelikehome(subset(het, species == "PF"), periods, Hgran_brkpt)
+exclosures = c(5, 7, 10, 16, 23, 24)
+krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
+DO_MARK = noplacelikehome(subset(het, species == "DO"), periods, krat_excl, Hgran_brkpt)
+DM_MARK = noplacelikehome(subset(het, species == "DM"), periods, krat_excl, Hgran_brkpt)
+PB_MARK = noplacelikehome(subset(het, species == "PB"), periods, exclosures, Hgran_brkpt)
+PP_MARK = noplacelikehome(subset(het, species == "PP"), periods, exclosures, Hgran_brkpt)
+PF_MARK = noplacelikehome(subset(het, species == "PF"), periods, exclosures, Hgran_brkpt)
                           
-PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, Cgran_brkpt) 
-PM_MARK = noplacelikehome(subset(cricet, species == "PM"), periods, Cgran_brkpt)
-RM_MARK = noplacelikehome(subset(cricet, species == "RM"), periods, Cgran_brkpt)
+PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, exclosures, Cgran_brkpt) 
+PM_MARK = noplacelikehome(subset(cricet, species == "PM"), periods, exclosures, Cgran_brkpt)
+RM_MARK = noplacelikehome(subset(cricet, species == "RM"), periods, exclosures, Cgran_brkpt)
                           
-SH_MARK = noplacelikehome(subset(foliv, species == "SH"), periods, foli_brkpt)
-SF_MARK = noplacelikehome(subset(foliv, species == "SF"), periods, foli_brkpt)
+SH_MARK = noplacelikehome(subset(foliv, species == "SH"), periods, exclosures, foli_brkpt)
+SF_MARK = noplacelikehome(subset(foliv, species == "SF"), periods, exclosures, foli_brkpt)
 
-NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, nao_brkpt)
+NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, exclosures, nao_brkpt)
                           
-OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, ins_brkpt)
-OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, ins_brkpt)
+OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, exclosures, ins_brkpt)
+OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, exclosures, ins_brkpt)
 
 #write files to local folder for MARK analysis
 write.csv(DO_MARK, file = "MARK_datafiles//do_mark.csv", row.names = F)
