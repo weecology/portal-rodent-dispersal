@@ -102,9 +102,6 @@ OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, exclosures, i
 OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, exclosures, ins_brkpt)
 
 #write files to local folder for MARK analysis
-write.table(recencsxgrp,file = "recencsxgrp.txt", row.names=FALSE,col.names=FALSE)
-
-
 write.table(DO_MARK, file = "MARK_datafiles//do_mark.txt", row.names = F, col.names = F)
 write.table(DM_MARK, file = "MARK_datafiles//dm_mark.txt", row.names = F, col.names = F)
 write.table(PB_MARK, file = "MARK_datafiles//pb_mark.txt", row.names = F, col.names = F)
