@@ -111,8 +111,8 @@ sd_avg_mass = function (dat, ind_dat) {
 noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ### Create a set of MARK capture histories by home vs away from home
   # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
-  ## "A" (stayed home), "B" (away from home) and "C" (removed from study, captured on an exclosure). 
-  ## Home is determined using a predetermined breakpoint.
+  ## 1 (stayed home), and 2 (away from home). 
+  ## Home is determined using the mean + 1 sd of the data.
   
   tags = unique(dat$tag)
   MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd) + 5)
@@ -124,7 +124,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     
     p1 = min(ind_dat$period) # first capture period
     index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
-    MARK_distance[t,index] = "A"  #mark first capture with A ("home")
+    MARK_distance[t,index] = 1  #mark first capture with 1 ("home")
     
     numcaps = nrow(ind_dat)
     MARK_distance[t,ncol(MARK_distance)-1] = numcaps      
@@ -147,15 +147,15 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
         pnext = ind_dat[i+1,]$period #next capture period, where the distance will be recorded in the matrix
         
         if (meters <= breakpoint) {
-          dist = "A" #captured close to "home"
+          dist = 1 #captured close to "home"
         }
         
         else if (meters > breakpoint) {
-          dist = "B" #captured far from "home"
+          dist = 2 #captured far from "home"
         }
 
         if (ind_dat[i+1,]$plot %in% exclosures){ #was it captured on an exclosure?
-          MARK_distance[t, group] = MARK_distance[t,group]*-1
+            MARK_distance[t,group] = MARK_distance[t,group]*-1
         }
         
         index = match(pnext, prd)
