@@ -108,13 +108,15 @@ sd_avg_mass = function (dat, ind_dat) {
 }
 
 
-noplacelikehome = function (dat, prd, breakpoint){
+noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ### Create a set of MARK capture histories by home vs away from home
-  #Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
-  ##"A" (stayed home), and "B" (away from home). Home is determined using a predetermined breakpoint.
+  # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
+  ## "A" (stayed home), "B" (away from home) and "C" (removed from study, captured on an exclosure). 
+  ## Home is determined using a predetermined breakpoint.
   
   tags = unique(dat$tag)
-  MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd) + 3)
+  MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd) + 5)
+    group = c(ncol(MARK_distance)-4, ncol(MARK_distance)-3, ncol(MARK_distance)-2) #represent the "group"
   
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
@@ -125,13 +127,15 @@ noplacelikehome = function (dat, prd, breakpoint){
     MARK_distance[t,index] = "A"  #mark first capture with A ("home")
     
     numcaps = nrow(ind_dat)
-    MARK_distance[t,ncol(MARK_distance)-2] = numcaps
+    MARK_distance[t,ncol(MARK_distance)-1] = numcaps      
     
     sex = ind_dat[1,]$sex # don't need to acct for disputes in sex b/c should be already deleted (in flagged data fxn)
-    if (sex == "F" | sex == "M") {
-      sex = sex }
-    else { sex = "X" }
-    MARK_distance[t,ncol(MARK_distance)-1] = sex # put sex in penultimate col
+    if (sex == "M") {
+      MARK_distance[t,ncol(MARK_distance)-4] = 1 } 
+    else if (sex == "F") {
+      MARK_distance[t,ncol(MARK_distance)-3] = 1 }
+    else { 
+      MARK_distance[t,ncol(MARK_distance)-2] = 1 }
     
     sd_mass = sd_avg_mass(dat, ind_dat)
     MARK_distance[t,ncol(MARK_distance)] = sd_mass #put sd of mass in last col
@@ -149,6 +153,11 @@ noplacelikehome = function (dat, prd, breakpoint){
         else if (meters > breakpoint) {
           dist = "B" #captured far from "home"
         }
+
+        if (ind_dat[i+1,]$plot %in% exclosures){ #was it captured on an exclosure?
+          MARK_distance[t, group] = MARK_distance[t,group]*-1
+        }
+        
         index = match(pnext, prd)
         MARK_distance[t,index] = dist #mark subsequent captures 
       }
