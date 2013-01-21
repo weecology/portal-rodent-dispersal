@@ -49,5 +49,13 @@ MS.ddl$p$strB=0
 MS.ddl$p$strB[MS.ddl$p$stratum=="B"]=1
 
 ## TODO: fix recapture probabilities for unsampled or omitted months!
+    # periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 
+              #   337, 339, 344, 351)
 
+# Add a field for monthly reporting probabilities 
+MS.ddl$p$rpt=0
+MS.ddl$p$rpt[MS.ddl$p$prd] == 267 = 0
+MS.ddl$p$rpt[MS.ddl$p$prd] == 277 = 0
 
+# TODO: Lots of work on building up the models!
+                          
