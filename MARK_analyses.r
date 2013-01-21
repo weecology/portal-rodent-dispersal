@@ -48,4 +48,6 @@ MS.ddl$p$strA[MS.ddl$p$stratum=="A"]=1
 MS.ddl$p$strB=0
 MS.ddl$p$strB[MS.ddl$p$stratum=="B"]=1
 
+## TODO: fix recapture probabilities for unsampled or omitted months!
+
 
