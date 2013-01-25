@@ -101,8 +101,17 @@ sd_avg_mass = function (dat, ind_dat) {
   spp_mean = mean(dat$wgt, na.rm = TRUE) #include ALL indivs (should I NOT INCLUDE juveniles and pregnant indivs?)
   spp_sd = sd(dat$wgt, na.rm = TRUE)
   ind_mean = mean(ind_dat$wgt, na.rm = TRUE)
+  
+  if (is.na(ind_mean)) {
+    # if no mass is recorded (returns NA), make ind_sd = 0 so we don't lose data. 
+    #This shouldn't skew the results, but it ISN'T a true zero. Denote appropriately in methods.
+    ind_sd = 0
+  }
+  
+  else {
   # num of standard deviations the indiv's mean wgt is from spp mean wgt
   ind_sd = round((ind_mean - spp_mean) / spp_sd , 4) 
+  }
   
   return (ind_sd) #number of standard deviations individual is away from capture weight mean
 }
@@ -115,8 +124,10 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ## Home is determined using the mean + 1 sd of the data.
   
   tags = unique(dat$tag)
-  capture_history = matrix(0, nrow = length(tags), ncol = length(prd) + 4)
-    group = c(ncol(capture_history)-3, ncol(capture_history)-2, ncol(capture_history)-1) #represent the "group"
+  capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
+  covariates = matrix(0, nrow = length(tags), ncol = 7)
+    colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "hgran", "cgran", "foli")
+    group = c(1,2,3) #represent the "group"
   
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
@@ -128,14 +139,14 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     
     sex = ind_dat[1,]$sex # don't need to acct for disputes in sex b/c should be already deleted (in flagged data fxn)
     if (sex == "M") {
-      capture_history[t,ncol(capture_history)-3] = 1 } 
+      covariates[t,1] = 1 } 
     else if (sex == "F") {
-      capture_history[t,ncol(capture_history)-2] = 1 }
+      covariates[t,2] = 1 }
     else { 
-      capture_history[t,ncol(capture_history)-1] = 1 }
+      covariates[t,3] = 1 }
     
     sd_mass = sd_avg_mass(dat, ind_dat)
-    capture_history[t,ncol(capture_history)] = sd_mass #put sd of mass in last col
+    covariates[t,4] = sd_mass 
     
     for (i in 1:nrow(ind_dat)){
       
