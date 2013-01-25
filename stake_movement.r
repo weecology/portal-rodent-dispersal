@@ -102,19 +102,19 @@ OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, exclosures, i
 OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, exclosures, ins_brkpt)
 
 #write files to local folder for MARK analysis
-write.table(DO_MARK, file = "mark_datafiles//do_mark.txt", row.names = F, col.names = F)
-write.table(DM_MARK, file = "mark_datafiles//dm_mark.txt", row.names = F, col.names = F)
-write.table(PB_MARK, file = "mark_datafiles//pb_mark.txt", row.names = F, col.names = F)
-write.table(PP_MARK, file = "mark_datafiles//pp_mark.txt", row.names = F, col.names = F)
-write.table(PF_MARK, file = "mark_datafiles//pf_mark.txt", row.names = F, col.names = F)
-write.table(PE_MARK, file = "mark_datafiles//pe_mark.txt", row.names = F, col.names = F)
-write.table(PM_MARK, file = "mark_datafiles//pm_mark.txt", row.names = F, col.names = F)
-write.table(RM_MARK, file = "mark_datafiles//rm_mark.txt", row.names = F, col.names = F)
-write.table(SH_MARK, file = "mark_datafiles//sh_mark.txt", row.names = F, col.names = F)
-write.table(SF_MARK, file = "mark_datafiles//sf_mark.txt", row.names = F, col.names = F)
-write.table(NAO_MARK, file = "mark_datafiles//nao_mark.txt", row.names = F, col.names = F)
-write.table(OT_MARK, file = "mark_datafiles//ot_mark.txt", row.names = F, col.names = F)
-write.table(OL_MARK, file = "mark_datafiles//ol_mark.txt", row.names = F, col.names = F)
+write.table(DO_MARK, file = "mark_datafiles//do_mark.inp", row.names = F, col.names = F)
+write.table(DM_MARK, file = "mark_datafiles//dm_mark.inp", row.names = F, col.names = F)
+write.table(PB_MARK, file = "mark_datafiles//pb_mark.inp", row.names = F, col.names = F)
+write.table(PP_MARK, file = "mark_datafiles//pp_mark.inp", row.names = F, col.names = F)
+write.table(PF_MARK, file = "mark_datafiles//pf_mark.inp", row.names = F, col.names = F)
+write.table(PE_MARK, file = "mark_datafiles//pe_mark.inp", row.names = F, col.names = F)
+write.table(PM_MARK, file = "mark_datafiles//pm_mark.inp", row.names = F, col.names = F)
+write.table(RM_MARK, file = "mark_datafiles//rm_mark.inp", row.names = F, col.names = F)
+write.table(SH_MARK, file = "mark_datafiles//sh_mark.inp", row.names = F, col.names = F)
+write.table(SF_MARK, file = "mark_datafiles//sf_mark.inp", row.names = F, col.names = F)
+write.table(NAO_MARK, file = "mark_datafiles//nao_mark.inp", row.names = F, col.names = F)
+write.table(OT_MARK, file = "mark_datafiles//ot_mark.inp", row.names = F, col.names = F)
+write.table(OL_MARK, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F)
 
 #-------------------------------------------------------------------------------------------------------------
 ############### PLOTTING
