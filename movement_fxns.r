@@ -115,8 +115,8 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ## Home is determined using the mean + 1 sd of the data.
   
   tags = unique(dat$tag)
-  MARK_distance = matrix(0, nrow = length(tags), ncol = length(prd) + 4)
-    group = c(ncol(MARK_distance)-3, ncol(MARK_distance)-2, ncol(MARK_distance)-1) #represent the "group"
+  capture_history = matrix(0, nrow = length(tags), ncol = length(prd) + 4)
+    group = c(ncol(capture_history)-3, ncol(capture_history)-2, ncol(capture_history)-1) #represent the "group"
   
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
@@ -124,18 +124,18 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     
     p1 = min(ind_dat$period) # first capture period
     index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
-    MARK_distance[t,index] = 1  #mark first capture with 1 ("home")      
+    capture_history[t,index] = 1  #mark first capture with 1 ("home")      
     
     sex = ind_dat[1,]$sex # don't need to acct for disputes in sex b/c should be already deleted (in flagged data fxn)
     if (sex == "M") {
-      MARK_distance[t,ncol(MARK_distance)-3] = 1 } 
+      capture_history[t,ncol(capture_history)-3] = 1 } 
     else if (sex == "F") {
-      MARK_distance[t,ncol(MARK_distance)-2] = 1 }
+      capture_history[t,ncol(capture_history)-2] = 1 }
     else { 
-      MARK_distance[t,ncol(MARK_distance)-1] = 1 }
+      capture_history[t,ncol(capture_history)-1] = 1 }
     
     sd_mass = sd_avg_mass(dat, ind_dat)
-    MARK_distance[t,ncol(MARK_distance)] = sd_mass #put sd of mass in last col
+    capture_history[t,ncol(capture_history)] = sd_mass #put sd of mass in last col
     
     for (i in 1:nrow(ind_dat)){
       
@@ -152,15 +152,15 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
         }
 
         if (ind_dat[i+1,]$plot %in% exclosures){ #was it captured on an exclosure?
-            MARK_distance[t,group] = MARK_distance[t,group]*-1
+          capture_history[t,group] = capture_history[t,group]*-1
         }
         
         index = match(pnext, prd)
-        MARK_distance[t,index] = dist #mark subsequent captures 
+        capture_history[t,index] = dist #mark subsequent captures 
       }
     }  
   }
-  mark_df = concat_ch(MARK_distance)  
+  mark_df = concat_ch(capture_history)  
   return(mark_df)
 }
 
