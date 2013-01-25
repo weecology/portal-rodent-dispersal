@@ -4,9 +4,9 @@
 library(calibrate)
 library(fields)
 
-wd = "C://Users//sarah//Desktop//Dropbox//Active Research Projects//Rodent Movement"
+wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
 setwd(wd)
-source("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//movement_fxns.R")
+source("movement_fxns.R")
 
 #mac access
 wd = "/Users/sarah/Desktop/portal-rodent-dispersal/"
