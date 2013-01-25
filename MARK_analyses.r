@@ -13,7 +13,7 @@ source("movement_fxns.r") #functions for stake_movement.r
 source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
 
-# bring in the inp file and convert it to RMark format (.txt needs to be .inp, change manually)
+# bring in the inp file and convert it to RMark format 
 MSdata <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")))
 
 # Build up the model. Looking at sex effects on dispersal/survival
