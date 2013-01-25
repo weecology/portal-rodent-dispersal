@@ -129,6 +129,16 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "hgran", "cgran", "foli")
     group = c(1,2,3) #represent the "group"
   
+  # record guild in dummy variables (cols 5:7)
+  # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
+  if (dat[1,]$species %in% list("DO", "DM", "PB", "PP", "PF")){ 
+    covariates[, 5] = 1 }
+  else if (dat[1,]$species %in% list("PE", "PM", "RM")){
+    covariates[, 6] = 1}
+  else if (dat[1,]$species %in% list("SH", "SF", "NAO")){
+    covariates[,7] = 1 }  #all zeros indicate insectivores    
+  
+  #loopo through each tag to get individual-level data
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
     ind_dat = ind_dat[order(ind_dat$period),] #order chronologically
@@ -147,14 +157,6 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     
     sd_mass = sd_avg_mass(dat, ind_dat) # record standard deviations away from species average mass
     covariates[t,4] = sd_mass 
-    
-    if (ind_dat[1,]$species %in% list("DO", "DM", "PB", "PP", "PF")){ # record guild in dummy variables (cols 5:7)
-      covariates[t, 5] = 1 }
-    else if (ind_dat[1,]$species %in% list("PE", "PM", "RM")){
-      covariates[t, 6] = 1}
-    else if (ind_dat[1,]$species %in% list("SH", "SF", "NAO")){
-      covariates[t,7] = 1 }  #all zeros indicate insectivores    
-
     
     for (i in 1:nrow(ind_dat)){ #record capture history data
       
@@ -179,7 +181,8 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
       }
     }  
   }
-  mark_df = concat_ch(capture_history)  
+  mark_ch = concat_ch(capture_history)
+  mark_df = cbind(mark_ch, covariates)
   return(mark_df)
 }
 
