@@ -145,10 +145,18 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     else { 
       covariates[t,3] = 1 }
     
-    sd_mass = sd_avg_mass(dat, ind_dat)
+    sd_mass = sd_avg_mass(dat, ind_dat) # record standard deviations away from species average mass
     covariates[t,4] = sd_mass 
     
-    for (i in 1:nrow(ind_dat)){
+    if (ind_dat[1,]$species %in% list("DO", "DM", "PB", "PP", "PF")){ # record guild in dummy variables (cols 5:7)
+      covariates[t, 5] = 1 }
+    else if (ind_dat[1,]$species %in% list("PE", "PM", "RM")){
+      covariates[t, 6] = 1}
+    else if (ind_dat[1,]$species %in% list("SH", "SF", "NAO")){
+      covariates[t,7] = 1 }  #all zeros indicate insectivores    
+
+    
+    for (i in 1:nrow(ind_dat)){ #record capture history data
       
       if (i+1 <= nrow(ind_dat)){
         meters = sqrt((ind_dat[i,8]-ind_dat[i+1,8])**2 + (ind_dat[i,7]-ind_dat[i+1,7])**2)
@@ -163,7 +171,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
         }
 
         if (ind_dat[i+1,]$plot %in% exclosures){ #was it captured on an exclosure?
-          capture_history[t,group] = capture_history[t,group]*-1
+          covariates[t,group] = covariates[t,group]*-1
         }
         
         index = match(pnext, prd)
