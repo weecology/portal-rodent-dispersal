@@ -138,7 +138,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   else if (dat[1,]$species %in% list("SH", "SF", "NAO")){
     covariates[,7] = 1 }  #all zeros indicate insectivores    
   
-  #loopo through each tag to get individual-level data
+  #loop through each tag to get individual-level data
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
     ind_dat = ind_dat[order(ind_dat$period),] #order chronologically
@@ -181,15 +181,14 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
       }
     }  
   }
-  mark_ch = concat_ch(capture_history)
-  mark_df = cbind(mark_ch, covariates)
+  mark_df = concat_ch(capture_history, covariates)
   return(mark_df)
 }
 
-concat_ch = function (matrix){
+concat_ch = function (ch_matrix, cov_matrix){
   #concatenates columns representing capture histories, to be used in later MARK analyses
   # A is a placeholder for the concatenated data (code from D. Koons)
-  A <- data.frame(matrix)
+  A <- data.frame(ch_matrix)
   concat <- paste(A$X1,A$X2,A$X3,A$X4,A$X5,A$X6,A$X7,A$X8,A$X9,A$X10,A$X11,A$X12,
                    A$X13,A$X14,A$X15,A$X16,A$X17,A$X18,A$X19,A$X20,A$X21,A$X22,A$X23,A$X24,A$X25,
                    A$X26,A$X27,A$X28,A$X29,A$X30,A$X31,A$X32,A$X33,A$X34,A$X35,A$X36,A$X37,A$X38,A$X39,
@@ -201,7 +200,7 @@ concat_ch = function (matrix){
                    A$X105,A$X106,A$X107,A$X108,A$X109,A$X110,A$X111,A$X112,A$X113,A$X114,A$X115,
                    A$X116,A$X117,A$X118,A$X119,A$X120,sep='')
       semicol <- rep(";", nrow(A))
-      mark_df <- cbind(concat,A$X121,A$X122,A$X123,A$X124,semicol)
+      mark_df <- cbind(concat,cov_matrix,semicol)
   return (mark_df)
 }
 
