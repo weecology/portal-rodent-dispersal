@@ -119,24 +119,18 @@ write.table(OL_MARK, file = "mark_datafiles//ol_mark.inp", row.names = F, col.na
 #-------------------------------------------------------------------------------------------------------------
 ############### PLOTTING
 
-# plot density of movment by guild for 2000-2009
-plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2, col = 'hotpink2')
-  lines(density(Cgran), col = 'deepskyblue3', lwd = 3, lty = 6)
-  lines(density(naometers), col = 'indianred4', lwd = 4, lty = 3)
-  lines(density(foli), col = 'mediumpurple4', lwd = 4, lty = 3)
-  lines(density(insectiv), col = 'darkgreen', lwd = 2)
-  legend('topright', c('Hgran', 'Neotoma', 'foliv', 'Cgran', 'insec'), bty = 'n', lty = c(1,3,6,3,1), lwd = 5, seg.len = 2,
-         col = c('hotpink2', 'indianred4', 'mediumpurple4', 'deepskyblue3', 'darkgreen'))
+length(unique(cricet[cricet$species=="PE",]$yr))/10
 
-#### Make an occupancy plot for 2000-2009 (similar to Morgan) #######FIX ME - REFERS TO OLD DATAFRAMES
+
+#### Make an occupancy plot for 2000-2009 (similar to Morgan) 
 #proportion of years they were seen in
-doyr = length(unique(DO$yr))/10; dmyr = length(unique(DM$yr))/10; pfyr = length(unique(PF$year))/10; ppyr = length(unique(PP$year))/10; pbyr = length(unique(PB$year))/10
-peyr = length(unique(PE$yr))/10; pmyr = length(unique(PM$yr))/10; rmyr = length(unique(RM$yr))/10
-shyr = length(unique(SH$yr))/10; sfyr = length(unique(SF$yr))/10; naoyr = length(unique(NAO$yr))/10
-otyr = length(unique(OT$yr))/10; olyr = length(unique(OL$yr))/10
+doyr = length(unique(het[het$species=="DO",]$yr))/10; dmyr = length(unique(het[het$species=="DM",]$yr))/10; pfyr = length(unique(het[het$species=="PF",]$yr))/10; ppyr = length(unique(het[het$species=="PP",]$yr))/10; pbyr = length(unique(het[het$species=="PB",]$yr))/10
+peyr = length(unique(cricet[cricet$species=="PE",]$yr))/10; pmyr = length(unique(cricet[cricet$species=="PM",]$yr))/10; rmyr = length(unique(cricet[cricet$species=="RM",]$yr))/10
+shyr = length(unique(foliv[foliv$species=="SH",]$yr))/10; sfyr = length(unique(foliv[foliv$species=="SF",]$yr))/10; naoyr = length(unique(foliv[foliv$species=="NAO",]$yr))/10
+otyr = length(unique(insec[insec$species=="OT",]$yr))/10; olyr = length(unique(insec[insec$species=="OL",]$yr))/10
 
-#proportion of within-year trapping periods they were seen in 
-domo = mean_win_yr_occ(DO); dmmo = mean_win_yr_occ(DM); pfmo = mean_win_yr_occ(PF); ppmo = mean_win_yr_occ(PP); pbmo = mean_win_yr_occ(PB)
+#proportion of within-year trapping periods they were seen in  #FIXME
+domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(DM); pfmo = mean_win_yr_occ(PF); ppmo = mean_win_yr_occ(PP); pbmo = mean_win_yr_occ(PB)
 pemo = mean_win_yr_occ(PE); pmmo = mean_win_yr_occ(PM); rmmo = mean_win_yr_occ(RM)
 shmo = mean_win_yr_occ(SH); sfmo = mean_win_yr_occ(SF); naomo = mean_win_yr_occ(NAO)
 otmo = mean_win_yr_occ(OT); olmo = mean_win_yr_occ(OL)
@@ -201,6 +195,15 @@ plot_recap_hist(OT, "OT"); plot_recap_hist(OL, "OL")
 dev.off()
 
 ######################### EXTRA STUFF, PROBABLY DON'T NEED.... ##############################
+
+# plot density of movment by guild for 2000-2009 - DENSITY PLOTS AREN'T REALLY "CORRECT" BECAUSE DATA ARE DISCRETE
+plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2, col = 'hotpink2')
+lines(density(Cgran), col = 'deepskyblue3', lwd = 3, lty = 6)
+lines(density(naometers), col = 'indianred4', lwd = 4, lty = 3)
+lines(density(foli), col = 'mediumpurple4', lwd = 4, lty = 3)
+lines(density(insectiv), col = 'darkgreen', lwd = 2)
+legend('topright', c('Hgran', 'Neotoma', 'foliv', 'Cgran', 'insec'), bty = 'n', lty = c(1,3,6,3,1), lwd = 5, seg.len = 2,
+       col = c('hotpink2', 'indianred4', 'mediumpurple4', 'deepskyblue3', 'darkgreen'))
 
 
 ############## MOVING
