@@ -26,19 +26,19 @@ ms_ddl <- make.design.data(ms_process)
 
 # Add dynamic dummy variable age class fields to the design data for Psi and p
 ms_ddl$Psi$hy=0
-ms_ddl$Psi$hy[ms_ddl$Psi$sex==0&ms_ddl$Psi$stratum=="A"]=1
+ms_ddl$Psi$hy[ms_ddl$Psi$sex==0&ms_ddl$Psi$stratum=="1"]=1
 ms_ddl$Psi$ahy=0
-ms_ddl$Psi$ahy[ms_ddl$Psi$sex>=1&ms_ddl$Psi$stratum=="A"]=1
+ms_ddl$Psi$ahy[ms_ddl$Psi$sex>=1&ms_ddl$Psi$stratum=="1"]=1
 
 ms_ddl$p$hy=0
-ms_ddl$p$hy[ms_ddl$p$sex==1&ms_ddl$p$stratum=="A"]=1
-ms_ddl$p$hy[ms_ddl$p$sex==1&ms_ddl$p$stratum=="B"]=1
+ms_ddl$p$hy[ms_ddl$p$sex==1&ms_ddl$p$stratum=="1"]=1
+ms_ddl$p$hy[ms_ddl$p$sex==1&ms_ddl$p$stratum=="1"]=1
 ms_ddl$p$sy=0
-ms_ddl$p$sy[ms_ddl$p$sex==2&ms_ddl$p$stratum=="A"]=1
+ms_ddl$p$sy[ms_ddl$p$sex==2&ms_ddl$p$stratum=="1"]=1
 ms_ddl$p$asy=0
-ms_ddl$p$asy[ms_ddl$p$sex>=3&ms_ddl$p$stratum=="A"]=1
+ms_ddl$p$asy[ms_ddl$p$sex>=3&ms_ddl$p$stratum=="1"]=1
 ms_ddl$p$ahy=0
-ms_ddl$p$ahy[ms_ddl$p$sex>=2&ms_ddl$p$stratum=="B"]=1
+ms_ddl$p$ahy[ms_ddl$p$sex>=2&ms_ddl$p$stratum=="2"]=1
 
 ##### Add dummy variables for operating on specific states or transitions
   # A = 1 (home), B = 2 (away)
@@ -51,12 +51,12 @@ ms_ddl$Psi$toA=0
 ms_ddl$Psi$toA[ms_ddl$Psi$stratum=="2"]=1
 
 ms_ddl$p$strA=0
-ms_ddl$p$strA[ms_ddl$p$stratum=="A"]=1
+ms_ddl$p$strA[ms_ddl$p$stratum=="1"]=1
 ms_ddl$p$strB=0
-ms_ddl$p$strB[ms_ddl$p$stratum=="B"]=1
+ms_ddl$p$strB[ms_ddl$p$stratum=="2"]=1
 
 ## TODO: fix recapture probabilities for unsampled or omitted months!
-    # periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 
+    # skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 
               #   337, 339, 344, 351)
 
 # Add a field for monthly reporting probabilities 
