@@ -189,24 +189,13 @@ concat_ch = function (ch_matrix, cov_matrix){
   #concatenates columns representing capture histories, to be used in later MARK analyses
   # A is a placeholder for the concatenated data (code from D. Koons)
   A <- data.frame(ch_matrix)
-  concat <- paste(A$X1,A$X2,A$X3,A$X4,A$X5,A$X6,A$X7,A$X8,A$X9,A$X10,A$X11,A$X12,
-                   A$X13,A$X14,A$X15,A$X16,A$X17,A$X18,A$X19,A$X20,A$X21,A$X22,A$X23,A$X24,A$X25,
-                   A$X26,A$X27,A$X28,A$X29,A$X30,A$X31,A$X32,A$X33,A$X34,A$X35,A$X36,A$X37,A$X38,A$X39,
-                   A$X40,A$X41,A$X42,A$X43,A$X44,A$X45,A$X46,A$X47,A$X48,A$X49,A$X50,A$X51,A$X52,
-                   A$X53,A$X54,A$X55,A$X56,A$X57,A$X58,A$X59,A$X60,A$X61,A$X62,A$X63,A$X64,A$X65,
-                   A$X66,A$X67,A$X68,A$X69,A$X70,A$X71,A$X72,A$X73,A$X74,A$X75,A$X76,A$X77,A$X78,
-                   A$X79,A$X80,A$X81,A$X82,A$X83,A$X84,A$X85,A$X86,A$X87,A$X88,A$X89,A$X90,A$X91,
-                   A$X92,A$X93,A$X94,A$X95,A$X96,A$X97,A$X98,A$X99,A$X100,A$X101,A$X102,A$X103,A$X104,
-                   A$X105,A$X106,A$X107,A$X108,A$X109,A$X110,A$X111,A$X112,A$X113,A$X114,A$X115,
-                   A$X116,A$X117,A$X118,A$X119,A$X120,sep='')
-      semicol <- rep(";", nrow(A))
-      mark_df <- cbind(concat,cov_matrix,semicol)
+  encounters <- do.call(paste, c(A[c(names(A))], sep = '')) # makes a vector of all the capture histories
+      semicol <- rep(";", nrow(A)) # makes a vector of semicolons
+      mark_df <- cbind(encounters,cov_matrix,semicol) # binds the capture, cov, and semicolon data together into a dataframe
   return (mark_df)
 }
 
-format_wrt_mark = function (dataframe, pathname){
-  # format and write files, includes concatenating recapture histories
-}
+
 
 
 
