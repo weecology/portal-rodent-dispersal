@@ -44,25 +44,25 @@ ms_ddl$p$ahy[ms_ddl$p$sex>=2&ms_ddl$p$stratum=="B"]=1
   # A = 1 (home), B = 2 (away)
   # moving to B from anywhere, is risky
   # moving to A from anywhere, is less risky (within home, "normal" movements)
-MS.ddl$Psi$toB=0
-MS.ddl$Psi$toB[MS.ddl$Psi$stratum=="1" & MS.ddl$Psi$tostratum=="2"]=1
+ms_ddl$Psi$toB=0
+ms_ddl$Psi$toB[ms_ddl$Psi$stratum=="1" & ms_ddl$Psi$tostratum=="2"]=1
 
-MS.ddl$Psi$toA=0
-MS.ddl$Psi$toA[MS.ddl$Psi$stratum=="2"]=1
+ms_ddl$Psi$toA=0
+ms_ddl$Psi$toA[ms_ddl$Psi$stratum=="2"]=1
 
-MS.ddl$p$strA=0
-MS.ddl$p$strA[MS.ddl$p$stratum=="A"]=1
-MS.ddl$p$strB=0
-MS.ddl$p$strB[MS.ddl$p$stratum=="B"]=1
+ms_ddl$p$strA=0
+ms_ddl$p$strA[ms_ddl$p$stratum=="A"]=1
+ms_ddl$p$strB=0
+ms_ddl$p$strB[ms_ddl$p$stratum=="B"]=1
 
 ## TODO: fix recapture probabilities for unsampled or omitted months!
     # periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 
               #   337, 339, 344, 351)
 
 # Add a field for monthly reporting probabilities 
-MS.ddl$p$rpt=0
-MS.ddl$p$rpt[MS.ddl$p$prd] == 267 = 0
-MS.ddl$p$rpt[MS.ddl$p$prd] == 277 = 0
+ms_ddl$p$rpt=0
+ms_ddl$p$rpt[ms_ddl$p$prd] == 267 = 0
+ms_ddl$p$rpt[ms_ddl$p$prd] == 277 = 0
 
 # TODO: Lots of work on building up the models!
                           
