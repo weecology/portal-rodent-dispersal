@@ -15,30 +15,30 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 
 
 # bring in the inp file and convert it to RMark format 
-MSdata <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")),  #FIXME
+ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")),  #FIXME
                       covariates = data.frame(mass = "sd_mass", guild = c("hgran", "cgran", "foli")))
 
 # Build up the model. Looking at sex effects on dispersal/survival
-MS.process <- process.data(MSdata,model="Multistrata",begin.time=2000,
-                           group=c("sex"))
+ms_process <- process.data(ms_data,model="Multistrata",begin.time=2000,
+                           group=c("sex"), covariates = c("mass", "guild"))
 
-MS.ddl <- make.design.data(MS.process)
+ms_ddl <- make.design.data(ms_process)
 
 # Add dynamic dummy variable age class fields to the design data for Psi and p
-MS.ddl$Psi$hy=0
-MS.ddl$Psi$hy[MS.ddl$Psi$sex==0&MS.ddl$Psi$stratum=="A"]=1
-MS.ddl$Psi$ahy=0
-MS.ddl$Psi$ahy[MS.ddl$Psi$sex>=1&MS.ddl$Psi$stratum=="A"]=1
+ms_ddl$Psi$hy=0
+ms_ddl$Psi$hy[ms_ddl$Psi$sex==0&ms_ddl$Psi$stratum=="A"]=1
+ms_ddl$Psi$ahy=0
+ms_ddl$Psi$ahy[ms_ddl$Psi$sex>=1&ms_ddl$Psi$stratum=="A"]=1
 
-MS.ddl$p$hy=0
-MS.ddl$p$hy[MS.ddl$p$sex==1&MS.ddl$p$stratum=="A"]=1
-MS.ddl$p$hy[MS.ddl$p$sex==1&MS.ddl$p$stratum=="B"]=1
-MS.ddl$p$sy=0
-MS.ddl$p$sy[MS.ddl$p$sex==2&MS.ddl$p$stratum=="A"]=1
-MS.ddl$p$asy=0
-MS.ddl$p$asy[MS.ddl$p$sex>=3&MS.ddl$p$stratum=="A"]=1
-MS.ddl$p$ahy=0
-MS.ddl$p$ahy[MS.ddl$p$sex>=2&MS.ddl$p$stratum=="B"]=1
+ms_ddl$p$hy=0
+ms_ddl$p$hy[ms_ddl$p$sex==1&ms_ddl$p$stratum=="A"]=1
+ms_ddl$p$hy[ms_ddl$p$sex==1&ms_ddl$p$stratum=="B"]=1
+ms_ddl$p$sy=0
+ms_ddl$p$sy[ms_ddl$p$sex==2&ms_ddl$p$stratum=="A"]=1
+ms_ddl$p$asy=0
+ms_ddl$p$asy[ms_ddl$p$sex>=3&ms_ddl$p$stratum=="A"]=1
+ms_ddl$p$ahy=0
+ms_ddl$p$ahy[ms_ddl$p$sex>=2&ms_ddl$p$stratum=="B"]=1
 
 ##### Add dummy variables for operating on specific states or transitions
   # A = 1 (home), B = 2 (away)
