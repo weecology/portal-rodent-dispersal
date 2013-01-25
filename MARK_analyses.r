@@ -7,6 +7,10 @@ library(RMark) #can't install on mac? Update R version?
 wd = "/Users/sarah/Desktop/portal-rodent-dispersal/"
 setwd(wd)
 
+source("movement_fxns.r") #functions for stake_movement.r
+source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
+
+
 # bring in the inp file and convert it to RMark format (.txt needs to be .inp, change manually)
 MSdata <- convert.inp("do_mark.inp",
                       group.df=data.frame(sex=c("male","female","unidsex")))
