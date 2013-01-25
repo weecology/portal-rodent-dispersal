@@ -185,12 +185,12 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   return(mark_df)
 }
 
+
 concat_ch = function (ch_matrix, cov_matrix){
   #concatenates columns representing capture histories, to be used in later MARK analyses
-  # A is a placeholder for the concatenated data (code from D. Koons)
-  A <- data.frame(ch_matrix)
-  encounters <- do.call(paste, c(A[c(names(A))], sep = '')) # makes a vector of all the capture histories
-      semicol <- rep(";", nrow(A)) # makes a vector of semicolons
+  ch_df <- data.frame(ch_matrix)
+  encounters <- do.call(paste, c(ch_df[c(names(ch_df))], sep = '')) # makes a vector of all the capture histories
+      semicol <- rep(";", nrow(ch_df)) # makes a vector of semicolons
       mark_df <- cbind(encounters,cov_matrix,semicol) # binds the capture, cov, and semicolon data together into a dataframe
   return (mark_df)
 }
