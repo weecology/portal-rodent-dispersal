@@ -1,11 +1,12 @@
 # for manipulating  rodent movement data in MARK
 ## analyze survival and dispseral probabilities for species and guilds
+# Use multistrata models that give S(survival), p(capture probability) and Psi(transition probability)
+# Will compare data among species and guilds. 
+# Major covariates include sex, guild, and average body mass
 
-library(RMark) #can't install on mac? Update R version?
+library(RMark) 
 
-#mac access
-wd = "/Users/sarah/Desktop/portal-rodent-dispersal/"
-#windows access
+#set working directory and import source code
 wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
 setwd(wd)
 
@@ -14,7 +15,8 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 
 
 # bring in the inp file and convert it to RMark format 
-MSdata <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")))
+MSdata <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")),  #FIXME
+                      covariates = data.frame(mass = "sd_mass", guild = c("hgran", "cgran", "foli")))
 
 # Build up the model. Looking at sex effects on dispersal/survival
 MS.process <- process.data(MSdata,model="Multistrata",begin.time=2000,
