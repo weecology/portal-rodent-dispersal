@@ -189,8 +189,9 @@ format_wrt_mark = function (dataframe, pathname){
 
 
 
-
+#---------------------------------------------------------------------------------------------------------------
 #################### OLD FUNCTIONS ? TO FIX AND WORK ON...
+#---------------------------------------------------------------------------------------------------------------
 
 ### Create a set of capture histories by treatment type
 create_trmt_hist = function(dat, tags, prd){
