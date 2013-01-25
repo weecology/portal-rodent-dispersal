@@ -5,6 +5,8 @@ library(RMark) #can't install on mac? Update R version?
 
 #mac access
 wd = "/Users/sarah/Desktop/portal-rodent-dispersal/"
+#windows access
+wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
 setwd(wd)
 
 source("movement_fxns.r") #functions for stake_movement.r
@@ -12,8 +14,7 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 
 
 # bring in the inp file and convert it to RMark format (.txt needs to be .inp, change manually)
-MSdata <- convert.inp("do_mark.inp",
-                      group.df=data.frame(sex=c("male","female","unidsex")))
+MSdata <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")))
 
 # Build up the model. Looking at sex effects on dispersal/survival
 MS.process <- process.data(MSdata,model="Multistrata",begin.time=2000,
