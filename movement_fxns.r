@@ -191,7 +191,7 @@ concat_ch = function (ch_matrix, cov_matrix){
   ch_df <- data.frame(ch_matrix)
   encounters <- do.call(paste, c(ch_df[c(names(ch_df))], sep = '')) # makes a vector of all the capture histories
       semicol <- rep(";", nrow(ch_df)) # makes a vector of semicolons
-      mark_df <- cbind(encounters,cov_matrix,semicol) # binds the capture, cov, and semicolon data together into a dataframe
+      mark_df <- cbind(encounters, cov_matrix, semicol) # binds the capture, cov, and semicolon data together into a dataframe
   return (mark_df)
 }
 
