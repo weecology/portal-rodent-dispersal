@@ -13,10 +13,10 @@ wd = "/Users/sarah/Desktop/portal-rodent-dispersal/"
 setwd(wd)
 source("movement_fxns.r")
 
-het = read.csv("data//heteromyids_2000-2009.csv")   # DO, DM, PB, PP, PF
-cricet = read.csv("data//cricetids_2000-2009.csv")  # PE, PM, RM
-foliv = read.csv("data//folivores_2000-2009.csv")   # SH, SF, NA (as NAO)
-insec = read.csv("data//onychomys_2000-2009.csv")   # OT, OL
+het = read.csv("rawdata//heteromyids_2000-2009.csv")   # DO, DM, PB, PP, PF
+cricet = read.csv("rawdata//cricetids_2000-2009.csv")  # PE, PM, RM
+foliv = read.csv("rawdata//folivores_2000-2009.csv")   # SH, SF, NA (as NAO)
+insec = read.csv("rawdata//onychomys_2000-2009.csv")   # OT, OL
 
 # # # list of dataframes                                                 WORKS NOW, TO USE? OR NOT TO USE? 
 # datLS = list(het, cricet, foliv, insec)
