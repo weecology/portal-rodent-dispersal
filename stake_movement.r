@@ -57,12 +57,13 @@ foli = c(shmeters, sfmeters) #separate NAO because they use different strategy -
 insectiv = c(otmeters, olmeters)
 
 # find breakpoints to use in MARK data structure for future analyses
-# breakpoint = mean + sd of all the distances traveled by recaptured individuals    #IS THERE A BETTER WAY!?
-Hgran_brkpt = mean(Hgran) + sd(Hgran)
-Cgran_brkpt = mean(Cgran) + sd(Cgran)
-foli_brkpt = mean(foli) + sd(foli)
-nao_brkpt = mean(naometers) + sd(naometers)
-ins_brkpt = mean(insectiv) + sd(insectiv)
+# data reasonably well fits a lognormal distribution (eyeball and J. Powell)
+# breakpoint = mean(logdata) + sd(logdata) of all the distances traveled by recaptured individuals    
+Hgran_brkpt = expm1(mean(log1p(Hgran)) + sd(log1p(Hgran)))
+Cgran_brkpt = expm1(mean(log1p(Cgran)) + sd(log1p(Cgran)))
+foli_brkpt = expm1(mean(log1p(foli)) + sd(log1p(foli)))
+nao_brkpt = expm1(mean(log1p(naometers)) + sd(log1p(naometers)))
+ins_brkpt = expm1(mean(log1p(insectiv)) + sd(log1p(insectiv)))
 
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
 #create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
