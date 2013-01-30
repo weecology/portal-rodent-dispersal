@@ -115,24 +115,29 @@ write.table(OL_MARK, file = "mark_datafiles//ol_mark.inp", row.names = F, col.na
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
+pdf("Fig1_guild_movement_hist.pdf", 8, 5, pointsize = 10)
+par(mfrow=c(3,2), mar=c(3,1.5,2,0.5), oma=c(1.5,2,1,1))
 
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
 #create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
 v6 = seq(-3,500,6)
-Hgcount = hist(Hgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
-xline(Hgran_brkpt, lwd = 2, col = "indianred")
-Cgcount = hist(Cgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
-xline(Cgran_brkpt, lwd = 2, col = "indianred")
-focount = hist(foli, breaks = v6, col = 'gray60', xlim = c(0,500), main = 'folivores - SH, SF')
-xline(foli_brkpt, lwd = 2, col = "indianred")
-nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), main = 'neotoma - NA')
-xline(nao_brkpt, lwd = 2, col = "indianred")
-incount = hist(insectiv, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
-xline(ins_brkpt, lwd = 2, col = "indianred")
+Hgcount = hist(Hgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 3500), 
+               xlab = "meters", main = 'Heteromyids - PF, PP, PB, DO, DM')      
+            xline(Hgran_brkpt, lwd = 2, col = "indianred")
+Cgcount = hist(Cgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,40), 
+               xlab = "meters", main = 'Cricetids - PE, PM, RM')
+            xline(Cgran_brkpt, lwd = 2, col = "indianred")
+focount = hist(foli, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25),
+               xlab = "meters", main = 'folivores - SH, SF')
+            xline(foli_brkpt, lwd = 2, col = "indianred")
+nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
+               xlab = "meters", main = 'neotoma - NA')
+            xline(nao_brkpt, lwd = 2, col = "indianred")
+incount = hist(insectiv, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,120), 
+               xlab = "meters", main = 'insectivores - OT, OL')
+            xline(ins_brkpt, lwd = 2, col = "indianred")
 
-
-
-length(unique(cricet[cricet$species=="PE",]$yr))/10
+dev.off()
 
 
 #### Make an occupancy plot for 2000-2009 (similar to Morgan) 
