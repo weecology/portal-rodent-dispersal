@@ -213,3 +213,33 @@ mean_win_yr_occ = function (data){
   return (months)
 }
 
+
+mean_mo_repro = function (femaledata){
+  mos = c(1:12)
+  years = sort(unique(femaledata$yr)) #only look at data during years in which the species is present
+
+  avg_r_mo = c()
+  
+  for (m in 1:length(mos)){
+    mo_repros = c()
+    
+    for (y in 1:length(years)){
+      tmp = subset(femaledata, yr == years[y])
+      tmp = subset(tmp, mo == mos[m])
+      
+      if (nrow(tmp) > 0){
+        num_females = nrow(tmp)
+        repro = subset(tmp, nipples == "E" | nipples == "B" | pregnant == "P")
+        prop_repro = nrow(repro)/num_females
+        mo_repros = append(mo_repros, prop_repro)
+      }
+      else {
+        mo_repros = append(mo_repros, NA)
+      }
+    }
+    avg_mo = round(mean(mo_repros, na.rm = T),4)
+    avg_r_mo = append(avg_r_mo, avg_mo)
+  }
+  
+  return(avg_r_mo)
+}
