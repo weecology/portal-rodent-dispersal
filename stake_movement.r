@@ -138,6 +138,7 @@ write.table(OL_MARK, file = "mark_datafiles//ol_mark.inp", row.names = F, col.na
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
+
 pdf("Fig1_guild_movement_hist.pdf", 8, 5, pointsize = 10)
 par(mfrow=c(3,2), mar=c(3,1.5,2,0.5), oma=c(1.5,2,1,1))
 
@@ -159,15 +160,14 @@ nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c
 incount = hist(insectiv, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,120), 
                xlab = "meters", main = 'insectivores - OT, OL')
             xline(ins_brkpt, lwd = 2, col = "indianred")
-
 dev.off()
 
-
-#### Make an occupancy plot for 2000-2009 (similar to Morgan) 
-# plot temporal occupancy - for month and year 
+#------------------------------------------------------------
 pdf("Fig2_avg_temporal_occ.pdf", 5, 5, pointsize = 10)
 par(mfrow=c(1,1))
 
+# Make an occupancy plot for 2000-2009 (similar to Morgan) 
+# plot temporal occupancy - for month and year 
 plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
     textxy(pfyr, pfmo, "PF")
   points(ppyr, ppmo, pch = 19, col = "hotpink")
@@ -196,13 +196,13 @@ plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", y
     textxy(rmyr, rmmo, "Cgran")
   abline(v = 0.5, lty = 2, col = 'gray40', lwd = 1)
   abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
-
 dev.off()
 
-# plot mean fecundity by month for each species
+#---------------------------------------------
 pdf("Fig3_avg_temporal_occ.pdf", 7, 10, paper = "letter", pointsize = 10)
 par(mfrow=c(5,3))
 
+#plot mean fecundity by month for each species
 plot(c(1:12), doreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "DO - krat")
 plot(c(1:12), dmreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
@@ -232,7 +232,6 @@ plot(c(1:12), otreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab
      ylab = "proprotion reproductive fem.", bty = "n", main = "OT - grasshopper mouse")
 plot(c(1:12), olreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "OL - grasshopper mouse")
-
 dev.off()
 
 
