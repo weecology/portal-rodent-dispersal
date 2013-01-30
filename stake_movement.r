@@ -146,51 +146,52 @@ doyr = length(unique(het[het$species=="DO",]$yr))/10; dmyr = length(unique(het[h
 peyr = length(unique(cricet[cricet$species=="PE",]$yr))/10; pmyr = length(unique(cricet[cricet$species=="PM",]$yr))/10; rmyr = length(unique(cricet[cricet$species=="RM",]$yr))/10
 shyr = length(unique(foliv[foliv$species=="SH",]$yr))/10; sfyr = length(unique(foliv[foliv$species=="SF",]$yr))/10; naoyr = length(unique(foliv[foliv$species=="NAO",]$yr))/10
 otyr = length(unique(insec[insec$species=="OT",]$yr))/10; olyr = length(unique(insec[insec$species=="OL",]$yr))/10
-# 
-# # average number of months they were seen in during year sin which they were present
 
-domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(DM); pfmo = mean_win_yr_occ(PF); ppmo = mean_win_yr_occ(PP); pbmo = mean_win_yr_occ(PB)
-pemo = mean_win_yr_occ(PE); pmmo = mean_win_yr_occ(PM); rmmo = mean_win_yr_occ(RM)
-shmo = mean_win_yr_occ(SH); sfmo = mean_win_yr_occ(SF); naomo = mean_win_yr_occ(NAO)
-otmo = mean_win_yr_occ(OT); olmo = mean_win_yr_occ(OL)
-# 
+# average number of months they were seen in during year sin which they were present
+domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(subset(het, species == "DM")); pfmo = mean_win_yr_occ(subset(het, species == "PF")); ppmo = mean_win_yr_occ(subset(het, species == "PP")); pbmo = mean_win_yr_occ(subset(het, species == "PB"))
+pemo = mean_win_yr_occ(subset(cricet, species == "PE")); pmmo = mean_win_yr_occ(subset(cricet, species == "PM")); rmmo = mean_win_yr_occ(subset(cricet, species == "RM"))
+shmo = mean_win_yr_occ(subset(foliv, species == "SH")); sfmo = mean_win_yr_occ(subset(foliv, species == "SF")); naomo = mean_win_yr_occ(subset(foliv, species == "NAO"))
+otmo = mean_win_yr_occ(subset(insec, species == "OT")); olmo = mean_win_yr_occ(subset(insec, species == "OL"))
+ 
+# plot temporal occupancy - for month and year 
+plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
+    textxy(pfyr, pfmo, "PF")
+  points(ppyr, ppmo, pch = 19, col = "hotpink")
+    textxy(ppyr, ppmo, "PP")
+  points(pbyr, pbmo, pch = 19, col = "hotpink")
+    textxy(pbyr, pbmo, "PB")
+  points(doyr, domo, pch = 19, col = "hotpink")
+    textxy(doyr, domo, "DO")
+  points(dmyr, dmmo, pch = 19, col = "hotpink")
+    textxy(dmyr, dmmo, "DM")
+  points(peyr, pemo, pch = 19)
+    textxy(peyr, pemo, "Cgran")
+  points(pmyr, pmmo, pch = 19)
+    textxy(pmyr, pmmo, "Cgran")
+  points(otyr, otmo, pch = '*', cex = 1.5)
+    textxy(otyr, otmo, "insectiv")
+  points(olyr, olmo, pch = '*', cex = 1.5)
+    textxy(olyr, olmo, "insectiv")
+  points(shyr, shmo, pch = 19)
+    textxy(shyr, shmo, "foliv")
+  points(sfyr, sfmo, pch = 19)
+    textxy(sfyr, sfmo, "foliv")
+  points(naoyr, naomo, pch = 19, col = "purple")
+    textxy(naoyr, naomo, "NA")
+  points(rmyr, rmmo, pch = 19)
+    textxy(rmyr, rmmo, "Cgran")
+  abline(v = 0.5, lty = 2, col = 'gray40', lwd = 1)
+  abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
+dev.off()
+
 # #mean abundance within all years #FIXME - CAN'T FIND FXN
 # doabun = mean_allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(DM); pfabun = mean_allyrs_abun(PF); ppabun = mean_allyrs_abun(PP); pbabun = mean_allyrs_abun(PB)
 # peabun = mean_allyrs_abun(PE); pmabun = mean_allyrs_abun(PM); rmabun = mean_allyrs_abun(RM)
 # shabun = mean_allyrs_abun(SH); sfabun = mean_allyrs_abun(SF); naoabun = mean_allyrs_abun(NAO)
 # otabun = mean_allyrs_abun(OT); olabun = mean_allyrs_abun(OL)
 # 
-# 
-# # plot temporal occupancy - for month and year - #FIXME - CAN'T FIND FXN TO GET DATA
-# plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
-#     #textxy(pfyr, pfmo, "PF")
-#   points(ppyr, ppmo, pch = 19, col = "hotpink")
-#     #textxy(ppyr, ppmo, "PP")
-#   points(pbyr, pbmo, pch = 19, col = "hotpink")
-#     #textxy(pbyr, pbmo, "PB")
-#   points(doyr, domo, pch = 19, col = "hotpink")
-#     #textxy(doyr, domo, "DO")
-#   points(dmyr, dmmo, pch = 19, col = "hotpink")
-#     #textxy(dmyr, dmmo, "DM")
-#   points(peyr, pemo, pch = 19)
-#     textxy(peyr, pemo, "Cgran")
-#   points(pmyr, pmmo, pch = 19)
-#     textxy(pmyr, pmmo, "Cgran")
-#   points(otyr, otmo, pch = '*', cex = 1.5)
-#     textxy(otyr, otmo, "insectiv")
-#   points(olyr, olmo, pch = '*', cex = 1.5)
-#     textxy(olyr, olmo, "insectiv")
-#   points(shyr, shmo, pch = 19)
-#     textxy(shyr, shmo, "foliv")
-#   points(sfyr, sfmo, pch = 19)
-#     textxy(sfyr, sfmo, "foliv")
-#   points(naoyr, naomo, pch = 19, col = "purple")
-#     textxy(naoyr, naomo, "NA")
-#   points(rmyr, rmmo, pch = 19)
-#     textxy(rmyr, rmmo, "Cgran")
-#   abline(v = 0.5, lty = 2, col = 'gray40', lwd = 2)
-#   abline(h = 0.5, lty = 2, col = 'gray40', lwd = 2)
-# 
+
 # ##------- plot number of individuals captured in each period for each group, save in pdf file #FIXME
 # pdf(file="indivs_per_year.pdf",11,7.5)
 # par(mfrow=c(3,2))
