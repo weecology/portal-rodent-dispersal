@@ -7,16 +7,12 @@ library(fields)
 #---------------------------------------------------------------------------------
 #          setup - select wd, import data, source code,  file to collect results
 #---------------------------------------------------------------------------------
-
+#set working directory
 wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
 setwd(wd)
 source("movement_fxns.R")
 
-#mac access
-wd = "/Users/sarah/Desktop/portal-rodent-dispersal/"
-setwd(wd)
-source("movement_fxns.r")
-
+#import the data by guild
 het = read.csv("rawdata//heteromyids_2000-2009.csv")   # DO, DM, PB, PP, PF
 cricet = read.csv("rawdata//cricetids_2000-2009.csv")  # PE, PM, RM
 foliv = read.csv("rawdata//folivores_2000-2009.csv")   # SH, SF, NA (as NAO)
@@ -41,6 +37,9 @@ het = id_unknowns(het, 16); cricet = id_unknowns(cricet, 16); foliv = id_unknown
 # get rid of 'bad data'; deletes data that is not a pit tag, where sex is inconsistent or where species is inconsistent. 
 het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); insec = subsetDat(insec)
 
+#---------------------------------------------------------------------------------
+#          calculate movement distances, multi-state capture histories
+#---------------------------------------------------------------------------------
 
 # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
   #heteromyids
