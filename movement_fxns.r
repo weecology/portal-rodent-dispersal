@@ -196,5 +196,20 @@ concat_ch = function (ch_matrix, cov_matrix){
 }
 
 
-
+mean_win_yr_occ = function (data){
+  #finds the mean within year occupancy for each month for a given species, returns a single value
+  mos = c(1:12)
+  years = sort(unique(data$yr)) #only count during years in which the species is present
+  
+  num_mos = c()
+  
+  for (y in 1:length (years)){
+    yr_data = subset(data, yr == years[y])
+    m = length(unique(yr_data$mo))
+    num_mos = append(num_mos, m)
+  }
+  months = mean(num_mos)
+  
+  return (months)
+}
 
