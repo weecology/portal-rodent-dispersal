@@ -4,6 +4,10 @@
 library(calibrate)
 library(fields)
 
+#---------------------------------------------------------------------------------
+#          setup - select wd, import data, source code,  file to collect results
+#---------------------------------------------------------------------------------
+
 wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
 setwd(wd)
 source("movement_fxns.R")
@@ -18,11 +22,13 @@ cricet = read.csv("rawdata//cricetids_2000-2009.csv")  # PE, PM, RM
 foliv = read.csv("rawdata//folivores_2000-2009.csv")   # SH, SF, NA (as NAO)
 insec = read.csv("rawdata//onychomys_2000-2009.csv")   # OT, OL
 
-# # # list of dataframes                                                 WORKS NOW, TO USE? OR NOT TO USE? 
-# datLS = list(het, cricet, foliv, insec)
-# names(datLS) = c('het','cricet', 'foliv', 'insec')
-# for (df in seq_along(datLS)) datLS[[df]]$tag = as.character(datLS[[df]]$tag)
+# output directed to rodent_results.txt in wd. output is appended
+# to existing file. output also sent to terminal. 
+sink("rodent_results.txt", append=TRUE, split=TRUE)
 
+#---------------------------------------------------------------------------------
+#          clean up the data
+#---------------------------------------------------------------------------------
 
 # change some cols from factor to character class
 het$tag = as.character(het$tag); cricet$tag = as.character(cricet$tag); foliv$tag = as.character(foliv$tag); insec$tag = as.character(insec$tag)
@@ -65,20 +71,6 @@ foli_brkpt = expm1(mean(log1p(foli)) + sd(log1p(foli)))
 nao_brkpt = expm1(mean(log1p(naometers)) + sd(log1p(naometers)))
 ins_brkpt = expm1(mean(log1p(insectiv)) + sd(log1p(insectiv)))
 
-#plot histogram of all consecutive movement for rodents within a species 2000-2009
-#create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
-v6 = seq(-3,500,6)
-Hgcount = hist(Hgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
-  xline(Hgran_brkpt, lwd = 2, col = "indianred")
-Cgcount = hist(Cgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
-  xline(Cgran_brkpt, lwd = 2, col = "indianred")
-focount = hist(foli, breaks = v6, col = 'gray60', xlim = c(0,500), main = 'folivores - SH, SF')
-  xline(foli_brkpt, lwd = 2, col = "indianred")
-nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), main = 'neotoma - NA')
-  xline(nao_brkpt, lwd = 2, col = "indianred")
-incount = hist(insectiv, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
-  xline(ins_brkpt, lwd = 2, col = "indianred")
-
 # Get MARK capture histories
 ## add unique breakpoints for each species based on histogram data of movement
 periods = c(261:380)
@@ -102,7 +94,11 @@ NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, exclosures,
 OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, exclosures, ins_brkpt)
 OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, exclosures, ins_brkpt)
 
-#write files to local folder for MARK analysis
+#---------------------------------------------------------------------------------
+#          write files to folder for later analysis using RMark - .inp required
+#---------------------------------------------------------------------------------
+
+#write files to local folder
 write.table(DO_MARK, file = "mark_datafiles//do_mark.inp", row.names = F, col.names = F)
 write.table(DM_MARK, file = "mark_datafiles//dm_mark.inp", row.names = F, col.names = F)
 write.table(PB_MARK, file = "mark_datafiles//pb_mark.inp", row.names = F, col.names = F)
@@ -117,8 +113,25 @@ write.table(NAO_MARK, file = "mark_datafiles//nao_mark.inp", row.names = F, col.
 write.table(OT_MARK, file = "mark_datafiles//ot_mark.inp", row.names = F, col.names = F)
 write.table(OL_MARK, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F)
 
-#-------------------------------------------------------------------------------------------------------------
-############### PLOTTING
+#---------------------------------------------------------------------------------
+#          plot results
+#---------------------------------------------------------------------------------
+
+#plot histogram of all consecutive movement for rodents within a species 2000-2009
+#create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
+v6 = seq(-3,500,6)
+Hgcount = hist(Hgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2500), main = 'Heteromyids - PF, PP, PB, DO, DM')      
+xline(Hgran_brkpt, lwd = 2, col = "indianred")
+Cgcount = hist(Cgran, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,20), main = 'Cricetids - PE, PM, RM')
+xline(Cgran_brkpt, lwd = 2, col = "indianred")
+focount = hist(foli, breaks = v6, col = 'gray60', xlim = c(0,500), main = 'folivores - SH, SF')
+xline(foli_brkpt, lwd = 2, col = "indianred")
+nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), main = 'neotoma - NA')
+xline(nao_brkpt, lwd = 2, col = "indianred")
+incount = hist(insectiv, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,80), main = 'insectivores - OT, OL')
+xline(ins_brkpt, lwd = 2, col = "indianred")
+
+
 
 length(unique(cricet[cricet$species=="PE",]$yr))/10
 
