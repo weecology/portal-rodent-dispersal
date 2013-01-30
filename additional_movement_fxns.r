@@ -1,6 +1,11 @@
 # Functions that accompany the Supp, Koons, and Ernest rodent movement project using data at the Portal Project 2000-2009
 # These functions were used to create figures and summarizing data, but may not be included in the final paper.
 
+# # # list of dataframes                                                 WORKS NOW, TO USE? OR NOT TO USE? 
+# datLS = list(het, cricet, foliv, insec)
+# names(datLS) = c('het','cricet', 'foliv', 'insec')
+# for (df in seq_along(datLS)) datLS[[df]]$tag = as.character(datLS[[df]]$tag)
+
 #---------------------------------------------------------------------------------------------------------------
 #################### OLD FUNCTIONS ? TO FIX AND WORK ON...
 #---------------------------------------------------------------------------------------------------------------
