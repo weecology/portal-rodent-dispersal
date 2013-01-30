@@ -201,14 +201,14 @@ mean_win_yr_occ = function (data){
   mos = c(1:12)
   years = sort(unique(data$yr)) #only count during years in which the species is present
   
-  num_mos = c()
+  proportion_mos = c()
   
   for (y in 1:length (years)){
     yr_data = subset(data, yr == years[y])
-    m = length(unique(yr_data$mo))
-    num_mos = append(num_mos, m)
+    m = length(unique(yr_data$mo))/12
+    proportion_mos = append(proportion_mos, m)
   }
-  months = mean(num_mos)
+  months = round(mean(proportion_mos),4)
   
   return (months)
 }
