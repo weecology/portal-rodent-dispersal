@@ -426,3 +426,76 @@ plot_recap_hist = function (data, name) {
        col = "gray60", border = "white", main = "")
 }
 
+# 
+# ######################### plotting commands - mostly density plots, not exactly correct ##############################
+# 
+# # plot density of movment by guild for 2000-2009 - DENSITY PLOTS AREN'T REALLY "CORRECT" BECAUSE DATA ARE DISCRETE
+# plot(density(Hgran), main = 'Portal movement by guild', xlab = 'meters', lwd = 2, col = 'hotpink2')
+# lines(density(Cgran), col = 'deepskyblue3', lwd = 3, lty = 6)
+# lines(density(naometers), col = 'indianred4', lwd = 4, lty = 3)
+# lines(density(foli), col = 'mediumpurple4', lwd = 4, lty = 3)
+# lines(density(insectiv), col = 'darkgreen', lwd = 2)
+# legend('topright', c('Hgran', 'Neotoma', 'foliv', 'Cgran', 'insec'), bty = 'n', lty = c(1,3,6,3,1), lwd = 5, seg.len = 2,
+#        col = c('hotpink2', 'indianred4', 'mediumpurple4', 'deepskyblue3', 'darkgreen'))
+# 
+# 
+# ############## MOVING
+# # get list of indivs that moved plots or treatment, species is included
+# moving_rats = find_rats_that_move(heteros, tags, 8, 9, 3, 4)
+# 
+# # subset tags that never leave a plot
+# stationary_hets = heteros
+# plotmovers = unique(moving_rats$tag)
+# for (i in 1:length(plotmovers)) {
+#   stationary_hets = subset(stationary_hets, tag != plotmovers[i])
+# }
+# 
+# # list the stakes it inhabits
+# tags = unique(stationary_hets$tag)
+# stakemoves = examine_stake_moves(stationary_hets, tags, 5, 6, 7, 8, 9)
+# 
+# # calculate the distances between each trapping location
+# plot_stake_moves(stationary_hets, tags, 5, 4, 8, 9)
+# 
+# 
+# # plot density of all consecutive movement from rodents within a species 2000-2009, NOT A GREAT WAY TO PLOT THIS DATA
+# plot(density(pf_meters), main = paste("P. flavus (", length(pftags), " = i, ", length(pf_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(pp_meters), main = paste("C. penicillatus (", length(pptags), " = i, ", length(pp_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(pb_meters), main = paste("C. baileyi (", length(pbtags), " = i, ", length(pb_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(do_meters), main = paste("D. ordii (", length(dotags), " = i, ", length(do_meters), " = N)", sep = ''), lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(dm_meters), main = paste("D. merriami (", length(dmtags), "= i, ", length(dm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# 
+# plot(density(pe_meters), main = paste("P. eremicus (", length(petags), " = i, ", length(pe_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(pm_meters), main = paste("P. maniculatus (", length(pmtags), " = i, ", length(pm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(rm_meters), main = paste("R. megalotis (", length(rmtags), "= i, ", length(rm_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# 
+# plot(density(sh_meters), main = paste("S. hispidus (", length(shtags), " = i, ", length(sh_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(sf_meters), main = paste("S. fulviventer (", length(sftags), " = i, ", length(sf_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(nao_meters), main = paste("N. albigula (", length(naotags), " = i, ", length(nao_meters), " = N)", sep = ''), lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# 
+# plot(density(ot_meters), main = paste("O. torridus (", length(ottags), " = i, ", length(ot_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# plot(density(ol_meters), main = paste("O. leucogaster (", length(oltags), " = i, ", length(ol_meters), " = N)", sep = ''), xlab = 'meters', lwd = 2, xlim = c(0,500), ylim = c(0,.1))
+# 
+# 
+# #plot all together using density WHICH IS NOT REALLY A GOOD WAY TO PLOT THIS DATA
+# plot(density(pb_meters), main = 'Portal rodent movement', xlab = 'meters', lwd = 2, col = 'peru')
+# lines(density(pp_meters), col = 'black', lwd = 2)
+# lines(density(do_meters), col = 'mediumpurple4', lwd = 4, lty = 3)
+# lines(density(dm_meters), col = 'maroon4', lwd = 4, lty = 3)
+# lines(density(pf_meters), col = 'hotpink', lwd = 2)
+# 
+# lines(density(pe_meters), col = 'deepskyblue3', lwd = 3, lty = 6)
+# lines(density(pm_meters), col = 'royalblue4', lwd = 3, lty = 6)
+# lines(density(rm_meters), col = 'cadetblue', lwd = 3, lty = 6)
+# 
+# lines(density(sh_meters), col = 'indianred', lwd = 3)
+# lines(density(sf_meters), col = 'brown', lwd = 3)
+# lines(density(nao_meters), col = 'gray60', lwd = 3)
+# 
+# lines(density(ot_meters), col = 'darkgreen', lwd = 2)
+# lines(density(ol_meters), col = 'darkolivegreen', lwd = 2)
+# 
+# legend('topright', c('PB','PP','DO','DM','PE','PM','OT','OL'), bty = 'n', lty = c(1,1,3,3,6,6,1,1), lwd = 10, seg.len = 2, 
+#        col = c('peru', 'black', 'mediumpurple4','maroon4','deepskyblue3', 'royalblue3','darkgreen', 'darkolivegreen'))
+# abline(v = 70.71, lty = 2, col = 'gray60', lwd = 2)
+
