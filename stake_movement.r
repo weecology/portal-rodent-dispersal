@@ -188,6 +188,11 @@ plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", y
 
 dev.off()
 
+# plot mean fecundity by month for each species
+
+doreprd = mean_mo_repro(subset(het, species == "DO"));
+
+
 # #mean abundance within all years #FIXME - CAN'T FIND FXN
 # doabun = mean_allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(DM); pfabun = mean_allyrs_abun(PF); ppabun = mean_allyrs_abun(PP); pbabun = mean_allyrs_abun(PB)
 # peabun = mean_allyrs_abun(PE); pmabun = mean_allyrs_abun(PM); rmabun = mean_allyrs_abun(RM)
