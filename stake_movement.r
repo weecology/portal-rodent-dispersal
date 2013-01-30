@@ -154,6 +154,9 @@ shmo = mean_win_yr_occ(subset(foliv, species == "SH")); sfmo = mean_win_yr_occ(s
 otmo = mean_win_yr_occ(subset(insec, species == "OT")); olmo = mean_win_yr_occ(subset(insec, species == "OL"))
  
 # plot temporal occupancy - for month and year 
+pdf("Fig2_avg_temporal_occ.pdf", 5, 5, pointsize = 10)
+par(mfrow=c(1,1))
+
 plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
     textxy(pfyr, pfmo, "PF")
   points(ppyr, ppmo, pch = 19, col = "hotpink")
