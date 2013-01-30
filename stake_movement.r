@@ -38,13 +38,27 @@ het = id_unknowns(het, 16); cricet = id_unknowns(cricet, 16); foliv = id_unknown
 het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); insec = subsetDat(insec)
 
 #---------------------------------------------------------------------------------
-#          calculate life-history details - reproduction
+#          calculate life-history details - reproduction, temporal persistence
 #---------------------------------------------------------------------------------
 
+#proportion of reproductive females by month
 doreprd = mean_mo_repro(subset(het, species == "DO" & sex == "F")); dmreprd = mean_mo_repro(subset(het, species == "DM" & sex == "F")); pfreprd = mean_mo_repro(subset(het, species == "PF" & sex == "F")); ppreprd = mean_mo_repro(subset(het, species == "PP" & sex == "F")); pbreprd = mean_mo_repro(subset(het, species == "PB" & sex == "F"));
 pereprd = mean_mo_repro(subset(cricet, species == "PE" & sex == "F")); pmreprd = mean_mo_repro(subset(cricet, species == "PM" & sex == "F")); rmreprd = mean_mo_repro(subset(cricet, species == "RM" & sex == "F"))
 shreprd = mean_mo_repro(subset(foliv, species == "SH" & sex == "F")); sfreprd = mean_mo_repro(subset(foliv, species == "SF" & sex == "F")); naoreprd = mean_mo_repro(subset(foliv, species == "NAO" & sex == "F"))
 otreprd = mean_mo_repro(subset(insec, species == "OT" & sex == "F")); olreprd = mean_mo_repro(subset(insec, species == "OL" & sex == "F"))
+
+#proportion of years they were seen in
+doyr = length(unique(het[het$species=="DO",]$yr))/10; dmyr = length(unique(het[het$species=="DM",]$yr))/10; pfyr = length(unique(het[het$species=="PF",]$yr))/10; ppyr = length(unique(het[het$species=="PP",]$yr))/10; pbyr = length(unique(het[het$species=="PB",]$yr))/10
+peyr = length(unique(cricet[cricet$species=="PE",]$yr))/10; pmyr = length(unique(cricet[cricet$species=="PM",]$yr))/10; rmyr = length(unique(cricet[cricet$species=="RM",]$yr))/10
+shyr = length(unique(foliv[foliv$species=="SH",]$yr))/10; sfyr = length(unique(foliv[foliv$species=="SF",]$yr))/10; naoyr = length(unique(foliv[foliv$species=="NAO",]$yr))/10
+otyr = length(unique(insec[insec$species=="OT",]$yr))/10; olyr = length(unique(insec[insec$species=="OL",]$yr))/10
+
+# average number of months they were seen in during years in which they were present
+domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(subset(het, species == "DM")); pfmo = mean_win_yr_occ(subset(het, species == "PF")); ppmo = mean_win_yr_occ(subset(het, species == "PP")); pbmo = mean_win_yr_occ(subset(het, species == "PB"))
+pemo = mean_win_yr_occ(subset(cricet, species == "PE")); pmmo = mean_win_yr_occ(subset(cricet, species == "PM")); rmmo = mean_win_yr_occ(subset(cricet, species == "RM"))
+shmo = mean_win_yr_occ(subset(foliv, species == "SH")); sfmo = mean_win_yr_occ(subset(foliv, species == "SF")); naomo = mean_win_yr_occ(subset(foliv, species == "NAO"))
+otmo = mean_win_yr_occ(subset(insec, species == "OT")); olmo = mean_win_yr_occ(subset(insec, species == "OL"))
+
 
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
@@ -150,18 +164,6 @@ dev.off()
 
 
 #### Make an occupancy plot for 2000-2009 (similar to Morgan) 
-#proportion of years they were seen in
-doyr = length(unique(het[het$species=="DO",]$yr))/10; dmyr = length(unique(het[het$species=="DM",]$yr))/10; pfyr = length(unique(het[het$species=="PF",]$yr))/10; ppyr = length(unique(het[het$species=="PP",]$yr))/10; pbyr = length(unique(het[het$species=="PB",]$yr))/10
-peyr = length(unique(cricet[cricet$species=="PE",]$yr))/10; pmyr = length(unique(cricet[cricet$species=="PM",]$yr))/10; rmyr = length(unique(cricet[cricet$species=="RM",]$yr))/10
-shyr = length(unique(foliv[foliv$species=="SH",]$yr))/10; sfyr = length(unique(foliv[foliv$species=="SF",]$yr))/10; naoyr = length(unique(foliv[foliv$species=="NAO",]$yr))/10
-otyr = length(unique(insec[insec$species=="OT",]$yr))/10; olyr = length(unique(insec[insec$species=="OL",]$yr))/10
-
-# average number of months they were seen in during year sin which they were present
-domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(subset(het, species == "DM")); pfmo = mean_win_yr_occ(subset(het, species == "PF")); ppmo = mean_win_yr_occ(subset(het, species == "PP")); pbmo = mean_win_yr_occ(subset(het, species == "PB"))
-pemo = mean_win_yr_occ(subset(cricet, species == "PE")); pmmo = mean_win_yr_occ(subset(cricet, species == "PM")); rmmo = mean_win_yr_occ(subset(cricet, species == "RM"))
-shmo = mean_win_yr_occ(subset(foliv, species == "SH")); sfmo = mean_win_yr_occ(subset(foliv, species == "SF")); naomo = mean_win_yr_occ(subset(foliv, species == "NAO"))
-otmo = mean_win_yr_occ(subset(insec, species == "OT")); olmo = mean_win_yr_occ(subset(insec, species == "OL"))
- 
 # plot temporal occupancy - for month and year 
 pdf("Fig2_avg_temporal_occ.pdf", 5, 5, pointsize = 10)
 par(mfrow=c(1,1))
