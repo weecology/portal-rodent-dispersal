@@ -38,6 +38,15 @@ het = id_unknowns(het, 16); cricet = id_unknowns(cricet, 16); foliv = id_unknown
 het = subsetDat(het); cricet = subsetDat(cricet); foliv = subsetDat(foliv); insec = subsetDat(insec)
 
 #---------------------------------------------------------------------------------
+#          calculate life-history details - reproduction
+#---------------------------------------------------------------------------------
+
+doreprd = mean_mo_repro(subset(het, species == "DO" & sex == "F")); dmreprd = mean_mo_repro(subset(het, species == "DM" & sex == "F")); pfreprd = mean_mo_repro(subset(het, species == "PF" & sex == "F")); ppreprd = mean_mo_repro(subset(het, species == "PP" & sex == "F")); pbreprd = mean_mo_repro(subset(het, species == "PB" & sex == "F"));
+pereprd = mean_mo_repro(subset(cricet, species == "PE" & sex == "F")); pmreprd = mean_mo_repro(subset(cricet, species == "PM" & sex == "F")); rmreprd = mean_mo_repro(subset(cricet, species == "RM" & sex == "F"))
+shreprd = mean_mo_repro(subset(foliv, species == "SH" & sex == "F")); sfreprd = mean_mo_repro(subset(foliv, species == "SF" & sex == "F")); naoreprd = mean_mo_repro(subset(foliv, species == "NAO" & sex == "F"))
+otreprd = mean_mo_repro(subset(insec, species == "OT" & sex == "F")); olreprd = mean_mo_repro(subset(insec, species == "OL" & sex == "F"))
+
+#---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
 
@@ -189,8 +198,40 @@ plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", y
 dev.off()
 
 # plot mean fecundity by month for each species
+pdf("Fig3_avg_temporal_occ.pdf", 7, 10, paper = "letter", pointsize = 10)
+par(mfrow=c(5,3))
 
-doreprd = mean_mo_repro(subset(het, species == "DO"));
+plot(c(1:12), doreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "DO - krat")
+plot(c(1:12), dmreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "DM - krat")
+plot(c(1:12), pbreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "PB - pocket mouse")
+plot(c(1:12), ppreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "PP - pocket mouse")
+plot(c(1:12), pfreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "PF - pocket mouse")
+
+plot(c(1:12), pereprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "PE - cactus mouse")
+plot(c(1:12), pmreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "PM - deer mouse")
+plot(c(1:12), rmreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "RM - harvest mouse")
+
+plot(c(1:12), shreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "SH - cotton rat")
+plot(c(1:12), sfreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "SF - cotton rat")
+plot(c(1:12), naoreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "NA - pack rat")
+
+plot(c(1:12), otreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "OT - grasshopper mouse")
+plot(c(1:12), olreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "OL - grasshopper mouse")
+
+dev.off()
 
 
 # #mean abundance within all years #FIXME - CAN'T FIND FXN
