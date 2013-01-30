@@ -147,11 +147,12 @@ peyr = length(unique(cricet[cricet$species=="PE",]$yr))/10; pmyr = length(unique
 shyr = length(unique(foliv[foliv$species=="SH",]$yr))/10; sfyr = length(unique(foliv[foliv$species=="SF",]$yr))/10; naoyr = length(unique(foliv[foliv$species=="NAO",]$yr))/10
 otyr = length(unique(insec[insec$species=="OT",]$yr))/10; olyr = length(unique(insec[insec$species=="OL",]$yr))/10
 # 
-# #proportion of within-year trapping periods they were seen in  #FIXME - CAN'T FIND FXN
-# domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(DM); pfmo = mean_win_yr_occ(PF); ppmo = mean_win_yr_occ(PP); pbmo = mean_win_yr_occ(PB)
-# pemo = mean_win_yr_occ(PE); pmmo = mean_win_yr_occ(PM); rmmo = mean_win_yr_occ(RM)
-# shmo = mean_win_yr_occ(SH); sfmo = mean_win_yr_occ(SF); naomo = mean_win_yr_occ(NAO)
-# otmo = mean_win_yr_occ(OT); olmo = mean_win_yr_occ(OL)
+# # average number of months they were seen in during year sin which they were present
+
+domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(DM); pfmo = mean_win_yr_occ(PF); ppmo = mean_win_yr_occ(PP); pbmo = mean_win_yr_occ(PB)
+pemo = mean_win_yr_occ(PE); pmmo = mean_win_yr_occ(PM); rmmo = mean_win_yr_occ(RM)
+shmo = mean_win_yr_occ(SH); sfmo = mean_win_yr_occ(SF); naomo = mean_win_yr_occ(NAO)
+otmo = mean_win_yr_occ(OT); olmo = mean_win_yr_occ(OL)
 # 
 # #mean abundance within all years #FIXME - CAN'T FIND FXN
 # doabun = mean_allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(DM); pfabun = mean_allyrs_abun(PF); ppabun = mean_allyrs_abun(PP); pbabun = mean_allyrs_abun(PB)
