@@ -234,28 +234,36 @@ plot(c(1:12), olreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab
      ylab = "proprotion reproductive fem.", bty = "n", main = "OL - grasshopper mouse")
 dev.off()
 
+#------------------------------------------
+pdf("Fig4_freq_across_periods.pdf", 7, 10, paper = "letter", pointsize = 10)
+par(mfrow=c(3,2))
+
+##------- plot number of individuals captured in each period for each group, save in pdf file #FIXME
+pdf(file="indivs_per_year.pdf",11,7.5)
+par(mfrow=c(3,2))
+
+plot_freq_by_prd(subset(het, species == PB), "PB"); plot_freq_by_prd(PP, "PP"); plot_freq_by_prd(PF, "PF"); plot_freq_by_prd(DM, "DM"); plot_freq_by_prd(DO, "DO")
+plot_freq_by_prd(PE, "PE"); plot_freq_by_prd(PM, "PM"); plot_freq_by_prd(RM, "RM")
+plot_freq_by_prd(NAO, "NAO"); plot_freq_by_prd(SF, "SF"); plot_freq_by_prd(SH, "SH")
+plot_freq_by_prd(OT, "OT"); plot_freq_by_prd(OL, "OL")
+
+dev.off()
+
+#mean abundance within all years #FIXME - CAN'T FIND FXN
+doabun = mean_allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(DM); pfabun = mean_allyrs_abun(PF); ppabun = mean_allyrs_abun(PP); pbabun = mean_allyrs_abun(PB)
+peabun = mean_allyrs_abun(PE); pmabun = mean_allyrs_abun(PM); rmabun = mean_allyrs_abun(RM)
+shabun = mean_allyrs_abun(SH); sfabun = mean_allyrs_abun(SF); naoabun = mean_allyrs_abun(NAO)
+otabun = mean_allyrs_abun(OT); olabun = mean_allyrs_abun(OL)
+
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
 #-------------------------------------------------------------------
 
 
-# #mean abundance within all years #FIXME - CAN'T FIND FXN
-# doabun = mean_allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(DM); pfabun = mean_allyrs_abun(PF); ppabun = mean_allyrs_abun(PP); pbabun = mean_allyrs_abun(PB)
-# peabun = mean_allyrs_abun(PE); pmabun = mean_allyrs_abun(PM); rmabun = mean_allyrs_abun(RM)
-# shabun = mean_allyrs_abun(SH); sfabun = mean_allyrs_abun(SF); naoabun = mean_allyrs_abun(NAO)
-# otabun = mean_allyrs_abun(OT); olabun = mean_allyrs_abun(OL)
+
 # 
 
-# ##------- plot number of individuals captured in each period for each group, save in pdf file #FIXME
-# pdf(file="indivs_per_year.pdf",11,7.5)
-# par(mfrow=c(3,2))
-# 
-# plot_freq_by_prd(subset(het, species == PB), "PB"); plot_freq_by_prd(PP, "PP"); plot_freq_by_prd(PF, "PF"); plot_freq_by_prd(DM, "DM"); plot_freq_by_prd(DO, "DO")
-# plot_freq_by_prd(PE, "PE"); plot_freq_by_prd(PM, "PM"); plot_freq_by_prd(RM, "RM")
-# plot_freq_by_prd(NAO, "NAO"); plot_freq_by_prd(SF, "SF"); plot_freq_by_prd(SH, "SH")
-# plot_freq_by_prd(OT, "OT"); plot_freq_by_prd(OL, "OL")
-# 
-# dev.off()
+
 # 
 # ##------ histograms of the number of recaptures (some species are recaptured far less often), save in pdf file #FIXME
 # pdf(file = "recaps_by_species.pdf", 11, 7.5)
