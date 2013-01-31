@@ -59,6 +59,11 @@ pemo = mean_win_yr_occ(subset(cricet, species == "PE")); pmmo = mean_win_yr_occ(
 shmo = mean_win_yr_occ(subset(foliv, species == "SH")); sfmo = mean_win_yr_occ(subset(foliv, species == "SF")); naomo = mean_win_yr_occ(subset(foliv, species == "NAO"))
 otmo = mean_win_yr_occ(subset(insec, species == "OT")); olmo = mean_win_yr_occ(subset(insec, species == "OL"))
 
+#mean abundance within all years 
+doabun = mean_allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(DM); pfabun = mean_allyrs_abun(PF); ppabun = mean_allyrs_abun(PP); pbabun = mean_allyrs_abun(PB)
+peabun = mean_allyrs_abun(PE); pmabun = mean_allyrs_abun(PM); rmabun = mean_allyrs_abun(RM)
+shabun = mean_allyrs_abun(SH); sfabun = mean_allyrs_abun(SF); naoabun = mean_allyrs_abun(NAO)
+otabun = mean_allyrs_abun(OT); olabun = mean_allyrs_abun(OL)
 
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
@@ -249,11 +254,7 @@ plot_freq_by_prd(OT, "OT"); plot_freq_by_prd(OL, "OL")
 
 dev.off()
 
-#mean abundance within all years #FIXME - CAN'T FIND FXN
-doabun = mean_allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(DM); pfabun = mean_allyrs_abun(PF); ppabun = mean_allyrs_abun(PP); pbabun = mean_allyrs_abun(PB)
-peabun = mean_allyrs_abun(PE); pmabun = mean_allyrs_abun(PM); rmabun = mean_allyrs_abun(RM)
-shabun = mean_allyrs_abun(SH); sfabun = mean_allyrs_abun(SF); naoabun = mean_allyrs_abun(NAO)
-otabun = mean_allyrs_abun(OT); olabun = mean_allyrs_abun(OL)
+
 
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
