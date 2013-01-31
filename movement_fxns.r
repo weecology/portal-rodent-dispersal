@@ -250,7 +250,7 @@ mean_mo_repro = function (femaledata){
 }
 
 
-mean_allyrs_abun = function(sp_data){
+allyrs_abun = function(sp_data){
   #function to find abundance in years in which the species is present. input the species dataframe, For each
   # year the species occurs in, calculates the abundance (total number of unique individuals). Returns a vector
   years = c(2000:2009)
