@@ -234,6 +234,10 @@ plot(c(1:12), olreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab
      ylab = "proprotion reproductive fem.", bty = "n", main = "OL - grasshopper mouse")
 dev.off()
 
+#-------------------------------------------------------------------
+#          Print statments - descriptive info for the txt file
+#-------------------------------------------------------------------
+
 
 # #mean abundance within all years #FIXME - CAN'T FIND FXN
 # doabun = mean_allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(DM); pfabun = mean_allyrs_abun(PF); ppabun = mean_allyrs_abun(PP); pbabun = mean_allyrs_abun(PB)
