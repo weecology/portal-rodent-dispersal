@@ -240,19 +240,46 @@ plot(c(1:12), olreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab
 dev.off()
 
 #------------------------------------------
-pdf("Fig4_freq_across_periods.pdf", 7, 10, paper = "letter", pointsize = 10)
-par(mfrow=c(3,2))
+pdf("Fig4_abun_across_yrs.pdf", 8, 5, pointsize = 10)
+par(mfrow=c(2,2), mar=c(2,2,2,0.5), oma=c(1.5,2,1,1))
 
-##------- plot number of individuals captured in each period for each group, save in pdf file #FIXME
-pdf(file="indivs_per_year.pdf",11,7.5)
-par(mfrow=c(3,2))
 
-plot_freq_by_prd(subset(het, species == PB), "PB"); plot_freq_by_prd(PP, "PP"); plot_freq_by_prd(PF, "PF"); plot_freq_by_prd(DM, "DM"); plot_freq_by_prd(DO, "DO")
-plot_freq_by_prd(PE, "PE"); plot_freq_by_prd(PM, "PM"); plot_freq_by_prd(RM, "RM")
-plot_freq_by_prd(NAO, "NAO"); plot_freq_by_prd(SF, "SF"); plot_freq_by_prd(SH, "SH")
-plot_freq_by_prd(OT, "OT"); plot_freq_by_prd(OL, "OL")
+years = c(2000:2009)
+
+plot(years, doabun, type = "l", bty = "n", ylab = "", xlim = c(2000, 2010), 
+     ylim = c(0, 600), xaxp = c(2000, 2009, 9))
+  points(years, dmabun, type = "l")
+  points(years, pbabun, type = "l")
+  points(years, ppabun, type = "l")
+  points(years, pfabun, type = "l")
+    mtext("Heteromyidae granivores", side = 3, adj = 0.15, line = -1)
+    mtext("abundance", side = 2, line = 2)
+
+plot(years, peabun, type = "l", bty = "n", ylab = "", xlim = c(2000, 2010), 
+     ylim = c(0, 600), xaxp = c(2000, 2009, 9))
+points(years, pmabun, type = "l")
+points(years, rmabun, type = "l")
+    mtext("Cricetidae granivores", side = 3, adj = 0.15, line = -1)
+
+plot(years, shabun, type = "l", bty = "n", ylab = "", xlim = c(2000, 2010), 
+     ylim = c(0, 600), xaxp = c(2000, 2009, 9))
+points(years, sfabun, type = "l")
+points(years, naoabun, type = "l")
+    mtext("Folivores", side = 3, adj = 0.15, line = -1)
+    mtext("abundance", side = 2, line = 2)
+    mtext("years", side = 1, line = 2)
+
+plot(years, otabun, type = "l", bty = "n", ylab = "", xlim = c(2000, 2010), 
+     ylim = c(0, 600), xaxp = c(2000, 2009, 9))
+points(years, olabun, type = "l")
+    mtext("Insectivores", side = 3, adj = 0.15, line = -1)
+    mtext("years", side = 1, line = 2)
 
 dev.off()
+
+
+#------------------------------------------
+
 
 
 
