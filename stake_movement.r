@@ -199,7 +199,7 @@ plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", y
 dev.off()
 
 #---------------------------------------------
-pdf("Fig3_avg_temporal_occ.pdf", 7, 10, paper = "letter", pointsize = 10)
+pdf("Fig3_avg_prop_reprodfemales.pdf", 7, 10, paper = "letter", pointsize = 10)
 par(mfrow=c(5,3))
 
 #plot mean fecundity by month for each species
