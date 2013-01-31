@@ -248,3 +248,21 @@ mean_mo_repro = function (femaledata){
   
   return(avg_r_mo)
 }
+
+
+mean_allyrs_abun = function(sp_data){
+  #function to find abundance in years in which the species is present. input the species dataframe, For each
+  # year the species occurs in, calculates the abundance (total number of unique individuals). Returns a vector
+  years = c(2000:2009)
+  abun = c()
+  
+  for (y in 1:length(years)){
+    dat = subset(sp_data, sp_data[,1] == years[y])
+    if (length(dat) > 0) {
+      indivs = sort(unique(dat$tag))
+      abun = append(abun, length(indivs))
+    }
+  }
+  
+  return (abun)
+}
