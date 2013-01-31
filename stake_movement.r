@@ -92,6 +92,7 @@ insectiv = c(otmeters, olmeters)
 # find breakpoints to use in MARK data structure for future analyses
 # data reasonably well fits a lognormal distribution (eyeball and J. Powell)
 # breakpoint = mean(logdata) + sd(logdata) of all the distances traveled by recaptured individuals    
+                    # FIXME: is this appropriate or should I * the data by 0.0000001 or add that amt to each distance? (can't log zeros)
 Hgran_brkpt = expm1(mean(log1p(Hgran)) + sd(log1p(Hgran)))
 Cgran_brkpt = expm1(mean(log1p(Cgran)) + sd(log1p(Cgran)))
 foli_brkpt = expm1(mean(log1p(foli)) + sd(log1p(foli)))
@@ -166,6 +167,13 @@ incount = hist(insectiv, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(
                xlab = "meters", main = 'insectivores - OT, OL')
             xline(ins_brkpt, lwd = 2, col = "indianred")
 dev.off()
+
+#NOTES: Hgran has no obvious breakpoint (everything stays "home"), minima at 54 (distance between plots?)
+#       Cgran has a minima at 48 m (distance between plots?)
+#       Foli has a minima at 48 m (artefact of about the distance to hit between plots?)
+#       Na has a minima at 24, closer to where I would guess Hgran to be (middens, never really leaves?)
+#       Insec has a minima at 60 m, greater than the distance across a plot (active hunters)
+
 
 #------------------------------------------------------------
 pdf("Fig2_avg_temporal_occ.pdf", 5, 5, pointsize = 10)
