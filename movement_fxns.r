@@ -198,23 +198,28 @@ concat_ch = function (ch_matrix, cov_matrix){
 
 mean_win_yr_occ = function (data){
   #finds the mean within year occupancy for each month for a given species, returns a single value
+  uniq_mos = c(10, 8, 10, 10, 8, 9, 9, 10, 12, 12) #not all months were trapped in all years
   mos = c(1:12)
-  years = sort(unique(data$yr)) #only count during years in which the species is present
+  years = c(2000:2009)
   
   proportion_mos = c()
   
   for (y in 1:length (years)){
     yr_data = subset(data, yr == years[y])
-    m = length(unique(yr_data$mo))/12
-    proportion_mos = append(proportion_mos, m)
+    if(length(yr_data) > 0) {  #don't use years where it wasn't captured
+      m = length(unique(yr_data$mo))/numprds[y]
+      proportion_mos = append(proportion_mos, m)
+    }
   }
-  months = round(mean(proportion_mos),4)
-  
+    months = round(mean(proportion_mos),4)
+    
   return (months)
 }
 
 
 mean_mo_repro = function (femaledata){
+  #returns the proportion of females that are reproductive (nipples enlarged - E - red - R- or both - B - or pregnant - P-)
+  #on average in a given month across all the years. Only looks at data during years and months in which the species is present. 
   mos = c(1:12)
   years = sort(unique(femaledata$yr)) #only look at data during years in which the species is present
 
@@ -229,7 +234,7 @@ mean_mo_repro = function (femaledata){
       
       if (nrow(tmp) > 0){
         num_females = nrow(tmp)
-        repro = subset(tmp, nipples == "E" | nipples == "B" | pregnant == "P")
+        repro = subset(tmp, nipples == "E" | nipples == "B" | nipples == "R" | pregnant == "P")
         prop_repro = nrow(repro)/num_females
         mo_repros = append(mo_repros, prop_repro)
       }
