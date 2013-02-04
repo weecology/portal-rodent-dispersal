@@ -207,7 +207,7 @@ mean_win_yr_occ = function (data){
   for (y in 1:length (years)){
     yr_data = subset(data, yr == years[y])
     if(length(yr_data) > 0) {  #don't use years where it wasn't captured
-      m = length(unique(yr_data$mo))/numprds[y]
+      m = length(unique(yr_data$mo))/uniq_mos[y]
       proportion_mos = append(proportion_mos, m)
     }
   }
