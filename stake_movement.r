@@ -289,7 +289,24 @@ dev.off()
 
 
 #------------------------------------------
+pdf("Fig5_rank_abundance.pdf", 7, 10, pointsize = 10)
+par(mfrow=c(2,5))
 
+years = c(2000:2009)
+ranks = c(1:13)
+
+for (row in 1:nrow(abuns)){
+  yrdat = abuns[row,]
+  reldat = sort(yrdat/sum(yrdat), decreasing = TRUE)
+    
+  nonzero = reldat[reldat>0]
+    labels = strtrim(as.character(names(nonzero)),2)
+  
+  plot(ranks, reldat, type = "b", pch = 19, ylim = c(0,1), 
+       xlab = "Rank", ylab = "Relative Abundance", bty = "n")
+  mtext(years[row], side = 3)
+  textxy(c(1:length(nonzero)), nonzero, labs = labels)
+}
 
 
 
