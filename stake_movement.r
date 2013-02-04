@@ -60,10 +60,10 @@ shmo = mean_win_yr_occ(subset(foliv, species == "SH")); sfmo = mean_win_yr_occ(s
 otmo = mean_win_yr_occ(subset(insec, species == "OT")); olmo = mean_win_yr_occ(subset(insec, species == "OL"))
 
 #mean abundance within all years 
-doabun = allyrs_abun(subset(het, species == "DO")); dmabun = mean_allyrs_abun(subset(het, species == "DM")); pfabun = mean_allyrs_abun(subset(het, species == "PF")); ppabun = mean_allyrs_abun(subset(het, species == "PP")); pbabun = mean_allyrs_abun(subset(het, species == "PB"))
-peabun = mean_allyrs_abun(subset(cricet, species == "PE")); pmabun = mean_allyrs_abun(subset(cricet, species == "PM")); rmabun = mean_allyrs_abun(subset(cricet, species == "RM"))
-shabun = mean_allyrs_abun(subset(foliv, species == "SH")); sfabun = mean_allyrs_abun(subset(foliv, species == "SF")); naoabun = mean_allyrs_abun(subset(foliv, species == "NAO"))
-otabun = mean_allyrs_abun(subset(insec, species == "OT")); olabun = mean_allyrs_abun(subset(insec, species == "OL"))
+doabun = allyrs_abun(subset(het, species == "DO")); dmabun = allyrs_abun(subset(het, species == "DM")); pfabun = allyrs_abun(subset(het, species == "PF")); ppabun = allyrs_abun(subset(het, species == "PP")); pbabun = allyrs_abun(subset(het, species == "PB"))
+peabun = allyrs_abun(subset(cricet, species == "PE")); pmabun = allyrs_abun(subset(cricet, species == "PM")); rmabun = allyrs_abun(subset(cricet, species == "RM"))
+shabun = allyrs_abun(subset(foliv, species == "SH")); sfabun = allyrs_abun(subset(foliv, species == "SF")); naoabun = allyrs_abun(subset(foliv, species == "NAO"))
+otabun = allyrs_abun(subset(insec, species == "OT")); olabun = allyrs_abun(subset(insec, species == "OL"))
 
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
