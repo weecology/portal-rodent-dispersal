@@ -302,8 +302,8 @@ for (row in 1:nrow(abuns)){
   nonzero = reldat[reldat>0]
     labels = strtrim(as.character(names(nonzero)),2)
   
-  plot(ranks, reldat, type = "b", pch = 19, ylim = c(0,1), 
-       xlab = "Rank", ylab = "Relative Abundance", bty = "n")
+  plot(ranks, reldat, type = "b", pch = 19, ylim = c(0,0.6), 
+       xlab = "Rank", ylab = "Relative Abundance", bty = "n", xaxp = c(1, 13, 12))
   mtext(years[row], side = 3)
   textxy(c(1:length(nonzero)), nonzero, labs = labels)
 }
