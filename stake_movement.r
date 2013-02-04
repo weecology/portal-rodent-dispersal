@@ -65,6 +65,8 @@ peabun = allyrs_abun(subset(cricet, species == "PE")); pmabun = allyrs_abun(subs
 shabun = allyrs_abun(subset(foliv, species == "SH")); sfabun = allyrs_abun(subset(foliv, species == "SF")); naoabun = allyrs_abun(subset(foliv, species == "NAO"))
 otabun = allyrs_abun(subset(insec, species == "OT")); olabun = allyrs_abun(subset(insec, species == "OL"))
 
+abuns = cbind(doabun, dmabun, pbabun, ppabun, pfabun, peabun, pmabun, rmabun, shabun, sfabun, naoabun, otabun, olabun)
+
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
