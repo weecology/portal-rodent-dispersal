@@ -357,13 +357,13 @@ dev.off()
 
 #------------------------------------------
 pdf("Fig7_mo-yr_repro_trends.pdf", 7, 10, paper = "letter", pointsize = 10)
-par(mfrow=c(5,2))
+par(mfrow=c(4,3))
 
 alldat = rbind(doreprdyr, dmreprdyr, pbreprdyr, ppreprdyr, pfreprdyr, pereprdyr, pmreprdyr, rmreprdyr,
                shreprdyr, sfreprdyr, naoreprdyr, otreprdyr, olreprdyr)
 
 years = c(2000:2009)
-spp = c("DO", 'DM', 'PB', 'PP', 'PF', 'PE', 'PM', 'RM', 'SH', 'SF', 'NAO', 'OT', 'OL')
+spp = c("DO", 'DM', 'PB', 'PP', 'PF', 'PE', 'PM', 'RM', 'SH', 'NAO', 'OT', 'OL') #SF (fit all on a page, hardly reproduce anyway)
 
 #plot proportion fecundity by month and year for each species
 for (y in 1:length (years)){
@@ -375,7 +375,11 @@ for (y in 1:length (years)){
   
     plot(c(1:12), data$proprepro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month",  
        ylab = "prop. reproductive F", bty = "n", main =  paste(spp[s], years[y], sep = " "))
-}}}
+}
+  else {
+    plot(NA, NA, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month",  
+         ylab = "prop. reproductive F", bty = "n",  main = paste( "No", spp[s], years[y], sep = " "))
+  }}}
 
 dev.off()
 
