@@ -250,6 +250,38 @@ mean_mo_repro = function (femaledata){
 }
 
 
+mo_repro = function (femaledata){
+  #returns the proportion of females that are reproductive (nipples enlarged - E - red - R- or both - B - or pregnant - P-)
+  #in each year. Only looks at data during years and months in which the species is present. 
+  mos = c(1:12)
+  years = sort(unique(femaledata$yr)) #only look at data during years in which the species is present
+  
+  r_mo_df =data.frame("year" = 1, "month" = 1, "proprepro" = 1, "numfemales" = 1)
+  
+  for (m in 1:length(mos)){
+    
+    for (y in 1:length(years)){
+      tmp = subset(femaledata, yr == years[y])
+      tmp = subset(tmp, mo == mos[m])
+      
+      if (nrow(tmp) > 0){
+        num_females = nrow(tmp)
+        repro = subset(tmp, nipples == "E" | nipples == "B" | nipples == "R" | pregnant == "P")
+        prop_repro = nrow(repro)/num_females
+        mo_repros = c(years[y], mos[m], prop_repro, num_females)
+      }
+      else {
+        num_females = 0
+        mo_repros = c(years[y], mos[m], NA, num_females)
+      }
+      r_mo_df = rbind(r_mo_df, mo_repros)
+    }
+  }
+  
+  return(r_mo_df[-1,])
+}
+
+
 count_repro = function(reprodata){
   #input a df of reproductive data. Outputs the number of times that the individual was "uniquely" reproductive.
   # unique reproduction is defined by having a break between reproductive status in the trapping record.
