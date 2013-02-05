@@ -289,8 +289,8 @@ dev.off()
 
 
 #------------------------------------------
-pdf("Fig5_rank_abundance.pdf", 7, 10, pointsize = 10)
-par(mfrow=c(2,5))
+pdf("Fig5_rank_abundance.pdf", 7, 10, paper = "letter", pointsize = 10)
+par(mfrow=c(4,3))
 
 years = c(2000:2009)
 ranks = c(1:13)
@@ -305,9 +305,10 @@ for (row in 1:nrow(abuns)){
   plot(ranks, reldat, type = "b", pch = 19, ylim = c(0,0.6), 
        xlab = "Rank", ylab = "Relative Abundance", bty = "n", xaxp = c(1, 13, 12))
   mtext(years[row], side = 3)
-  textxy(c(1:length(nonzero)), nonzero, labs = labels)
+  textxy(c(1:length(nonzero)), nonzero, labs = labels, cx = 0.75)
 }
 
+dev.off()
 
 
 #-------------------------------------------------------------------
