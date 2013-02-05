@@ -250,6 +250,43 @@ mean_mo_repro = function (femaledata){
 }
 
 
+count_repro = function(reprodata){
+  #input a df of reproductive data. Outputs the number of times that the individual was "uniquely" reproductive.
+  # unique reproduction is defined by having a break between reproductive status in the trapping record.
+}
+
+indiv_repro = function (femaledata){
+  # returns the reproductive history of females in the time series
+  tags = unique(femaledata$tag)
+
+  reprod_df = data.frame("tag" = 1, "year" = 1, "num_reprod" = 1)
+  
+  for (t in 1:length(tags)) {
+    indiv = subset(femaledata, tag == tags[t]) #get individual data, sorted by chronologically by period
+    indiv = indiv[order(indiv$period),] #order chronologically
+    
+    years = sort(unique(indiv$yr))
+    
+    for (y in 1:length(years)){
+      tmp = subset(indiv, yr == years[y])
+      repro = subset(tmp, nipples == "E" | nipples == "B" | nipples == "R" | pregnant == "P")
+      
+      if (nrow(repro) > 0){
+        numreprod = count_repro(repro)
+      }
+      
+      else {
+        numreprod = 0
+      }
+      
+    }
+    data = c(tags[t], years[y], numreprod)
+    reprod_df = rbind(reprod_df, data)
+  }
+  return (reprod_df[-1,])
+}
+
+
 allyrs_abun = function(sp_data){
   #function to find abundance in years in which the species is present. input the species dataframe, For each
   # year the species occurs in, calculates the abundance (total number of unique individuals). Returns a vector
