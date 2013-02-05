@@ -257,7 +257,7 @@ mo_repro = function (femaledata){
   years = sort(unique(femaledata$yr)) #only look at data during years in which the species is present
   species = femaledata[1,9]
   
-  r_mo_df =data.frame("year" = 1, "month" = 1, "proprepro" = 1, "numfemales" = 1, "species" = "DO")
+  r_mo_df =data.frame("year" = 1, "month" = 1, "proprepro" = 1, "numfemales" = 1, "species" = 1)
   
   for (m in 1:length(mos)){
     
