@@ -261,7 +261,7 @@ count_repro = function(reprodata){
     prds = reprodata$period
     for (p in 1:length(prds)){
       if ((p + 1) < length(prds)){ #can't go past the number of periods that exist for the individual
-        diff = (p+1) - p #subtract the periods
+        diff = (prds[p]+1) - prds[p] #subtract the periods
         if (diff > 1){
           rh = rh + 1 #increment by one if the difference between  reproductive events is > 1 period
         }
