@@ -48,7 +48,7 @@ shreprd = mean_mo_repro(subset(foliv, species == "SH" & sex == "F")); sfreprd = 
 otreprd = mean_mo_repro(subset(insec, species == "OT" & sex == "F")); olreprd = mean_mo_repro(subset(insec, species == "OL" & sex == "F"))
 
 # proportion of reproductive females by month and year
-doreprdyr = mo_repro(subset(het, species = "DO" & sex == "F")); dmreprdyr = mo_repro(subset(het, species == "DM" & sex == "F")); pfreprdyr = mo_repro(subset(het, species == "PF" & sex == "F")); ppreprdyr = mo_repro(subset(het, species == "PP" & sex == "F")); pbreprdyr = mo_repro(subset(het, species == "PB" & sex == "F"));
+doreprdyr = mo_repro(subset(het, species == "DO" & sex == "F")); dmreprdyr = mo_repro(subset(het, species == "DM" & sex == "F")); pfreprdyr = mo_repro(subset(het, species == "PF" & sex == "F")); ppreprdyr = mo_repro(subset(het, species == "PP" & sex == "F")); pbreprdyr = mo_repro(subset(het, species == "PB" & sex == "F"));
 pereprdyr = mo_repro(subset(cricet, species == "PE" & sex == "F")); pmreprdyr = mo_repro(subset(cricet, species == "PM" & sex == "F")); rmreprdyr = mo_repro(subset(cricet, species == "RM" & sex == "F"))
 shreprdyr = mo_repro(subset(foliv, species == "SH" & sex == "F")); sfreprdyr = mo_repro(subset(foliv, species == "SF" & sex == "F")); naoreprdyr = mo_repro(subset(foliv, species == "NAO" & sex == "F"))
 otreprdyr = mo_repro(subset(insec, species == "OT" & sex == "F")); olreprdyr = mo_repro(subset(insec, species == "OL" & sex == "F"))
@@ -356,25 +356,28 @@ dev.off()
 
 
 #------------------------------------------
-pdf("Fig7_mo-yr_repro_trends.pdf", 7, 10, paper = "letter" pointsize = 10)
+pdf("Fig7_mo-yr_repro_trends.pdf", 7, 10, paper = "letter", pointsize = 10)
 par(mfrow=c(5,2))
 
+alldat = rbind(doreprdyr, dmreprdyr, pbreprdyr, ppreprdyr, pfreprdyr, pereprdyr, pmreprdyr, rmreprdyr,
+               shreprdyr, sfreprdyr, naoreprdyr, otreprdyr, olreprdyr)
 
-
-#plot proportion fecundity by month and year for each species
-for (y in 1:length (years)){
-  data = subset(doreprdyr, year == years[y])
-  plot(c(1:12), data$proprepro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month",  
-       ylab = "proprotion reproductive fem.", bty = "n", main =  paste("DO - krat", years[y], sep = " "))
-}
+years = c(2000:2009)
+spp = c("DO", 'DM', 'PB', 'PP', 'PF', 'PE', 'PM', 'RM', 'SH', 'SF', 'NAO', 'OT', 'OL')
 
 #plot proportion fecundity by month and year for each species
 for (y in 1:length (years)){
-  data = subset(dmreprdyr, year == years[y])
-  plot(c(1:12), data$proprepro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
-       ylab = "proprotion reproductive fem.", bty = "n", main =  paste("DM - krat", years[y], sep = " "))
-}
+  
+  for (s in 1:length (spp)) {
+    data = subset(alldat, year == years[y] & species == spp[s])
+    
+    if(nrow(data) > 0){
+  
+    plot(c(1:12), data$proprepro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month",  
+       ylab = "prop. reproductive F", bty = "n", main =  paste(spp[s], years[y], sep = " "))
+}}}
 
+dev.off()
 
 
 #-------------------------------------------------------------------
