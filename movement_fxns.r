@@ -268,7 +268,7 @@ mo_repro = function (femaledata){
       if (nrow(tmp) > 0){
         num_females = nrow(tmp)
         repro = subset(tmp, nipples == "E" | nipples == "B" | nipples == "R" | pregnant == "P")
-        prop_repro = nrow(repro)/num_females
+        prop_repro = round(nrow(repro)/num_females,4)
         mo_repros = c(years[y], mos[m], prop_repro, num_females, species)
       }
       else {
