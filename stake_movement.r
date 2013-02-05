@@ -47,6 +47,12 @@ pereprd = mean_mo_repro(subset(cricet, species == "PE" & sex == "F")); pmreprd =
 shreprd = mean_mo_repro(subset(foliv, species == "SH" & sex == "F")); sfreprd = mean_mo_repro(subset(foliv, species == "SF" & sex == "F")); naoreprd = mean_mo_repro(subset(foliv, species == "NAO" & sex == "F"))
 otreprd = mean_mo_repro(subset(insec, species == "OT" & sex == "F")); olreprd = mean_mo_repro(subset(insec, species == "OL" & sex == "F"))
 
+#track the number of times females uniquely reproduce within years
+doirep = indiv_repro(subset(het, species == "DO" & sex == "F")); dmirep = indiv_repro(subset(het, species == "DM" & sex == "F")); pfirep = indiv_repro(subset(het, species == "PF" & sex == "F")); ppirep = indiv_repro(subset(het, species == "PP" & sex == "F")); pbirep = indiv_repro(subset(het, species == "PB" & sex == "F"));
+peirep = indiv_repro(subset(cricet, species == "PE" & sex == "F")); pmirep = indiv_repro(subset(cricet, species == "PM" & sex == "F")); rmirep = indiv_repro(subset(cricet, species == "RM" & sex == "F"))
+shirep = indiv_repro(subset(foliv, species == "SH" & sex == "F")); sfirep = indiv_repro(subset(foliv, species == "SF" & sex == "F")); naoirep = indiv_repro(subset(foliv, species == "NAO" & sex == "F"))
+otirep = indiv_repro(subset(insec, species == "OT" & sex == "F")); olirep = indiv_repro(subset(insec, species == "OL" & sex == "F"))
+
 #proportion of years they were seen in
 doyr = length(unique(het[het$species=="DO",]$yr))/10; dmyr = length(unique(het[het$species=="DM",]$yr))/10; pfyr = length(unique(het[het$species=="PF",]$yr))/10; ppyr = length(unique(het[het$species=="PP",]$yr))/10; pbyr = length(unique(het[het$species=="PB",]$yr))/10
 peyr = length(unique(cricet[cricet$species=="PE",]$yr))/10; pmyr = length(unique(cricet[cricet$species=="PM",]$yr))/10; rmyr = length(unique(cricet[cricet$species=="RM",]$yr))/10
