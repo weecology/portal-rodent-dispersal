@@ -253,17 +253,19 @@ mean_mo_repro = function (femaledata){
 count_repro = function(reprodata){
   #input a df of reproductive data. Outputs the number of times that the individual was "uniquely" reproductive.
   # unique reproduction is defined by having a break between reproductive status in the trapping record.
-  if (nrow(reprodata) == 1) {
-    rh = 1
-  }
-  else {
-    rh = 1  #reproductive history counter. Starts at one. Increment when the difference between reproductive events is > 1
+ 
+  rh = 1   #reproductive history counter. Starts at one. Increment when the difference between reproductive events is > 1
+  
+  if (nrow(reprodata) > 1) { 
     prds = reprodata$period
+    
     for (p in 1:length(prds)){
-      if ((p + 1) < length(prds)){ #can't go past the number of periods that exist for the individual
-        diff = (prds[p+1]) - prds[p]) #subtract the periods
+      
+      if ((p + 1) <= length(prds)){ #can't go past the number of periods that exist for the individual
+        diff = prds[p+1] - prds[p] #subtract the periods
+        
         if (diff > 1){
-          rh = rh + 1 #increment by one if the difference between  reproductive events is > 1 period
+          rh = rh + 1 #increment by one if the difference between reproductive events is > 1 period
         }
       }
     }  
