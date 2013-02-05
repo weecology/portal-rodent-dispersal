@@ -354,6 +354,29 @@ plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive even
 
 dev.off()
 
+
+#------------------------------------------
+pdf("Fig7_mo-yr_repro_trends.pdf", 7, 10, paper = "letter" pointsize = 10)
+par(mfrow=c(5,2))
+
+
+
+#plot proportion fecundity by month and year for each species
+for (y in 1:length (years)){
+  data = subset(doreprdyr, year == years[y])
+  plot(c(1:12), data$proprepro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month",  
+       ylab = "proprotion reproductive fem.", bty = "n", main =  paste("DO - krat", years[y], sep = " "))
+}
+
+#plot proportion fecundity by month and year for each species
+for (y in 1:length (years)){
+  data = subset(dmreprdyr, year == years[y])
+  plot(c(1:12), data$proprepro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+       ylab = "proprotion reproductive fem.", bty = "n", main =  paste("DM - krat", years[y], sep = " "))
+}
+
+
+
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
 #-------------------------------------------------------------------
