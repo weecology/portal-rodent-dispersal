@@ -48,7 +48,10 @@ shreprd = mean_mo_repro(subset(foliv, species == "SH" & sex == "F")); sfreprd = 
 otreprd = mean_mo_repro(subset(insec, species == "OT" & sex == "F")); olreprd = mean_mo_repro(subset(insec, species == "OL" & sex == "F"))
 
 # proportion of reproductive females by month and year
-doreprdyr = mo_repro(subset(het, species = "DO" & sex == "F"));
+doreprdyr = mo_repro(subset(het, species = "DO" & sex == "F")); dmreprdyr = mo_repro(subset(het, species == "DM" & sex == "F")); pfreprdyr = mo_repro(subset(het, species == "PF" & sex == "F")); ppreprdyr = mo_repro(subset(het, species == "PP" & sex == "F")); pbreprdyr = mo_repro(subset(het, species == "PB" & sex == "F"));
+pereprdyr = mo_repro(subset(cricet, species == "PE" & sex == "F")); pmreprdyr = mo_repro(subset(cricet, species == "PM" & sex == "F")); rmreprdyr = mo_repro(subset(cricet, species == "RM" & sex == "F"))
+shreprdyr = mo_repro(subset(foliv, species == "SH" & sex == "F")); sfreprdyr = mo_repro(subset(foliv, species == "SF" & sex == "F")); naoreprdyr = mo_repro(subset(foliv, species == "NAO" & sex == "F"))
+otreprdyr = mo_repro(subset(insec, species == "OT" & sex == "F")); olreprdyr = mo_repro(subset(insec, species == "OL" & sex == "F"))
 
 #track the number of times females uniquely reproduce within years
 doirep = indiv_repro(subset(het, species == "DO" & sex == "F")); dmirep = indiv_repro(subset(het, species == "DM" & sex == "F")); pfirep = indiv_repro(subset(het, species == "PF" & sex == "F")); ppirep = indiv_repro(subset(het, species == "PP" & sex == "F")); pbirep = indiv_repro(subset(het, species == "PB" & sex == "F"));
