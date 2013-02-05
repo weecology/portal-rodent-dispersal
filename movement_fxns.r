@@ -255,8 +255,9 @@ mo_repro = function (femaledata){
   #in each year. Only looks at data during years and months in which the species is present. 
   mos = c(1:12)
   years = sort(unique(femaledata$yr)) #only look at data during years in which the species is present
+  species = femaledata[1,9]
   
-  r_mo_df =data.frame("year" = 1, "month" = 1, "proprepro" = 1, "numfemales" = 1)
+  r_mo_df =data.frame("year" = 1, "month" = 1, "proprepro" = 1, "numfemales" = 1, "species" = "DO")
   
   for (m in 1:length(mos)){
     
@@ -268,11 +269,11 @@ mo_repro = function (femaledata){
         num_females = nrow(tmp)
         repro = subset(tmp, nipples == "E" | nipples == "B" | nipples == "R" | pregnant == "P")
         prop_repro = nrow(repro)/num_females
-        mo_repros = c(years[y], mos[m], prop_repro, num_females)
+        mo_repros = c(years[y], mos[m], prop_repro, num_females, species)
       }
       else {
         num_females = 0
-        mo_repros = c(years[y], mos[m], NA, num_females)
+        mo_repros = c(years[y], mos[m], NA, num_females, species)
       }
       r_mo_df = rbind(r_mo_df, mo_repros)
     }
