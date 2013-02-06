@@ -164,6 +164,9 @@ Sstrata_pstrata_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = 
 Sguild_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psistrata),
                                  options = "SIMANNEAL")
 
+Sspecies_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sspecies,  p = pstrata, Psi = Psistrata),
+                                   options = "SIMANNEAL")
+
 
 #summarize results
 ms_results <- collect.models(type = "Multistrata")
