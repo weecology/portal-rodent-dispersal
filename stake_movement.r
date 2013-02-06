@@ -328,7 +328,7 @@ par(mfrow=c(2,2))
 
 #plot the relative abundance of females who represent each number of reproductive events per year
 plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "number individuals", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "heteromyids")
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "heteromyids")
   points(c(0:3), table(doirep$num_reprod)/sum(table(doirep$num_reprod)), type = "b", pch = 19, col = "indianred")
   points(c(0:4), table(dmirep$num_reprod)/sum(table(dmirep$num_reprod)), type = "b", pch = 19, col = "magenta")
   points(c(0:4), table(pbirep$num_reprod)/sum(table(pbirep$num_reprod)), type = "b", pch = 19, col = "red")
@@ -336,19 +336,19 @@ plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive even
   points(c(0:2), table(pfirep$num_reprod)/sum(table(pfirep$num_reprod)), type = "b", pch = 19, col = "purple")
 
 plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "number individuals", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "cricetids")
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "cricetids")
   points(c(0:2), table(peirep$num_reprod)/sum(table(peirep$num_reprod)), type = "b", pch = 18, col = "green")
   points(c(0:2), table(pmirep$num_reprod)/sum(table(pmirep$num_reprod)), type = "b", pch = 18, col = "darkgreen")
   points(c(0:1), table(rmirep$num_reprod)/sum(table(rmirep$num_reprod)), type = "b", pch = 18, col = "yellowgreen")
 
 plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "number individuals", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "folivores")
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "folivores")
   points(c(0:1), table(shirep$num_reprod)/sum(table(shirep$num_reprod)), type = "b", pch = 17, col = "brown")
   points(c(0:1), table(sfirep$num_reprod)/sum(table(sfirep$num_reprod)), type = "b", pch = 17, col = "brown4")
   points(c(0:3), table(naoirep$num_reprod)/sum(table(naoirep$num_reprod)), type = "b", pch = 17, col = "goldenrod4")
 
 plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "number individuals", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), main = "carnivores")
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), main = "carnivores")
   points(c(0:3), table(otirep$num_reprod)/sum(table(otirep$num_reprod)), type = "b", pch = 15, col = "orange3")
   points(c(0:1), table(olirep$num_reprod)/sum(table(olirep$num_reprod)), type = "b", pch = 15, col = "orange4")
 
