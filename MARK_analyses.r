@@ -10,7 +10,6 @@ library(RMark)
 wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
 setwd(wd)
 
-source("movement_fxns.r") #functions for stake_movement.r
 source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
 
