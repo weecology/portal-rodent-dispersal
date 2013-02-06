@@ -77,15 +77,8 @@ ms_ddl$p$strB[ms_ddl$p$stratum == "2"] = 1
 #---------------------------------------------------------------------------------
 #          Define model structures for S (survival probability)
 #---------------------------------------------------------------------------------
-SA = as.numeric(row.names(MS.ddl$S[MS.ddl$S$stratum == "A",]))
-SB = as.numeric(row.names(MS.ddl$S[MS.ddl$S$stratum == "B",]))
-SC = as.numeric(row.names(MS.ddl$S[MS.ddl$S$stratum == "C",]))  #No stratum C??
-SAval = rep(1,length(SA))
-SBval = rep(0,length(SB))
-SCval = rep(0,length(SC))
-# fix S to 1 for A and 0 for dead states B and C
-Sfix <- list(formula=~stratum,fixed=list(index=c(SA,SB,SC),value=c(SAval,SBval,
-                                                                   SCval)))
+Snull <- list(formula=~1)           # null model, S is not dependent on strata
+Sstrata <- list(formula=~stratum)   # S is dependent on strata (in A or in B)
 
 #---------------------------------------------------------------------------------
 #          Define model structures for p (capture probability)
