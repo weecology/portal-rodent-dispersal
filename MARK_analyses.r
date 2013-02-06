@@ -80,14 +80,11 @@ ms_ddl$p$strB[ms_ddl$p$stratum == "2"] = 1
 Snull <- list(formula=~1)           # null model, S is not dependent on strata
 Sstrata <- list(formula=~stratum)   # S is dependent on strata (in A or in B)
 
+
 #---------------------------------------------------------------------------------
 #          Define model structures for p (capture probability)
 #---------------------------------------------------------------------------------
-
-#---------------------------------------------------------------------------------
-#          fix p for omitted  periods - time between  trapping events ~ 1 month
-#---------------------------------------------------------------------------------
-# fix recapture probabilities for unsampled or omitted months!
+# fix recapture probabilities for unsampled or omitted months
 #    skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
 
 # select periods that were omitted from the study - untrapped
@@ -136,27 +133,12 @@ pstrata <- list(formula = ~stratum, fixed = list(index = c(p267, p277, p278, p28
 
 # link="logit" is the default. "cloglog" may be especially useful when there are fewer recaptures
 
+
 #---------------------------------------------------------------------------------
 #          Define model structures for psi (transition probability)
 #---------------------------------------------------------------------------------
-## FIXME: What does this all mean??
-PsiB = as.numeric(row.names(MS.ddl$Psi[MS.ddl$Psi$stratum == "B",]))
-PsiC = as.numeric(row.names(MS.ddl$Psi[MS.ddl$Psi$stratum == "C",]))
-Psi1996.g = as.numeric(row.names(MS.ddl$Psi[MS.ddl$Psi$time == 1996&MS.ddl$Psi$stratum == "A"&MS.ddl$Psi$rage == "gosling",]))
-Psi1997.g = as.numeric(row.names(MS.ddl$Psi[MS.ddl$Psi$time == 1997&MS.ddl$Psi$stratum == "A"&MS.ddl$Psi$rage == "gosling",]))
-PsiBval = rep(0,length(PsiB))
-PsiCval = rep(0,length(PsiC))
-Psi1996.gval = rep(0,length(Psi1996.g))
-Psi1997.gval = rep(0,length(Psi1997.g))
-Psi2002.gval = rep(0,length(Psi2002.g))
-Psi2004.gval = rep(0,length(Psi2004.g))
-Psi2009.gval = rep(0,length(Psi2009.g))
+Psistrata <- list(formula=~stratum)
 
-# tostratum and age effects (unique age effects for harvest and non-harvest mortalities)
-Psiage <- list(formula=~-1+toB:hy+toB:ahy+toC:hy+toC:ahy+fromB+fromC,
-               fixed=list(index=c(PsiB,PsiC,Psi1996.g,Psi1997.g,Psi2002.g,Psi2004.g,Psi2009.g),
-                          value=c(PsiBval,PsiCval,Psi1996.gval,Psi1997.gval,Psi2002.gval,Psi2004.gval,
-                                  Psi2009.gval)),link="logit")
 
 #---------------------------------------------------------------------------------
 #          Run Models
