@@ -127,7 +127,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   
   tags = unique(dat$tag)
   capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
-  covariates = matrix(0, nrow = length(tags), ncol = 7)
+  covariates = matrix(0, nrow = length(tags), ncol = 6)
     colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "guild", "species")
     group = c(1,2,3) #represent the "group"
   
