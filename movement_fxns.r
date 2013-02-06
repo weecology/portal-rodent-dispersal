@@ -121,23 +121,55 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ### Create a set of MARK capture histories by home vs away from home
   # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
   ## 1 (stayed home), and 2 (away from home). 
-  ## Home is determined using the mean + 1 sd of the data.
+  ## Home is determined using the mean + 1 sd of the logged data.
+  # guild (1 = heteromyid granivore, 2 = cricetid granivore, 3 = folivore, 4 = carnivore)
+  # species (1 = DO, 2 = DM, 3 = PB, 4 = PP, 5 = PF, 6 = PE, 7 = PM, 8 = RM, 9 = SH, 10 = SF, 11 = NAO, 12 = OT, 13 = OL)
   
   tags = unique(dat$tag)
   capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
   covariates = matrix(0, nrow = length(tags), ncol = 7)
-    colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "hgran", "cgran", "foli")
+    colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "guild", "species")
     group = c(1,2,3) #represent the "group"
   
-  # record guild in dummy variables (cols 5:7)
+  # record guild in col 5 of covariates
   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
   if (dat[1,]$species %in% list("DO", "DM", "PB", "PP", "PF")){ 
     covariates[, 5] = 1 }
   else if (dat[1,]$species %in% list("PE", "PM", "RM")){
-    covariates[, 6] = 1}
+    covariates[, 5] = 2}
   else if (dat[1,]$species %in% list("SH", "SF", "NAO")){
-    covariates[,7] = 1 }  #all zeros indicate insectivores    
+    covariates[,5] = 3 }  
+  else {
+    covariates[,5] = 4}
   
+  # record species in col 6 of covariates
+  if (dat[1,]$species == "DO") {
+    covariates[,6] = 1}
+  else if (dat[1,]$species == "DM"){
+    covariates[,6] = 2}
+  else if (dat[1,]$species == "PB"){
+    covariates[,6] = 3}
+  else if (dat[1,]$species == "PP"){
+    covariates[,6] = 4}
+  else if (dat[1,]$species == "PF"){
+    covariates[,6] = 5}
+  else if (dat[1,]$species == "PE"){
+    covariates[,6] = 6}
+  else if (dat[1,]$species == "PM"){
+    covariates[,6] = 7}
+  else if (dat[1,]$species == "RM"){
+    covariates[,6] = 8}
+  else if (dat[1,]$species == "SH"){
+    covariates[,6] = 9}
+  else if (dat[1,]$species == "SF"){
+    covariates[,6] = 10}
+  else if (dat[1,]$species == "NAO"){
+    covariates[,6] = 11}
+  else if (dat[1,]$species == "OT"){
+    covariates[,6] = 12}
+  else if (dat[1,]$species == "OL"){
+    covariates[,6] = 13}
+
   #loop through each tag to get individual-level data
   for (t in 1:length(tags)) {
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t

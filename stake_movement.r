@@ -156,7 +156,7 @@ write.table(OT_MARK, file = "mark_datafiles//ot_mark.inp", row.names = F, col.na
 write.table(OL_MARK, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F, quote = F)
 
 allspp = rbind(DO_MARK, DM_MARK, PB_MARK, PP_MARK, PF_MARK, PE_MARK, PM_MARK, RM_MARK, SH_MARK, SF_MARK, NAO_MARK, OT_MARK, OL_MARK)
-write.table(allspp, file = "mark_datafiles//all_mark.inp", row.names = F, col.names = F)
+write.table(allspp, file = "mark_datafiles//all_mark.inp", row.names = F, col.names = F, quote = F)
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
