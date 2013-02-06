@@ -105,7 +105,6 @@ Sfix <- list(formula=~stratum,fixed=list(index=c(SA,SB,SC),value=c(SAval,SBval,
 #---------------------------------------------------------------------------------
 #          Define model structures for p (capture probability)
 #---------------------------------------------------------------------------------
-
   ## FIXME: What does this all mean??
 p1996=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==1996&MS.ddl$p$stratum=="A",]))
 p1997=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==1997&MS.ddl$p$stratum=="A",]))
@@ -136,6 +135,49 @@ r2003.gval=rep(0,length(r2003.g))
 r2005.gval=rep(0,length(r2005.g))
 r2010.gval=rep(0,length(r2010.g))
 
+#---------------------------------------------------------------------------------
+#          Define model structures for psi (transition probability)
+#---------------------------------------------------------------------------------
+## FIXME: What does this all mean??
+PsiB = as.numeric(row.names(MS.ddl$Psi[MS.ddl$Psi$stratum == "B",]))
+PsiC = as.numeric(row.names(MS.ddl$Psi[MS.ddl$Psi$stratum == "C",]))
+Psi1996.g = as.numeric(row.names(MS.ddl$Psi[MS.ddl$Psi$time == 1996&MS.ddl$Psi$stratum == "A"&MS.ddl$Psi$rage == "gosling",]))
+Psi1997.g = as.numeric(row.names(MS.ddl$Psi[MS.ddl$Psi$time == 1997&MS.ddl$Psi$stratum == "A"&MS.ddl$Psi$rage == "gosling",]))
+PsiBval = rep(0,length(PsiB))
+PsiCval = rep(0,length(PsiC))
+Psi1996.gval = rep(0,length(Psi1996.g))
+Psi1997.gval = rep(0,length(Psi1997.g))
+Psi2002.gval = rep(0,length(Psi2002.g))
+Psi2004.gval = rep(0,length(Psi2004.g))
+Psi2009.gval = rep(0,length(Psi2009.g))
 
+# tostratum and age effects (unique age effects for harvest and non-harvest mortalities)
+Psiage <- list(formula=~-1+toB:hy+toB:ahy+toC:hy+toC:ahy+fromB+fromC,
+               fixed=list(index=c(PsiB,PsiC,Psi1996.g,Psi1997.g,Psi2002.g,Psi2004.g,Psi2009.g),
+                          value=c(PsiBval,PsiCval,Psi1996.gval,Psi1997.gval,Psi2002.gval,Psi2004.gval,
+                                  Psi2009.gval)),link="logit")
 
+#---------------------------------------------------------------------------------
+#          Run Models
+#---------------------------------------------------------------------------------
+Sfix.prage.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                  p=prage,Psi=Psiage),options="SIMANNEAL")
+Sfix.ptbin.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                  p=ptbin,Psi=Psiage),options="SIMANNEAL")
+Sfix.prtbin.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                   p=prtbin,Psi=Psiage),options="SIMANNEAL")
+Sfix.ptbinrT3.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                     p=ptbinrT3,Psi=Psiage))
+Sfix.ptbinrrpt.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                      p=ptbinrrpt,Psi=Psiage),options="SIMANNEAL")
+Sfix.pT3.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                p=pT3,Psi=Psiage),options="SIMANNEAL")
+Sfix.pT3rtbin.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                     p=pT3rtbin,Psi=Psiage))
+Sfix.prT3.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                 p=prT3,Psi=Psiage),options="SIMANNEAL")
+Sfix.pT3rrpt.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
+                                                                    p=pT3rrpt,Psi=Psiage),options="SIMANNEAL")
 
+#summarize results
+MS.results <- collect.models(type="Multistrata")
