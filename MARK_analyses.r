@@ -6,6 +6,9 @@
 
 library(RMark) 
 
+#---------------------------------------------------------------------------------
+#          bring in the data and source files
+#---------------------------------------------------------------------------------
 #set working directory and import source code
 wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
 setwd(wd)
@@ -17,6 +20,9 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")),  #FIXME
                       covariates = data.frame(mass = "sd_mass", guild = c("hgran", "cgran", "foli")))
 
+#---------------------------------------------------------------------------------
+#          process multistrata data, includes capture at home, and dipsersal transitions 
+#---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
 ms_process <- process.data(ms_data,model="Multistrata",begin.time=2000,
                            group=c("sex"), covariates = c("mass", "guild"))
