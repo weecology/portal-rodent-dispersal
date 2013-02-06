@@ -127,9 +127,12 @@ p344val = rep(0, length(p344))
 p351val = rep(0, length(p351))
 
 
-
-# age (base of separate age effects for p and r; transient effect for p) but no time effects
-pstrata <- list(formula=~stratum, fixed=list(index=c(p267),value=c(p267val),link="cloglog"))
+# look for effects of strata on recapture probability, given that some p are fixed to 0 (listed below)
+pstrata <- list(formula = ~stratum, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+                                                     p318, p321, p323, p337, p339, p344, p351), 
+                                             value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                       p313val, p314val, p318val, p321val, p323val, p337val, p339val,
+                                                       p344val, p351val), link = "cloglog"))
 
 # link="logit" is the default. "cloglog" may be especially useful when there are fewer recaptures
 
