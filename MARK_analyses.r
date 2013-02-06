@@ -64,13 +64,16 @@ ms_ddl$p$strA[ms_ddl$p$stratum == "1"] = 1
 ms_ddl$p$strB = 0
 ms_ddl$p$strB[ms_ddl$p$stratum == "2"] = 1
 
+#---------------------------------------------------------------------------------
+#          fix p for omitted  periods - time between  trapping events ~ 1 month
+#---------------------------------------------------------------------------------
 ## TODO: fix recapture probabilities for unsampled or omitted months!
     # skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 
-              #   337, 339, 344, 351)
+              #   337, 339, 344, 351): p = 0
 
 # Add a field for monthly reporting probabilities 
-ms_ddl$p$rpt=0
-ms_ddl$p$rpt[ms_ddl$p$prd] == 267 = 0
+ms_ddl$p$rpt = 0
+ms_ddl$p$rpt[ms_ddl$p$prd] == 267 = 0  #FIX ME: is this on the right track?
 ms_ddl$p$rpt[ms_ddl$p$prd] == 277 = 0
 
 # TODO: Lots of work on building up the models!
