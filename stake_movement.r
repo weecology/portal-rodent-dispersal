@@ -384,6 +384,26 @@ for (y in 1:length (years)){
 dev.off()
 
 
+#------------------------------------------
+pdf("Fig8_histogram_masses.pdf", 6, 6, pointsize = 10)
+par(mfrow=c(2,2))
+
+v10 = seq(0,300,10)
+hist(het$wgt, col = 'gray60', xlim = c(0,80), ylim = c(0, 3000), xlab = "grams", 
+     main = "Heteromyid mass")
+
+hist(cricet$wgt, col = 'gray60', xlim = c(0,40), ylim = c(0, 500), xlab = "grams", 
+     main = "Cricetid granivore mass")
+
+hist(foliv$wgt, col = 'gray60', xlim = c(0,300), ylim = c(0, 125), xlab = "grams", 
+     main = "folivore mass")
+
+hist(insec$wgt, col = 'gray60', xlim = c(0,50), ylim = c(0, 800), xlab = "grams", 
+     main = "carnivore mass")
+
+dev.off()
+
+
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
 #-------------------------------------------------------------------
