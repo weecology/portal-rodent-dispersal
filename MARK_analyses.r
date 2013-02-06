@@ -75,7 +75,7 @@ Snull <- list(formula = ~1)           # null model, S is not dependent on strata
 Sstrata <- list(formula = ~stratum)   # S is dependent on strata (in A or in B)
 
 Sguild <- list(formula = ~guild)  # Is this how to set up a model testing if S differs among guilds?
-
+Sspecies <- list(formula = ~species) # test for differences among species
 
 #---------------------------------------------------------------------------------
 #          Define model structures for p (capture probability)
