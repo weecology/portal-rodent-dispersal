@@ -62,13 +62,7 @@ ms_ddl$p$strB[ms_ddl$p$stratum == "2"] = 1
 
 
 #--------------------------------------------------------------------------------
-    # TODO: Lots of work on building up the models!
-        
-    # What is psi (transition probability) for each species/guild?
-
-    # What is  S (survival probability) for each species/guild?
-
-    # What is p (capture probability for each species/guild?
+    # TODO: Build up the models
 
     # Do psi and S significantly differ among species/guilds?
 
@@ -130,23 +124,22 @@ pstrata <- list(formula = ~stratum, fixed = list(index = c(p267, p277, p278, p28
                                              value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                        p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                        p344val, p351val), link = "cloglog"))
-
-# link="logit" is the default. "cloglog" may be especially useful when there are fewer recaptures
+        # link = "logit" is the default. "cloglog" may be esp. useful when there are fewer recaptures
 
 
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-Psistrata <- list(formula=~stratum)
+Psistrata <- list(formula = ~stratum)
 
 
 #---------------------------------------------------------------------------------
 #          Run Models
 #---------------------------------------------------------------------------------
-Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl,model.parameters=list(S=Sstrata,
-                                                                          p=pstrata,Psi=Psistrata),options="SIMANNEAL")
-
 #SIMANNEAL should be best for multistrata models, but may take longer to run
+Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
+                                  options = "SIMANNEAL")
+
 
 #summarize results
 ms_results <- collect.models(type = "Multistrata")
