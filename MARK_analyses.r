@@ -17,7 +17,7 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 
 
 # bring in the inp file and convert it to RMark format 
-ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")),  #FIXME
+ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")))  #FIXME
                       covariates = data.frame(mass = "sd_mass", guild = c("hgran", "cgran", "foli")))
 
 #---------------------------------------------------------------------------------
@@ -25,9 +25,13 @@ ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c(
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
 ms_process <- process.data(ms_data,model="Multistrata",begin.time=2000,
-                           group=c("sex"), covariates = c("mass", "guild"))
+                           group=c("sex"), sex.var=1, sex=c(0,1)) #FIXME
 
 ms_ddl <- make.design.data(ms_process)
+
+#---------------------------------------------------------------------------------
+#          make dummy variables and covariates
+#---------------------------------------------------------------------------------
 
 # Add dynamic dummy variable age class fields to the design data for Psi and p
 ms_ddl$Psi$hy=0
