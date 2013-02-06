@@ -107,6 +107,7 @@ insectiv = c(otmeters, olmeters)
 # data reasonably well fits a lognormal distribution (eyeball and J. Powell)
 # breakpoint = mean(logdata) + sd(logdata) of all the distances traveled by recaptured individuals    
   # using log1p, and back transforming using expm1 should solve the problem of lots of zeros 
+Hgran_brkpt = expm1(mean(log1p(Hgran)) + sd(log1p(Hgran)))
 Cgran_brkpt = expm1(mean(log1p(Cgran)) + sd(log1p(Cgran)))
 foli_brkpt = expm1(mean(log1p(foli)) + sd(log1p(foli)))
 nao_brkpt = expm1(mean(log1p(naometers)) + sd(log1p(naometers)))
@@ -154,6 +155,8 @@ write.table(NAO_MARK, file = "mark_datafiles//nao_mark.inp", row.names = F, col.
 write.table(OT_MARK, file = "mark_datafiles//ot_mark.inp", row.names = F, col.names = F)
 write.table(OL_MARK, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F)
 
+allspp = rbind(DO_MARK, DM_MARK, PB_MARK, PP_MARK, PF_MARK, PE_MARK, PM_MARK, RM_MARK, SH_MARK, SF_MARK, NAO_MARK, OT_MARK, OL_MARK)
+write.table(allspp, file = "mark_datafiles//all_mark.inp", row.names = F, col.names = F)
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
