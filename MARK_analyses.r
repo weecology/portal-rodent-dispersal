@@ -76,5 +76,66 @@ ms_ddl$p$rpt = 0
 ms_ddl$p$rpt[ms_ddl$p$prd] == 267 = 0  #FIX ME: is this on the right track?
 ms_ddl$p$rpt[ms_ddl$p$prd] == 277 = 0
 
-# TODO: Lots of work on building up the models!
-                          
+#--------------------------------------------------------------------------------
+    # TODO: Lots of work on building up the models!
+        
+    # What is psi (transition probability) for each species/guild?
+
+    # What is  S (survival probability) for each species/guild?
+
+    # What is p (capture probability for each species/guild?
+
+    # Do psi and S significantly differ among species/guilds?
+
+    # Within a species/guild, do covariates (sex, body mass) influence psi and S?
+
+#---------------------------------------------------------------------------------
+#          Define model structures for S (survival probability)
+#---------------------------------------------------------------------------------
+SA = as.numeric(row.names(MS.ddl$S[MS.ddl$S$stratum == "A",]))
+SB = as.numeric(row.names(MS.ddl$S[MS.ddl$S$stratum == "B",]))
+SC = as.numeric(row.names(MS.ddl$S[MS.ddl$S$stratum == "C",]))  #No stratum C??
+SAval = rep(1,length(SA))
+SBval = rep(0,length(SB))
+SCval = rep(0,length(SC))
+# fix S to 1 for A and 0 for dead states B and C
+Sfix <- list(formula=~stratum,fixed=list(index=c(SA,SB,SC),value=c(SAval,SBval,
+                                                                   SCval)))
+
+#---------------------------------------------------------------------------------
+#          Define model structures for p (capture probability)
+#---------------------------------------------------------------------------------
+
+  ## FIXME: What does this all mean??
+p1996=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==1996&MS.ddl$p$stratum=="A",]))
+p1997=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==1997&MS.ddl$p$stratum=="A",]))
+p1998.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==1998&MS.ddl$p$stratum=="A"&MS.ddl$p$rage=="gosling",]))
+p1998.y=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==1998&MS.ddl$p$stratum=="A"&MS.ddl$p$rage=="yearling",]))
+p2003.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==2003&MS.ddl$p$stratum=="A"&MS.ddl$p$rage=="gosling",]))
+p2005.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==2005&MS.ddl$p$stratum=="A"&MS.ddl$p$rage=="gosling",]))
+p2009=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==2009&MS.ddl$p$stratum=="A",]))
+p2010.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==2010&MS.ddl$p$stratum=="A"&MS.ddl$p$rage=="gosling",]))
+rC=as.numeric(row.names(MS.ddl$p[MS.ddl$p$stratum=="C",]))
+r1997.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==1997&MS.ddl$p$stratum=="B"&MS.ddl$p$rage=="gosling",]))
+r1998.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==1998&MS.ddl$p$stratum=="B"&MS.ddl$p$rage=="gosling",]))
+r2003.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==2003&MS.ddl$p$stratum=="B"&MS.ddl$p$rage=="gosling",]))
+r2005.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==2005&MS.ddl$p$stratum=="B"&MS.ddl$p$rage=="gosling",]))
+r2010.g=as.numeric(row.names(MS.ddl$p[MS.ddl$p$time==2010&MS.ddl$p$stratum=="B"&MS.ddl$p$rage=="gosling",]))
+p1996val=rep(0,length(p1996))
+p1997val=rep(0,length(p1997))
+p1998.gval=rep(0,length(p1998.g))
+p1998.yval=rep(0,length(p1998.y))
+p2003.gval=rep(0,length(p2003.g))
+p2005.gval=rep(0,length(p2005.g))
+p2009val=rep(0,length(p2009))
+p2010.gval=rep(0,length(p2010.g))
+rCval=rep(0,length(rC))
+r1997.gval=rep(0,length(r1997.g))
+r1998.gval=rep(0,length(r1998.g))
+r2003.gval=rep(0,length(r2003.g))
+r2005.gval=rep(0,length(r2005.g))
+r2010.gval=rep(0,length(r2010.g))
+
+
+
+
