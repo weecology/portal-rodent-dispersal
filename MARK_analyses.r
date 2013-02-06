@@ -77,8 +77,8 @@ ms_ddl$p$strB[ms_ddl$p$stratum == "2"] = 1
 #---------------------------------------------------------------------------------
 #          Define model structures for S (survival probability)
 #---------------------------------------------------------------------------------
-Snull <- list(formula=~1)           # null model, S is not dependent on strata
-Sstrata <- list(formula=~stratum)   # S is dependent on strata (in A or in B)
+Snull <- list(formula = ~1)           # null model, S is not dependent on strata
+Sstrata <- list(formula = ~stratum)   # S is dependent on strata (in A or in B)
 
 
 #---------------------------------------------------------------------------------
