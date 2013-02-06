@@ -24,45 +24,44 @@ ms_data <- convert.inp("mark_datafiles//all_mark.inp", group.df=data.frame(sex =
 #          process multistrata data, includes capture at home, and dipsersal transitions 
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
-ms_process <- process.data(ms_data,model = "Multistrata",begin.time = 2000,
-                           group=c("sex"), sex.var = 1, sex = c(0,1)) #FIXME
+ms_process <- process.data(ms_data,model = "Multistrata",begin.time = 261, groups = "sex")
 
 ms_ddl <- make.design.data(ms_process)
 
 #---------------------------------------------------------------------------------
 #          make dummy variables and covariates
 #---------------------------------------------------------------------------------
+# Add dummy variables for operating on specific states or transitions
+# A = 1 (home), B = 2 (away)
+# A to B and B to B, is risky
+# A to A and B to A, is less risky (within home, "normal" movements)
 
-# Add dynamic dummy variable age class fields to the design data for Psi (transition prob) and p (capture prob)
-ms_ddl$Psi$hy = 0
-ms_ddl$Psi$hy[ms_ddl$Psi$sex == 0 & ms_ddl$Psi$stratum == "1"] = 1
-ms_ddl$Psi$ahy = 0
-ms_ddl$Psi$ahy[ms_ddl$Psi$sex >= 1 & ms_ddl$Psi$stratum == "1"] = 1
+# Surival probability given that the individual is in A
+ms_ddl$S$inA = 0
+ms_ddl$S$inA[ms_ddl$S$stratum == "1"] = 1
 
-ms_ddl$p$hy = 0
-ms_ddl$p$hy[ms_ddl$p$sex == 1 & ms_ddl$p$stratum == "1"] = 1
-ms_ddl$p$hy[ms_ddl$p$sex == 1 & ms_ddl$p$stratum == "1"] = 1
-ms_ddl$p$sy = 0
-ms_ddl$p$sy[ms_ddl$p$sex == 2 & ms_ddl$p$stratum == "1"] = 1
-ms_ddl$p$asy = 0
-ms_ddl$p$asy[ms_ddl$p$sex >= 3 & ms_ddl$p$stratum == "1"] = 1
-ms_ddl$p$ahy = 0
-ms_ddl$p$ahy[ms_ddl$p$sex >= 2 & ms_ddl$p$stratum == "2"] = 1
+# Surival probability given that the individual is in B
+ms_ddl$S$inB = 0
+ms_ddl$S$inB[ms_ddl$S$stratum == "2"] = 1
 
-##### Add dummy variables for operating on specific states or transitions
-  # A = 1 (home), B = 2 (away)
-  # A to B and B to B, is risky
-  # A to A and B to A, is less risky (within home, "normal" movements)
+# Transition probability given that the individual  A ---> B
+ms_ddl$Psi$toA = 0
+ms_ddl$Psi$toA[ms_ddl$Psi$stratum == "2" & ms_ddl$Psi$tostratum == "1"] = 1
+
+# Transition probability given that the individual  B ---> A
 ms_ddl$Psi$toB = 0
 ms_ddl$Psi$toB[ms_ddl$Psi$stratum == "1" & ms_ddl$Psi$tostratum == "2"] = 1 
 
-ms_ddl$Psi$toA = 0
-ms_ddl$Psi$toA[ms_ddl$Psi$stratum == "2"] = 1
-
+# recapture probability given that the individual is in A
 ms_ddl$p$strA = 0
 ms_ddl$p$strA[ms_ddl$p$stratum == "1"] = 1
+
+# recapture probability given that the individual is in B
 ms_ddl$p$strB = 0
 ms_ddl$p$strB[ms_ddl$p$stratum == "2"] = 1
+
+
+
 
 #---------------------------------------------------------------------------------
 #          fix p for omitted  periods - time between  trapping events ~ 1 month
