@@ -24,7 +24,7 @@ ms_data <- convert.inp("mark_datafiles//all_mark.inp", group.df=data.frame(sex =
 #          process multistrata data, includes capture at home, and dipsersal transitions 
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
-ms_process <- process.data(ms_data,model = "Multistrata",begin.time = 261, groups = "sex")
+ms_process <- process.data(ms_data,model = "Multistrata", begin.time = 261, groups = "sex")
 
 ms_ddl <- make.design.data(ms_process)
 
@@ -87,7 +87,7 @@ Sstrata <- list(formula=~stratum)   # S is dependent on strata (in A or in B)
 # fix recapture probabilities for unsampled or omitted months
 #    skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
 
-# select periods that were omitted from the study - untrapped
+# select periods that were omitted from the study - untrapped  #FIXME, error in undefined columns selected?
 p267 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 267]))
 p277 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 277]))
 p278 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 278]))
