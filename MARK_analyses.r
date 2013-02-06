@@ -17,15 +17,15 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 
 
 # bring in the inp file and convert it to RMark format 
-ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex=c("male","female","unidsex")))  #FIXME
+ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")))  #FIXME
                       covariates = data.frame(mass = "sd_mass", guild = c("hgran", "cgran", "foli")))
 
 #---------------------------------------------------------------------------------
 #          process multistrata data, includes capture at home, and dipsersal transitions 
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
-ms_process <- process.data(ms_data,model="Multistrata",begin.time=2000,
-                           group=c("sex"), sex.var=1, sex=c(0,1)) #FIXME
+ms_process <- process.data(ms_data,model = "Multistrata",begin.time = 2000,
+                           group=c("sex"), sex.var = 1, sex = c(0,1)) #FIXME
 
 ms_ddl <- make.design.data(ms_process)
 
@@ -33,21 +33,21 @@ ms_ddl <- make.design.data(ms_process)
 #          make dummy variables and covariates
 #---------------------------------------------------------------------------------
 
-# Add dynamic dummy variable age class fields to the design data for Psi and p
-ms_ddl$Psi$hy=0
-ms_ddl$Psi$hy[ms_ddl$Psi$sex==0&ms_ddl$Psi$stratum=="1"]=1
-ms_ddl$Psi$ahy=0
-ms_ddl$Psi$ahy[ms_ddl$Psi$sex>=1&ms_ddl$Psi$stratum=="1"]=1
+# Add dynamic dummy variable age class fields to the design data for Psi (transition prob) and p (capture prob)
+ms_ddl$Psi$hy = 0
+ms_ddl$Psi$hy[ms_ddl$Psi$sex == 0 & ms_ddl$Psi$stratum == "1"] = 1
+ms_ddl$Psi$ahy = 0
+ms_ddl$Psi$ahy[ms_ddl$Psi$sex >= 1 & ms_ddl$Psi$stratum == "1"] = 1
 
-ms_ddl$p$hy=0
-ms_ddl$p$hy[ms_ddl$p$sex==1&ms_ddl$p$stratum=="1"]=1
-ms_ddl$p$hy[ms_ddl$p$sex==1&ms_ddl$p$stratum=="1"]=1
-ms_ddl$p$sy=0
-ms_ddl$p$sy[ms_ddl$p$sex==2&ms_ddl$p$stratum=="1"]=1
-ms_ddl$p$asy=0
-ms_ddl$p$asy[ms_ddl$p$sex>=3&ms_ddl$p$stratum=="1"]=1
-ms_ddl$p$ahy=0
-ms_ddl$p$ahy[ms_ddl$p$sex>=2&ms_ddl$p$stratum=="2"]=1
+ms_ddl$p$hy = 0
+ms_ddl$p$hy[ms_ddl$p$sex == 1 & ms_ddl$p$stratum == "1"] = 1
+ms_ddl$p$hy[ms_ddl$p$sex == 1 & ms_ddl$p$stratum == "1"] = 1
+ms_ddl$p$sy = 0
+ms_ddl$p$sy[ms_ddl$p$sex == 2 & ms_ddl$p$stratum == "1"] = 1
+ms_ddl$p$asy = 0
+ms_ddl$p$asy[ms_ddl$p$sex >= 3 & ms_ddl$p$stratum == "1"] = 1
+ms_ddl$p$ahy = 0
+ms_ddl$p$ahy[ms_ddl$p$sex >= 2 & ms_ddl$p$stratum == "2"] = 1
 
 ##### Add dummy variables for operating on specific states or transitions
   # A = 1 (home), B = 2 (away)
