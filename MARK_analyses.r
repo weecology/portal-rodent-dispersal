@@ -74,6 +74,8 @@ ms_ddl$p$strB[ms_ddl$p$stratum == "2"] = 1
 Snull <- list(formula = ~1)           # null model, S is not dependent on strata
 Sstrata <- list(formula = ~stratum)   # S is dependent on strata (in A or in B)
 
+Sguild <- list(formula = ~guild)  # Is this how to set up a model testing if S differs among guilds?
+
 
 #---------------------------------------------------------------------------------
 #          Define model structures for p (capture probability)
@@ -127,18 +129,40 @@ pstrata <- list(formula = ~stratum, fixed = list(index = c(p267, p277, p278, p28
         # link = "logit" is the default. "cloglog" may be esp. useful when there are fewer recaptures
 
 
+pguild <- list(formula = ~guild, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+                                                         p318, p321, p323, p337, p339, p344, p351), 
+                                               value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                         p313val, p314val, p318val, p321val, p323val, p337val, p339val,
+                                                         p344val, p351val), link = "cloglog"))
+              # Is this how to set up a model testing if S differs among guilds?
+
+
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
 Psistrata <- list(formula = ~stratum)
 
+Psiguild <- list(formula = ~guild)
+
 
 #---------------------------------------------------------------------------------
-#          Run Models
+#          Run Models and collect results
 #---------------------------------------------------------------------------------
 #SIMANNEAL should be best for multistrata models, but may take longer to run
 Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
                                   options = "SIMANNEAL")
+
+Sguild_pguild_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
+                               options = "SIMANNEAL")
+
+Sguild_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psiguild),
+                                 options = "SIMANNEAL")
+
+Sstrata_pstrata_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psiguild),
+                                 options = "SIMANNEAL")
+
+Sguild_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psistrata),
+                                 options = "SIMANNEAL")
 
 
 #summarize results
@@ -150,5 +174,5 @@ ms_results <- collect.models(type = "Multistrata")
 #---------------------------------------------------------------------------------
 write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_modelstuff_beta")
 write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_modelstuff_real")
-
+#TODO: Add the others to be printed when finalize models
 
