@@ -181,3 +181,11 @@ Sfix.pT3rrpt.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
 
 #summarize results
 MS.results <- collect.models(type="Multistrata")
+
+#---------------------------------------------------------------------------------
+#          Write result data to csv files
+#---------------------------------------------------------------------------------
+write.csv(Sfix.pT3rrpt.Psiagebytbin$results$beta, "MS_agebytbin_beta")
+write.csv(Sfix.pT3rrpt.Psiagebytbin$results$real, "MS_agebytbin_real")
+write.csv(Sfix.pT3rrpt.Psiagebyt$results$beta, "MS_agebyt_beta")
+write.csv(Sfix.pT3rrpt.Psiagebyt$results$real, "MS_agebyt_real")
