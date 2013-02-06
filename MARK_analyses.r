@@ -51,18 +51,18 @@ ms_ddl$p$ahy[ms_ddl$p$sex >= 2 & ms_ddl$p$stratum == "2"] = 1
 
 ##### Add dummy variables for operating on specific states or transitions
   # A = 1 (home), B = 2 (away)
-  # moving to B from anywhere, is risky
-  # moving to A from anywhere, is less risky (within home, "normal" movements)
-ms_ddl$Psi$toB=0
-ms_ddl$Psi$toB[ms_ddl$Psi$stratum=="1" & ms_ddl$Psi$tostratum=="2"]=1
+  # A to B and B to B, is risky
+  # A to A and B to A, is less risky (within home, "normal" movements)
+ms_ddl$Psi$toB = 0
+ms_ddl$Psi$toB[ms_ddl$Psi$stratum == "1" & ms_ddl$Psi$tostratum == "2"] = 1 
 
-ms_ddl$Psi$toA=0
-ms_ddl$Psi$toA[ms_ddl$Psi$stratum=="2"]=1
+ms_ddl$Psi$toA = 0
+ms_ddl$Psi$toA[ms_ddl$Psi$stratum == "2"] = 1
 
-ms_ddl$p$strA=0
-ms_ddl$p$strA[ms_ddl$p$stratum=="1"]=1
-ms_ddl$p$strB=0
-ms_ddl$p$strB[ms_ddl$p$stratum=="2"]=1
+ms_ddl$p$strA = 0
+ms_ddl$p$strA[ms_ddl$p$stratum == "1"] = 1
+ms_ddl$p$strB = 0
+ms_ddl$p$strB[ms_ddl$p$stratum == "2"] = 1
 
 ## TODO: fix recapture probabilities for unsampled or omitted months!
     # skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 
