@@ -17,8 +17,8 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 
 
 # bring in the inp file and convert it to RMark format 
-ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")))  #FIXME
-                      covariates = data.frame(mass = "sd_mass", guild = c("hgran", "cgran", "foli")))
+ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
+                      covariates = c("sd_mass", "guild", "species"))
 
 #---------------------------------------------------------------------------------
 #          process multistrata data, includes capture at home, and dipsersal transitions 
