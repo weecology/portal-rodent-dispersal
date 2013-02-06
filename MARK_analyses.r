@@ -135,7 +135,7 @@ pstrata <- list(formula = ~stratum, fixed = list(index = c(p267, p277, p278, p28
 
 
 #---------------------------------------------------------------------------------
-#          Define model structures for psi (transition probability)
+#          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
 Psistrata <- list(formula=~stratum)
 
@@ -143,32 +143,19 @@ Psistrata <- list(formula=~stratum)
 #---------------------------------------------------------------------------------
 #          Run Models
 #---------------------------------------------------------------------------------
-Sfix.prage.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                  p=prage,Psi=Psiage),options="SIMANNEAL")
-Sfix.ptbin.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                  p=ptbin,Psi=Psiage),options="SIMANNEAL")
-Sfix.prtbin.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                   p=prtbin,Psi=Psiage),options="SIMANNEAL")
-Sfix.ptbinrT3.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                     p=ptbinrT3,Psi=Psiage))
-Sfix.ptbinrrpt.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                      p=ptbinrrpt,Psi=Psiage),options="SIMANNEAL")
-Sfix.pT3.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                p=pT3,Psi=Psiage),options="SIMANNEAL")
-Sfix.pT3rtbin.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                     p=pT3rtbin,Psi=Psiage))
-Sfix.prT3.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                 p=prT3,Psi=Psiage),options="SIMANNEAL")
-Sfix.pT3rrpt.Psiage <- mark(MS.process,MS.ddl,model.parameters=list(S=Sfix,
-                                                                    p=pT3rrpt,Psi=Psiage),options="SIMANNEAL")
+Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl,model.parameters=list(S=Sstrata,
+                                                                          p=pstrata,Psi=Psistrata),options="SIMANNEAL")
+
+#SIMANNEAL should be best for multistrata models, but may take longer to run
 
 #summarize results
-MS.results <- collect.models(type="Multistrata")
+ms_results <- collect.models(type = "Multistrata")
+
 
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
-write.csv(Sfix.pT3rrpt.Psiagebytbin$results$beta, "MS_agebytbin_beta")
-write.csv(Sfix.pT3rrpt.Psiagebytbin$results$real, "MS_agebytbin_real")
-write.csv(Sfix.pT3rrpt.Psiagebyt$results$beta, "MS_agebyt_beta")
-write.csv(Sfix.pT3rrpt.Psiagebyt$results$real, "MS_agebyt_real")
+write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_modelstuff_beta")
+write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_modelstuff_real")
+
+
