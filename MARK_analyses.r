@@ -16,8 +16,8 @@ setwd(wd)
 source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
 
-# bring in the inp file and convert it to RMark format 
-ms_data <- convert.inp("mark_datafiles//do_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
+# bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
+ms_data <- convert.inp("mark_datafiles//all_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
                       covariates = c("sd_mass", "guild", "species"))
 
 #---------------------------------------------------------------------------------
