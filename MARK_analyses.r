@@ -87,9 +87,54 @@ Sstrata <- list(formula=~stratum)   # S is dependent on strata (in A or in B)
 #---------------------------------------------------------------------------------
 #          fix p for omitted  periods - time between  trapping events ~ 1 month
 #---------------------------------------------------------------------------------
-## TODO: fix recapture probabilities for unsampled or omitted months!
-# skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 
-#   337, 339, 344, 351): p = 0
+# fix recapture probabilities for unsampled or omitted months!
+#    skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
+
+# select periods that were omitted from the study - untrapped
+p267 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 267]))
+p277 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 277]))
+p278 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 278]))
+p283 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 283]))
+p284 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 284]))
+p300 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 300]))
+p311 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 311]))
+p313 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 313]))
+p314 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 314]))
+p318 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 318]))
+p321 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 321]))
+p323 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 323]))
+p337 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 337]))
+p339 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 339]))
+p344 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 344]))
+p351 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 351]))
+
+# set those periods to p = 0, because they *can't* be anything else
+p267val = rep(0, length(p267))
+p277val = rep(0, length(p277))
+p278val = rep(0, length(p278))
+p283val = rep(0, length(p283))
+p284val = rep(0, length(p284))
+p300val = rep(0, length(p300))
+p311val = rep(0, length(p311))
+p313val = rep(0, length(p313))
+p314val = rep(0, length(p314))
+p318val = rep(0, length(p318))
+p321val = rep(0, length(p321))
+p323val = rep(0, length(p323))
+p337val = rep(0, length(p337))
+p339val = rep(0, length(p339))
+p344val = rep(0, length(p344))
+p351val = rep(0, length(p351))
+
+
+
+# age (base of separate age effects for p and r; transient effect for p) but no time effects
+pstrata <- list(formula=~stratum, fixed=list(index=c(p267),value=c(p267val),link="cloglog"))
+
+# link="logit" is the default. "cloglog" may be especially useful when there are fewer recaptures
+
+
+
 
 # Add a field for monthly reporting probabilities 
 ms_ddl$p$rpt = 0
