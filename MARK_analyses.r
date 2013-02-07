@@ -154,9 +154,13 @@ pspecies <- list(formula = ~as.factor(species), fixed = list(index = c(p267, p27
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
+Psinull <- list(formula = ~1)
+
 Psistrata <- list(formula = ~stratum)
 
-Psiguild <- list(formula = ~guild)
+Psiguild <- list(formula = ~as.factor(guild))
+
+Psispecies <- list(formula = ~as.factor(species))
 
 
 #---------------------------------------------------------------------------------
