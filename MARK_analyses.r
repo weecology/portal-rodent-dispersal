@@ -18,16 +18,19 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 
 
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
-ms_data <- convert.inp("mark_datafiles//practice3.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
+ms_data <- convert.inp("mark_datafiles//practice2.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
                       covariates = c("sd_mass", "guild", "species"))
+#convert to factor
+ms_data$guild = as.factor(ms_data$guild)
+ms_data$species = as.factor(ms_data$species)
 
 #---------------------------------------------------------------------------------
 #          process multistrata data, includes capture at home, and dipsersal transitions 
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
-ms_process <- process.data(ms_data,model = "Multistrata", begin.time = 261, groups = "sex")
+ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 261, groups = c("sex", "guild", "species"))
 
-ms_ddl <- make.design.data(ms_process)
+ms_ddl <- make.design.data(ms_process) #ddl = design data list
 
 #---------------------------------------------------------------------------------
 #          make dummy variables and covariates
