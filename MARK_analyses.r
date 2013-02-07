@@ -122,21 +122,33 @@ p344val = rep(0, length(p344))
 p351val = rep(0, length(p351))
 
 
-# look for effects of strata on recapture probability, given that some p are fixed to 0 (listed below)
+# look for effects on recapture probability, given that some p are fixed to 0 (listed below)
+# link = "logit" is the default. "cloglog" may be esp. useful when there are fewer recaptures
+
+#Null Model
+pnull <- list(formula = ~1, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+                                                   p318, p321, p323, p337, p339, p344, p351), 
+                                         value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                   p313val, p314val, p318val, p321val, p323val, p337val, p339val,
+                                                   p344val, p351val), link = "cloglog"))
+# Strata effect (in A or in B)
 pstrata <- list(formula = ~stratum, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                      p318, p321, p323, p337, p339, p344, p351), 
                                              value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                        p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                        p344val, p351val), link = "cloglog"))
-        # link = "logit" is the default. "cloglog" may be esp. useful when there are fewer recaptures
-
-
-pguild <- list(formula = ~guild, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
-                                                         p318, p321, p323, p337, p339, p344, p351), 
-                                               value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
-                                                         p313val, p314val, p318val, p321val, p323val, p337val, p339val,
-                                                         p344val, p351val), link = "cloglog"))
-              # Is this how to set up a model testing if S differs among guilds?
+# Guild effect 
+pguild <- list(formula = ~as.factor(guild), fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+                                                                   p318, p321, p323, p337, p339, p344, p351), 
+                                                         value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                                   p313val, p314val, p318val, p321val, p323val, p337val, p339val,
+                                                                   p344val, p351val), link = "cloglog"))
+# Species effect
+pspecies <- list(formula = ~as.factor(species), fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+                                                                       p318, p321, p323, p337, p339, p344, p351), 
+                                                             value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                                       p313val, p314val, p318val, p321val, p323val, p337val, p339val,
+                                                                       p344val, p351val), link = "cloglog"))
 
 
 #---------------------------------------------------------------------------------
