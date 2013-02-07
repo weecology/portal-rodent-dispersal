@@ -4,7 +4,7 @@
 # Will compare data among species and guilds. 
 # Major covariates include sex, guild, and average body mass
 
-MarkPath = "C://Program Files (x86)//MARK//mark64.exe"
+#MarkPath = "C://Program Files (x86)//MARK//mark64.exe"
 library(RMark) 
 
 #---------------------------------------------------------------------------------
@@ -175,11 +175,21 @@ Psispecies <- list(formula = ~as.factor(species))
 Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
                             options = "SIMANNEAL")
 
-Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
-                                  options = "SIMANNEAL")
+Sguild_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pnull, Psi = Psinull),
+                             options = "SIMANNEAL")
+
+Sguild_pnull_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pnull, Psi = Psiguild),
+                              options = "SIMANNEAL")
 
 Sguild_pguild_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
                                options = "SIMANNEAL")
+
+Snull_pnull_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psiguild),
+                                 options = "SIMANNEAL")
+
+
+Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
+                                  options = "SIMANNEAL")
 
 Sguild_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psiguild),
                                  options = "SIMANNEAL")
