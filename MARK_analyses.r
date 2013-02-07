@@ -168,8 +168,8 @@ Psispecies <- list(formula = ~as.factor(species))
 #          Run Models and collect results
 #---------------------------------------------------------------------------------
 #send results to new folder - change working directory
-wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_output"
-setwd(wd)
+#wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_output"
+#setwd(wd)
 
 #SIMANNEAL should be best for multistrata models, but may take longer to run
 Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
