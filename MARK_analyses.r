@@ -32,7 +32,7 @@ ms_ddl <- make.design.data(ms_process)
 #---------------------------------------------------------------------------------
 #          make dummy variables and covariates
 #---------------------------------------------------------------------------------
-# Add dummy variables for operating on specific states or transitions
+# Add dummy variables for operating on specific states(strata) or transitions
 # A = 1 (home), B = 2 (away)
 # A to B and B to B, is risky
 # A to A and B to A, is less risky (within home, "normal" movements)
