@@ -83,8 +83,8 @@ Sspecies <- list(formula = ~species) # test for differences among species
 # fix recapture probabilities for unsampled or omitted months
 #    skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
 
-# select periods that were omitted from the study - untrapped  #FIXME, error in undefined columns selected?
-p267 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 267]))
+# select periods that were omitted from the study - untrapped
+p267 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 267]))    #FIXME, error in undefined columns selected?
 p277 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 277]))
 p278 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 278]))
 p283 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 283]))
