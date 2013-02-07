@@ -167,6 +167,9 @@ Psispecies <- list(formula = ~as.factor(species))
 #          Run Models and collect results
 #---------------------------------------------------------------------------------
 #SIMANNEAL should be best for multistrata models, but may take longer to run
+Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
+                            options = "SIMANNEAL")
+
 Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
                                   options = "SIMANNEAL")
 
