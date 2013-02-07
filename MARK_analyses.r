@@ -175,35 +175,40 @@ wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_output"
 setwd(wd)
 
 #SIMANNEAL should be best for multistrata models, but may take longer to run
-Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
+#Null model
+Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull)),
                             options = "SIMANNEAL")
-
+#S on guild
 Sguild_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pnull, Psi = Psinull),
                              options = "SIMANNEAL")
-
+#S and Psi on guild
 Sguild_pnull_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pnull, Psi = Psiguild),
                               options = "SIMANNEAL")
-
+#S, p and Psi on guild
 Sguild_pguild_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
                                options = "SIMANNEAL")
-
+#Psi on guild
 Snull_pnull_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psiguild),
                                  options = "SIMANNEAL")
 
-
+#S, p and Psi on strata
 Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
                                   options = "SIMANNEAL")
-
+#s on guild, p and Psi on strata
 Sguild_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psiguild),
                                  options = "SIMANNEAL")
-
+#Psi on guild, S and p on strata
 Sstrata_pstrata_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psiguild),
                                  options = "SIMANNEAL")
-
-Sguild_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psistrata),
+#S and Psi on guld, p on strata
+Sguild_pstrata_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psiguild),
                                  options = "SIMANNEAL")
 
-Sspecies_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sspecies,  p = pstrata, Psi = Psistrata),
+#S, p and Psi on species
+Sspecies_pspecies_Pspecies <- mark(ms_process,ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Pspecies),
+                                   options = "SIMANNEAL")
+#S and Psi on species
+Sspecies_pnull_Pspecies <- mark(ms_process,ms_ddl, model.parameters = list(S = Sspecies,  p = pnull, Psi = Pspecies),
                                    options = "SIMANNEAL")
 
 
