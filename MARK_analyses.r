@@ -4,6 +4,7 @@
 # Will compare data among species and guilds. 
 # Major covariates include sex, guild, and average body mass
 
+MarkPath = "C://Program Files (x86)//MARK//Mark_Int.EXE"
 library(RMark) 
 
 #---------------------------------------------------------------------------------
