@@ -175,13 +175,17 @@ wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_output"
 setwd(wd)
 
 
-Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),options = "SIMANNEAL")
+Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
+                            options = "SIMANNEAL")
 
-Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),options = "SIMANNEAL")
+Sstrata_pstrata_Psistrata <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
+                                  options = "SIMANNEAL")
 
-Sguild_pguild_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),options = "SIMANNEAL")
+Sguild_pguild_Psiguild <- mark(ms_process, ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
+                               options = "SIMANNEAL")
 
-Sspecies_pspecies_Psispecies <- mark(ms_process,ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),options = "SIMANNEAL")
+Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
+                                     options = "SIMANNEAL")
 
 
 
