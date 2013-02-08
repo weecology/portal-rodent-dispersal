@@ -79,7 +79,7 @@ Snull <- list(formula = ~1)           # null model, S is not dependent on strata
 
 Sstrata <- list(formula = ~stratum)   # S is dependent on strata (in A or in B)
 
-Sguild <- list(formula = ~guild)  # testing if S differs among guilds?
+Sguild <- list(formula = ~guild)  # testing if S differs among guilds
 
 Sspecies <- list(formula = ~species) # test for differences among species
 
@@ -158,13 +158,13 @@ pspecies <- list(formula = ~as.factor(species), fixed = list(index = c(p267, p27
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-Psinull <- list(formula = ~1)
+Psinull <- list(formula = ~1, link = "logit")
 
-Psistrata <- list(formula = ~stratum)
+Psistrata <- list(formula = ~stratum, link = "logit")
 
-Psiguild <- list(formula = ~as.factor(guild))
+Psiguild <- list(formula = ~guild, link = "logit")
 
-Psispecies <- list(formula = ~as.factor(species))
+Psispecies <- list(formula = ~species, link = "logit")
 
 
 #---------------------------------------------------------------------------------
