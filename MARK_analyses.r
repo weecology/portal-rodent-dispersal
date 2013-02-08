@@ -187,7 +187,6 @@ Sguild_pguild_Psiguild <- mark(ms_process, ms_ddl, model.parameters = list(S = S
 Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
                                      options = "SIMANNEAL")
 
-
 #summarize results
 ms_results <- collect.models(type = "Multistrata")
 
