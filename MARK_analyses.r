@@ -174,7 +174,7 @@ Psispecies <- list(formula = ~species, link = "logit")
 wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_output"
 setwd(wd)
 
-
+# #SIMANNEAL should be best for multistrata models, but may take longer to run
 Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
                             options = "SIMANNEAL")
 
@@ -206,8 +206,6 @@ write.csv(Sspecies_pspecies_Psispecies$results$real, "ms_species_real.csv")
 
 
 
-
-# #SIMANNEAL should be best for multistrata models, but may take longer to run
 # #Null model
 # Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull)),
 #                             options = "SIMANNEAL")
