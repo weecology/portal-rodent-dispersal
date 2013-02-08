@@ -18,7 +18,7 @@ source("stake_movement.r") #makes a mark data structure using species-level data
 
 
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
-ms_data <- convert.inp("mark_datafiles//test.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
+ms_data <- convert.inp("mark_datafiles//practice3.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
                       covariates = c("sd_mass", "guild", "species"))
 #convert to factor
 ms_data$guild = as.factor(ms_data$guild)
@@ -188,6 +188,23 @@ Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list
                                      options = "SIMANNEAL")
 
 
+#summarize results
+ms_results <- collect.models(type = "Multistrata")
+
+
+#---------------------------------------------------------------------------------
+#          Write result data to csv files
+#---------------------------------------------------------------------------------
+write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_strata_beta.csv")
+write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_strata_real.csv")
+write.csv(Sguild_pguild_Psiguild$results$beta, "ms_guild_beta.csv")
+write.csv(Sguild_pguild_Psiguild$results$real, "ms_guild_real.csv")
+write.csv(Sspecies_pspecies_Psispecies$results$beta, "ms_species_beta.csv")
+write.csv(Sspecies_pspecies_Psispecies$results$real, "ms_species_real.csv")
+
+
+
+
 
 
 # #SIMANNEAL should be best for multistrata models, but may take longer to run
@@ -226,16 +243,3 @@ Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list
 # #S and Psi on species
 # Sspecies_pnull_Pspecies <- mark(ms_process,ms_ddl, model.parameters = list(S = Sspecies,  p = pnull, Psi = Pspecies),
 #                                    options = "SIMANNEAL")
-
-
-#summarize results
-ms_results <- collect.models(type = "Multistrata")
-
-
-#---------------------------------------------------------------------------------
-#          Write result data to csv files
-#---------------------------------------------------------------------------------
-write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_modelstuff_beta")
-write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_modelstuff_real")
-#TODO: Add the others to be printed when finalize models
-
