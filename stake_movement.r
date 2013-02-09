@@ -28,7 +28,6 @@ sink("rodent_results.txt", append=TRUE, split=TRUE)
 #---------------------------------------------------------------------------------
 
 # change some cols from factor to character class
-allrats$tag = as.character(allrats$tag)
 het$tag = as.character(het$tag); cricet$tag = as.character(cricet$tag); foliv$tag = as.character(foliv$tag); insec$tag = as.character(insec$tag)
 het$species = as.character(het$species); cricet$species = as.character(cricet$species); foliv$species = as.character(foliv$species); insec$species = as.character(insec$species)
 het$sex = as.character(het$sex); cricet$sex = as.character(cricet$sex); foliv$sex = as.character(foliv$sex); insec$sex = as.character(insec$sex)
@@ -409,13 +408,14 @@ hist(insec$wgt, col = 'gray60', xlim = c(0,50), ylim = c(0, 800), xlab = "grams"
 dev.off()
 
 #------------------------------------------
-pdf("Fig8_histogram_masses.pdf", 6, 6, pointsize = 10)
-par(mfrow=c(2,2))
+pdf("Fig9_avg_temporal_occ_allyears.pdf", 5, 5, pointsize = 10)
+par(mfrow=c(1,1))
+
 #proportion of years they were seen in
-doyr = length(unique(het[het$species=="DO",]$yr))/10; dmyr = length(unique(het[het$species=="DM",]$yr))/10; pfyr = length(unique(het[het$species=="PF",]$yr))/10; ppyr = length(unique(het[het$species=="PP",]$yr))/10; pbyr = length(unique(het[het$species=="PB",]$yr))/10
-peyr = length(unique(cricet[cricet$species=="PE",]$yr))/10; pmyr = length(unique(cricet[cricet$species=="PM",]$yr))/10; rmyr = length(unique(cricet[cricet$species=="RM",]$yr))/10
-shyr = length(unique(foliv[foliv$species=="SH",]$yr))/10; sfyr = length(unique(foliv[foliv$species=="SF",]$yr))/10; naoyr = length(unique(foliv[foliv$species=="NAO",]$yr))/10
-otyr = length(unique(insec[insec$species=="OT",]$yr))/10; olyr = length(unique(insec[insec$species=="OL",]$yr))/10
+doyr = length(unique(allrats[allrats$species=="DO",]$yr))/35; dmyr = length(unique(allrats[allrats$species=="DM",]$yr))/35; pfyr = length(unique(allrats[allrats$species=="PF",]$yr))/35; ppyr = length(unique(allrats[allrats$species=="PP",]$yr))/35; pbyr = length(unique(allrats[allrats$species=="PB",]$yr))/35
+peyr = length(unique(allrats[allrats$species=="PE",]$yr))/35; pmyr = length(unique(allrats[allrats$species=="PM",]$yr))/35; rmyr = length(unique(allrats[allrats$species=="RM",]$yr))/35
+shyr = length(unique(allrats[allrats$species=="SH",]$yr))/35; sfyr = length(unique(allrats[allrats$species=="SF",]$yr))/35; naoyr = length(unique(allrats[allrats$species=="NAO",]$yr))/35
+otyr = length(unique(allrats[allrats$species=="OT",]$yr))/35; olyr = length(unique(allrats[allrats$species=="OL",]$yr))/35
 
 # average number of months they were seen in during years in which they were present
 domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(subset(het, species == "DM")); pfmo = mean_win_yr_occ(subset(het, species == "PF")); ppmo = mean_win_yr_occ(subset(het, species == "PP")); pbmo = mean_win_yr_occ(subset(het, species == "PB"))
@@ -429,6 +429,37 @@ peabun = allyrs_abun(subset(cricet, species == "PE")); pmabun = allyrs_abun(subs
 shabun = allyrs_abun(subset(foliv, species == "SH")); sfabun = allyrs_abun(subset(foliv, species == "SF")); naoabun = allyrs_abun(subset(foliv, species == "NAO"))
 otabun = allyrs_abun(subset(insec, species == "OT")); olabun = allyrs_abun(subset(insec, species == "OL"))
 
+# Make an occupancy plot for 2000-2009 (similar to Morgan) 
+# plot temporal occupancy - for month and year 
+plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
+textxy(pfyr, pfmo, "PF")
+points(ppyr, ppmo, pch = 19, col = "hotpink")
+textxy(ppyr, ppmo, "PP")
+points(pbyr, pbmo, pch = 19, col = "hotpink")
+textxy(pbyr, pbmo, "PB")
+points(doyr, domo, pch = 19, col = "hotpink")
+textxy(doyr, domo, "DO")
+points(dmyr, dmmo, pch = 19, col = "hotpink")
+textxy(dmyr, dmmo, "DM")
+points(peyr, pemo, pch = 19)
+textxy(peyr, pemo, "Cgran")
+points(pmyr, pmmo, pch = 19)
+textxy(pmyr, pmmo, "Cgran")
+points(otyr, otmo, pch = '*', cex = 1.5)
+textxy(otyr, otmo, "insectiv")
+points(olyr, olmo, pch = '*', cex = 1.5)
+textxy(olyr, olmo, "insectiv")
+points(shyr, shmo, pch = 19)
+textxy(shyr, shmo, "foliv")
+points(sfyr, sfmo, pch = 19)
+textxy(sfyr, sfmo, "foliv")
+points(naoyr, naomo, pch = 19, col = "purple")
+textxy(naoyr, naomo, "NA")
+points(rmyr, rmmo, pch = 19)
+textxy(rmyr, rmmo, "Cgran")
+abline(v = 0.5, lty = 2, col = 'gray40', lwd = 1)
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+dev.off()
 
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
