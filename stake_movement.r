@@ -418,10 +418,10 @@ shyr = length(unique(allrats[allrats$species=="SH",]$yr))/35; sfyr = length(uniq
 otyr = length(unique(allrats[allrats$species=="OT",]$yr))/35; olyr = length(unique(allrats[allrats$species=="OL",]$yr))/35
 
 # average number of months they were seen in during years in which they were present
-domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(subset(het, species == "DM")); pfmo = mean_win_yr_occ(subset(het, species == "PF")); ppmo = mean_win_yr_occ(subset(het, species == "PP")); pbmo = mean_win_yr_occ(subset(het, species == "PB"))
-pemo = mean_win_yr_occ(subset(cricet, species == "PE")); pmmo = mean_win_yr_occ(subset(cricet, species == "PM")); rmmo = mean_win_yr_occ(subset(cricet, species == "RM"))
-shmo = mean_win_yr_occ(subset(foliv, species == "SH")); sfmo = mean_win_yr_occ(subset(foliv, species == "SF")); naomo = mean_win_yr_occ(subset(foliv, species == "NAO"))
-otmo = mean_win_yr_occ(subset(insec, species == "OT")); olmo = mean_win_yr_occ(subset(insec, species == "OL"))
+domo = mean_win_yr_alldat(subset(allrats, species == "DO")); dmmo = mean_win_yr_alldat(subset(het, species == "DM")); pfmo = mean_win_yr_alldat(subset(het, species == "PF")); ppmo = mean_win_yr_alldat(subset(het, species == "PP")); pbmo = mean_win_yr_alldat(subset(het, species == "PB"))
+pemo = mean_win_yr_alldat(subset(cricet, species == "PE")); pmmo = mean_win_yr_alldat(subset(cricet, species == "PM")); rmmo = mean_win_yr_alldat(subset(cricet, species == "RM"))
+shmo = mean_win_yr_alldat(subset(foliv, species == "SH")); sfmo = mean_win_yr_alldat(subset(foliv, species == "SF")); naomo = mean_win_yr_alldat(subset(foliv, species == "NAO"))
+otmo = mean_win_yr_alldat(subset(insec, species == "OT")); olmo = mean_win_yr_alldat(subset(insec, species == "OL"))
 
 #mean abundance within all years 
 doabun = allyrs_abun(subset(het, species == "DO")); dmabun = allyrs_abun(subset(het, species == "DM")); pfabun = allyrs_abun(subset(het, species == "PF")); ppabun = allyrs_abun(subset(het, species == "PP")); pbabun = allyrs_abun(subset(het, species == "PB"))

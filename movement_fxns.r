@@ -249,6 +249,27 @@ mean_win_yr_occ = function (data){
 }
 
 
+mean_win_yr_alldat = function (data){
+  #finds the mean within year occupancy for each month for a given species, returns a single value
+  uniq_mos = c(10, 8, 10, 10, 8, 9, 9, 10, 12, 12) #not all months were trapped in all years
+  mos = c(1:12)
+  years = c(1978:2012)
+  
+  proportion_mos = c()
+  
+  for (y in 1:length (years)){
+    yr_data = subset(data, yr == years[y])
+    if(length(yr_data) > 0) {  #don't use years where it wasn't captured
+      m = length(unique(yr_data$mo))/uniq_mos[y]
+      proportion_mos = append(proportion_mos, m)
+    }
+  }
+  months = round(mean(proportion_mos),4)
+  
+  return (months)
+}
+
+
 mean_mo_repro = function (femaledata){
   #returns the proportion of females that are reproductive (nipples enlarged - E - red - R- or both - B - or pregnant - P-)
   #on average in a given month across all the years. Only looks at data during years and months in which the species is present. 
