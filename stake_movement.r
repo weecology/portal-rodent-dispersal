@@ -243,33 +243,56 @@ par(mfrow=c(5,3))
 #plot mean fecundity by month for each species
 plot(c(1:12), doreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "DO - krat")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), dmreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "DM - krat")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), pbreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "PB - pocket mouse")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), ppreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "PP - pocket mouse")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), pfreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "PF - pocket mouse")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
 
 plot(c(1:12), pereprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "PE - cactus mouse")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), pmreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "PM - deer mouse")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), rmreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "RM - harvest mouse")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
 
 plot(c(1:12), shreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "SH - cotton rat")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), sfreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "SF - cotton rat")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), naoreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "NA - pack rat")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
 
 plot(c(1:12), otreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "OT - grasshopper mouse")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 plot(c(1:12), olreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
      ylab = "proprotion reproductive fem.", bty = "n", main = "OL - grasshopper mouse")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 dev.off()
 
 #------------------------------------------
