@@ -80,6 +80,14 @@ otabun = allyrs_abun(subset(insec, species == "OT")); olabun = allyrs_abun(subse
 
 abuns = cbind(doabun, dmabun, pbabun, ppabun, pfabun, peabun, pmabun, rmabun, shabun, sfabun, naoabun, otabun, olabun)
 
+#mean abundances within all years on control plots only
+doabun = allyrs_abun(subset(het, species == "DO" & plot %in% c(1,2,4,8,9,11,12,14,17,22))); dmabun = allyrs_abun(subset(het, species == "DM"& plot %in% c(1,2,4,8,9,11,12,14,17,22))); pfabun = allyrs_abun(subset(het, species == "PF"& plot %in% c(1,2,4,8,9,11,12,14,17,22))); ppabun = allyrs_abun(subset(het, species == "PP"& plot %in% c(1,2,4,8,9,11,12,14,17,22))); pbabun = allyrs_abun(subset(het, species == "PB"& plot %in% c(1,2,4,8,9,11,12,14,17,22)))
+peabun = allyrs_abun(subset(cricet, species == "PE"& plot %in% c(1,2,4,8,9,11,12,14,17,22))); pmabun = allyrs_abun(subset(cricet, species == "PM"& plot %in% c(1,2,4,8,9,11,12,14,17,22))); rmabun = allyrs_abun(subset(cricet, species == "RM"& plot %in% c(1,2,4,8,9,11,12,14,17,22)))
+shabun = allyrs_abun(subset(foliv, species == "SH"& plot %in% c(1,2,4,8,9,11,12,14,17,22))); sfabun = allyrs_abun(subset(foliv, species == "SF"& plot %in% c(1,2,4,8,9,11,12,14,17,22))); naoabun = allyrs_abun(subset(foliv, species == "NAO"& plot %in% c(1,2,4,8,9,11,12,14,17,22)))
+otabun = allyrs_abun(subset(insec, species == "OT"& plot %in% c(1,2,4,8,9,11,12,14,17,22))); olabun = allyrs_abun(subset(insec, species == "OL"& plot %in% c(1,2,4,8,9,11,12,14,17,22)))
+
+conabuns = cbind(doabun, dmabun, pbabun, ppabun, pfabun, peabun, pmabun, rmabun, shabun, sfabun, naoabun, otabun, olabun)
+
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
@@ -316,6 +324,7 @@ for (row in 1:nrow(abuns)){
     
   nonzero = reldat[reldat>0]
     labels = strtrim(as.character(names(nonzero)),2)
+    print(labels)
   
   plot(ranks, reldat, type = "b", pch = 19, ylim = c(0,0.6), 
        xlab = "Rank", ylab = "Relative Abundance", bty = "n", xaxp = c(1, 13, 12))
