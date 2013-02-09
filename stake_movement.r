@@ -13,6 +13,7 @@ setwd(wd)
 source("movement_fxns.R")
 
 #import the data by guild
+allrats = read.csv("rawdata//allrodents_1978-2012.csv") #all rodents, for temporal figure
 het = read.csv("rawdata//heteromyids_2000-2009.csv")   # DO, DM, PB, PP, PF
 cricet = read.csv("rawdata//cricetids_2000-2009.csv")  # PE, PM, RM
 foliv = read.csv("rawdata//folivores_2000-2009.csv")   # SH, SF, NA (as NAO)
