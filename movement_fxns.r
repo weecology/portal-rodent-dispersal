@@ -232,7 +232,7 @@ mean_win_yr_occ = function (data){
   #finds the mean within year occupancy for each month for a given species, returns a single value
   uniq_mos = c(10, 8, 10, 10, 8, 9, 9, 10, 12, 12) #not all months were trapped in all years
   mos = c(1:12)
-  years = sort(unique(data$yr))
+  years = c(2000:2009)
   
   proportion_mos = c()
   
