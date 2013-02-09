@@ -251,7 +251,9 @@ mean_win_yr_occ = function (data){
 
 mean_win_yr_alldat = function (data){
   #finds the mean within year occupancy for each month for a given species, returns a single value
-  uniq_mos = c(10, 8, 10, 10, 8, 9, 9, 10, 12, 12) #not all months were trapped in all years
+  uniq_mos = c(12, 10, 12, 11, 10, 12,  9, 11, 10, 11, 12, 11, 12,
+               12, 10, 12, 11, 10, 12, 10, 11, 10, 10, 11, 11, 10,
+               12, 11, 11, 12, 12, 12, 8, 9, 12) #not all months were trapped in all years
   mos = c(1:12)
   years = c(1978:2012)
   
