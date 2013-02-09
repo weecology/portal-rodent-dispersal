@@ -28,6 +28,7 @@ sink("rodent_results.txt", append=TRUE, split=TRUE)
 #---------------------------------------------------------------------------------
 
 # change some cols from factor to character class
+allrats$tag = as.character(allrats$tag)
 het$tag = as.character(het$tag); cricet$tag = as.character(cricet$tag); foliv$tag = as.character(foliv$tag); insec$tag = as.character(insec$tag)
 het$species = as.character(het$species); cricet$species = as.character(cricet$species); foliv$species = as.character(foliv$species); insec$species = as.character(insec$species)
 het$sex = as.character(het$sex); cricet$sex = as.character(cricet$sex); foliv$sex = as.character(foliv$sex); insec$sex = as.character(insec$sex)
@@ -406,6 +407,27 @@ hist(insec$wgt, col = 'gray60', xlim = c(0,50), ylim = c(0, 800), xlab = "grams"
      main = "carnivore mass")
 
 dev.off()
+
+#------------------------------------------
+pdf("Fig8_histogram_masses.pdf", 6, 6, pointsize = 10)
+par(mfrow=c(2,2))
+#proportion of years they were seen in
+doyr = length(unique(het[het$species=="DO",]$yr))/10; dmyr = length(unique(het[het$species=="DM",]$yr))/10; pfyr = length(unique(het[het$species=="PF",]$yr))/10; ppyr = length(unique(het[het$species=="PP",]$yr))/10; pbyr = length(unique(het[het$species=="PB",]$yr))/10
+peyr = length(unique(cricet[cricet$species=="PE",]$yr))/10; pmyr = length(unique(cricet[cricet$species=="PM",]$yr))/10; rmyr = length(unique(cricet[cricet$species=="RM",]$yr))/10
+shyr = length(unique(foliv[foliv$species=="SH",]$yr))/10; sfyr = length(unique(foliv[foliv$species=="SF",]$yr))/10; naoyr = length(unique(foliv[foliv$species=="NAO",]$yr))/10
+otyr = length(unique(insec[insec$species=="OT",]$yr))/10; olyr = length(unique(insec[insec$species=="OL",]$yr))/10
+
+# average number of months they were seen in during years in which they were present
+domo = mean_win_yr_occ(subset(het, species == "DO")); dmmo = mean_win_yr_occ(subset(het, species == "DM")); pfmo = mean_win_yr_occ(subset(het, species == "PF")); ppmo = mean_win_yr_occ(subset(het, species == "PP")); pbmo = mean_win_yr_occ(subset(het, species == "PB"))
+pemo = mean_win_yr_occ(subset(cricet, species == "PE")); pmmo = mean_win_yr_occ(subset(cricet, species == "PM")); rmmo = mean_win_yr_occ(subset(cricet, species == "RM"))
+shmo = mean_win_yr_occ(subset(foliv, species == "SH")); sfmo = mean_win_yr_occ(subset(foliv, species == "SF")); naomo = mean_win_yr_occ(subset(foliv, species == "NAO"))
+otmo = mean_win_yr_occ(subset(insec, species == "OT")); olmo = mean_win_yr_occ(subset(insec, species == "OL"))
+
+#mean abundance within all years 
+doabun = allyrs_abun(subset(het, species == "DO")); dmabun = allyrs_abun(subset(het, species == "DM")); pfabun = allyrs_abun(subset(het, species == "PF")); ppabun = allyrs_abun(subset(het, species == "PP")); pbabun = allyrs_abun(subset(het, species == "PB"))
+peabun = allyrs_abun(subset(cricet, species == "PE")); pmabun = allyrs_abun(subset(cricet, species == "PM")); rmabun = allyrs_abun(subset(cricet, species == "RM"))
+shabun = allyrs_abun(subset(foliv, species == "SH")); sfabun = allyrs_abun(subset(foliv, species == "SF")); naoabun = allyrs_abun(subset(foliv, species == "NAO"))
+otabun = allyrs_abun(subset(insec, species == "OT")); olabun = allyrs_abun(subset(insec, species == "OL"))
 
 
 #-------------------------------------------------------------------
