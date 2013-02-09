@@ -383,11 +383,10 @@ plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive even
   points(c(0:1), table(sfirep$num_reprod)/sum(table(sfirep$num_reprod)), type = "b", pch = 17, col = "brown4")
   points(c(0:3), table(naoirep$num_reprod)/sum(table(naoirep$num_reprod)), type = "b", pch = 17, col = "goldenrod4")
 
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", bty = "n", 
      ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), main = "carnivores")
   points(c(0:3), table(otirep$num_reprod)/sum(table(otirep$num_reprod)), type = "b", pch = 15, col = "orange3")
   points(c(0:1), table(olirep$num_reprod)/sum(table(olirep$num_reprod)), type = "b", pch = 15, col = "orange4")
-
 dev.off()
 
 
