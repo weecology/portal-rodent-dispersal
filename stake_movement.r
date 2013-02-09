@@ -417,7 +417,6 @@ hist(insec$wgt, col = 'gray60', xlim = c(0,50), ylim = c(0, 800), xlab = "grams"
 dev.off()
 
 #------------------------------------------
-
 #proportion of years they were seen in
 doyr = length(unique(allrats[allrats$species=="DO",]$yr))/35; dmyr = length(unique(allrats[allrats$species=="DM",]$yr))/35; pfyr = length(unique(allrats[allrats$species=="PF",]$yr))/35; ppyr = length(unique(allrats[allrats$species=="PP",]$yr))/35; pbyr = length(unique(allrats[allrats$species=="PB",]$yr))/35
 peyr = length(unique(allrats[allrats$species=="PE",]$yr))/35; pmyr = length(unique(allrats[allrats$species=="PM",]$yr))/35; rmyr = length(unique(allrats[allrats$species=="RM",]$yr))/35
@@ -473,6 +472,45 @@ abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
 
 dev.off()
 
+#------------------------------------------
+pdf("Fig10_temporal_occ_spp_rank.pdf", 5, 5, pointsize = 10)
+par(mfrow=c(1,1))
+
+#average rank of each species 2000-2009 on control plots
+#ordered: DM, DO, PB, PP, PF, PE, PM, RM, SH, SF, NA, OT, OL
+conranks = c(2.9, 3.9, 2.6, 1, 7.87, 7.1, 9.8, 9.3, 9, 8.6, 8.5, 4.8, 10.5)
+
+plot(conranks[5], pfyr, xlim = c(1,13), ylim = c(0,1), xlab = "species average rank 2000-09", ylab = "across-year occupancy", pch = 19, col = "hotpink")
+textxy(conranks[5], pfyr, "PF")
+points(conranks[4],ppyr, pch = 19, col = "hotpink")
+textxy(conranks[4],ppyr, "PP")
+points(conranks[3], pbyr, pch = 19, col = "hotpink")
+textxy(conranks[3], pbyr, "PB")
+points(conranks[2], doyr, pch = 19, col = "hotpink")
+textxy(conranks[2], doyr, "DO")
+points(conranks[1], dmyr, pch = 19, col = "hotpink")
+textxy(conranks[1], dmyr, "DM")
+points(conranks[6], peyr, pch = 19, col = "indianred4")
+textxy(conranks[6], peyr, "PE")
+points(conranks[7], pmyr, pch = 19, col = "indianred4")
+textxy(conranks[7], pmyr, "PM")
+points(conranks[8], rmyr, pch = 19, col = "indianred4")
+textxy(conranks[8], rmyr, "RM")
+points(conranks[12], otyr, pch = 19, col = "cadetblue4")
+textxy(conranks[12], otyr, "OT")
+points(conranks[13], olyr, pch = 17, col = "cadetblue4")
+textxy(conranks[13], olyr, "OT")
+points(conranks[9], shyr, pch = 17, col = "chartreuse3")
+textxy(conranks[9], shyr, "SH")
+points(conranks[10], sfyr, pch = 17, col = "chartreuse3")
+textxy(conranks[10], sfyr, "SH")
+points(conranks[11], naoyr, pch = 17, col = "chartreuse3")
+textxy(conranks[11], naoyr, "NA")
+
+abline(v = 5, lty = 2, col = 'gray40', lwd = 1)
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
+dev.off()
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
 #-------------------------------------------------------------------
