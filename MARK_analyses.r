@@ -14,7 +14,8 @@ library(RMark)
 wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
 setwd(wd)
 
-source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
+# Run the line below to generate new .inp files 
+#source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
 
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
