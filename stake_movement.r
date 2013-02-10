@@ -535,6 +535,60 @@ abline(v = 5, lty = 2, col = 'gray40', lwd = 1)
 abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
 
 dev.off()
+
+
+#------------------------------------------
+pdf("Fig11_species_movement_hist.pdf", 8, 5, pointsize = 10)
+par(mfrow=c(3,2), mar=c(3,1.5,2,0.5), oma=c(1.5,2,1,1))
+
+#plot histogram of all consecutive movement for rodents within a species 2000-2009
+#create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
+v6 = seq(-3,500,6)
+docount = hist(dometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 350), 
+               xlab = "meters", main = 'DO - krat')      
+xline(Hgran_brkpt, lwd = 2, col = "indianred")
+dmcount = hist(dmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 500), 
+               xlab = "meters", main = 'DM - krat')      
+xline(Hgran_brkpt, lwd = 2, col = "indianred")
+pbcount = hist(pbmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2000), 
+               xlab = "meters", main = 'PB - pocket mouse')      
+xline(Hgran_brkpt, lwd = 2, col = "indianred")
+ppcount = hist(ppmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 600), 
+               xlab = "meters", main = 'PP - pocket mouse')      
+xline(Hgran_brkpt, lwd = 2, col = "indianred")
+pfcount = hist(pfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 30), 
+               xlab = "meters", main = 'PF - pocket mouse')      
+xline(Hgran_brkpt, lwd = 2, col = "indianred")
+
+pecount = hist(pemeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
+               xlab = "meters", main = 'PE - cactus mouse')
+xline(Cgran_brkpt, lwd = 2, col = "indianred")
+pmcount = hist(pmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
+               xlab = "meters", main = 'PM - deer mouse')
+xline(foli_brkpt, lwd = 2, col = "indianred")
+rmcount = hist(rmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
+               xlab = "meters", main = 'RM - harvest mouse')
+xline(foli_brkpt, lwd = 2, col = "indianred")
+
+nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
+               xlab = "meters", main = 'NA - pack rat')
+xline(nao_brkpt, lwd = 2, col = "indianred")
+shcount = hist(shmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
+               xlab = "meters", main = 'SH - cotton rat')
+xline(nao_brkpt, lwd = 2, col = "indianred")
+sfcount = hist(sfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
+               xlab = "meters", main = 'SF - cotton rat')
+xline(nao_brkpt, lwd = 2, col = "indianred")
+
+otcount = hist(otmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,100), 
+               xlab = "meters", main = 'OT - grasshopper mouse')
+xline(ins_brkpt, lwd = 2, col = "indianred")
+olcount = hist(olmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
+               xlab = "meters", main = 'OL - grasshopper mouse')
+xline(ins_brkpt, lwd = 2, col = "indianred")
+
+dev.off()
+
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
 #-------------------------------------------------------------------
