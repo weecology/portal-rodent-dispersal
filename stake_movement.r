@@ -410,6 +410,8 @@ for (y in 1:length (years)){
   
     plot(c(1:12), data$proprepro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month",  
        ylab = "prop. reproductive F", bty = "n", main =  paste(spp[s], years[y], sep = " "))
+    abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+    
 }
   else {
     plot(NA, NA, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month",  
