@@ -341,8 +341,9 @@ par(mfrow=c(4,3))
 years = c(2000:2009)
 ranks = c(1:13)
 
-for (row in 1:nrow(abuns)){
-  yrdat = abuns[row,]
+#use data from control plots only
+for (row in 1:nrow(conabuns)){
+  yrdat = conabuns[row,]
   reldat = sort(yrdat/sum(yrdat), decreasing = TRUE)
     
   nonzero = reldat[reldat>0]
