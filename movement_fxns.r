@@ -175,9 +175,9 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
   if (dat[1,]$species %in% list("DO", "DM", "PB", "PP", "OT")){ 
     covariates[, 7] = 1 }
-  else if (dat[1,]$species %in% list("PF", "PE", "RM", "NA")){
+  else if (dat[1,]$species %in% list("PE", "RM", "NA")){
     covariates[,7] = 2}
-  else if (dat[1,]$species %in% list("PM", "SH", "SF", "OL")) {
+  else if (dat[1,]$species %in% list("PF", "PM", "SH", "SF", "OL")) {
     covariates[,7] = 3}
 
   #loop through each tag to get individual-level data
