@@ -613,38 +613,34 @@ for (s in 1:length (spp)) {
     data = subset(alldat, month == mos[m] & species == spp[s])
     mo_repro = as.numeric(data$proprepro)
     mo_repro = mo_repro[!is.na(mo_repro)] #remove NAs from data
-    avg = mean(mo_repro)
-    avg_repro = append(avg_repro, avg)
     
-    if (avg >= 0.5) {
-     prop_mos = length(mo_repro[mo_repro > 0.5])/length(mo_repro)  #proportion of months in which the spp was seen that had repro > 50%
-      z = append(z, prop_mos)
+    if (length(mo_repro > 0)){
+      avg = mean(mo_repro)
+      
+      if (avg >= 0.5) {
+        prop_mos = length(mo_repro[mo_repro > 0.5])/length(mo_repro)  #proportion of months in which the spp was seen that had repro > 50%     
+        z = append(z, prop_mos)
+      }
+      else {
+        z = append(z, NA)
+      }
     }
-    else {
-      z = append(z, NA)
-    }
+      else {
+      avg = NA }
+      
+    avg_repro = append(avg_repro, avg)   
   }
   
   plot(mos, avg_repro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
          ylab = "proprotion reproductive fem.", bty = "n", main = spp[s])
     abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
   
-  # colorRamp produces custom palettes, but needs values between 0 and 1
-  colorFunction <- colorRamp(c("darkblue", "black", "red"))
-  zScaled <- (z - min(z, na.rm=T)) / (max() - min(z, na.rm = T))
-  
-  points
-  
-  points(mos, props)
-      
-
-    }}}
+  points(mos, avg_repro, col = ifelse(z >=0.5, "indianred", "cadetblue"), pch = 19)
+}
 
 dev.off()
 
-plot(c(1:12), doreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
-     ylab = "proprotion reproductive fem.", bty = "n", main = "DO - krat")
-abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
 #-------------------------------------------------------------------
