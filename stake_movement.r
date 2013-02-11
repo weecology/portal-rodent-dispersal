@@ -206,7 +206,7 @@ par(mfrow=c(1,1))
 
 # Make an occupancy plot for 2000-2009 (similar to Morgan) 
 # plot temporal occupancy - for month and year 
-plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy", ylab = "within-year occupancy", pch = 19, col = "hotpink")
+plot(pfyr, pfmo, xlim = c(0,1), ylim = c(0,1), xlab = "across-year occupancy 2000-2009", ylab = "within-year occupancy", pch = 19, col = "hotpink")
     textxy(pfyr, pfmo, "PF")
   points(ppyr, ppmo, pch = 19, col = "hotpink")
     textxy(ppyr, ppmo, "PP")
