@@ -592,6 +592,59 @@ xline(ins_brkpt, lwd = 2, col = "indianred")
 
 dev.off()
 
+
+#------------------------------------------------------
+pdf("Fig12_avg_repro_trends_wpts.pdf", 7, 10, paper = "letter", pointsize = 10)
+par(mfrow=c(5,3))
+
+alldat = rbind(doreprdyr, dmreprdyr, pbreprdyr, ppreprdyr, pfreprdyr, pereprdyr, pmreprdyr, rmreprdyr,
+               shreprdyr, sfreprdyr, naoreprdyr, otreprdyr, olreprdyr)
+
+mos = c(1:12)
+spp = c("DO", 'DM', 'PB', 'PP', 'PF', 'PE', 'PM', 'RM', 'SH', 'SF', 'NAO', 'OT', 'OL') 
+
+#plot proportion fecundity by month and year for each species
+for (s in 1:length (spp)) {
+  avg_repro = c()
+  z = c() # for determining color of points
+  
+  for (m in 1:length (mos)){
+  
+    data = subset(alldat, month == mos[m] & species == spp[s])
+    mo_repro = as.numeric(data$proprepro)
+    mo_repro = mo_repro[!is.na(mo_repro)] #remove NAs from data
+    avg = mean(mo_repro)
+    avg_repro = append(avg_repro, avg)
+    
+    if (avg >= 0.5) {
+     prop_mos = length(mo_repro[mo_repro > 0.5])/length(mo_repro)  #proportion of months in which the spp was seen that had repro > 50%
+      z = append(z, prop_mos)
+    }
+    else {
+      z = append(z, NA)
+    }
+  }
+  
+  plot(mos, avg_repro, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+         ylab = "proprotion reproductive fem.", bty = "n", main = spp[s])
+    abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+  
+  # colorRamp produces custom palettes, but needs values between 0 and 1
+  colorFunction <- colorRamp(c("darkblue", "black", "red"))
+  zScaled <- (z - min(z, na.rm=T)) / (max() - min(z, na.rm = T))
+  
+  points
+  
+  points(mos, props)
+      
+
+    }}}
+
+dev.off()
+
+plot(c(1:12), doreprd, type = "l", xlim = c(1,12), ylim = c(0,1), pch = 19, xlab = "month", 
+     ylab = "proprotion reproductive fem.", bty = "n", main = "DO - krat")
+abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
 #-------------------------------------------------------------------
 #          Print statments - descriptive info for the txt file
 #-------------------------------------------------------------------
