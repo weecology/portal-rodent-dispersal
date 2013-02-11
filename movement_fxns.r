@@ -124,10 +124,11 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ## Home is determined using the mean + 1 sd of the logged data.
   # guild (1 = heteromyid granivore, 2 = cricetid granivore, 3 = folivore, 4 = carnivore)
   # species (1 = DO, 2 = DM, 3 = PB, 4 = PP, 5 = PF, 6 = PE, 7 = PM, 8 = RM, 9 = SH, 10 = SF, 11 = NAO, 12 = OT, 13 = OL)
+  # status (1 = core, 2 = intermediate, 3 = occasional)
   
   tags = unique(dat$tag)
   capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
-  covariates = matrix(0, nrow = length(tags), ncol = 6)
+  covariates = matrix(0, nrow = length(tags), ncol = 7)
     colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "guild", "species", "status")
     group = c(1,2,3) #represent the "group"
   
