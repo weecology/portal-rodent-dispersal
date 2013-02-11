@@ -176,7 +176,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     covariates[, 7] = 1 }
   else if (dat[1,]$species %in% list("PF", "PE", "RM", "NA")){
     covariates[,7] = 2}
-  else if (dat[1,]$species %in% list("PM", "SH", "SF", "OL") {
+  else if (dat[1,]$species %in% list("PM", "SH", "SF", "OL")) {
     covariates[,7] = 3}
 
   #loop through each tag to get individual-level data
