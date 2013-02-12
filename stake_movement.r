@@ -551,66 +551,79 @@ docount = hist(dometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(
                xlab = "meters", main = 'DO - krat')      
 xline(expm1(mean(log1p(dometers))+sd(log1p(dometers))), lwd = 2, col = "cadetblue")
 xline(Hgran_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 dmcount = hist(dmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 500), 
                xlab = "meters", main = 'DM - krat')  
 xline(expm1(mean(log1p(dmmeters))+sd(log1p(dmmeters))), lwd = 2, col = "cadetblue")
 xline(Hgran_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 pbcount = hist(pbmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2000), 
                xlab = "meters", main = 'PB - pocket mouse')   
 xline(expm1(mean(log1p(pbmeters))+sd(log1p(pbmeters))), lwd = 2, col = "cadetblue")
 xline(Hgran_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 ppcount = hist(ppmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 600), 
                xlab = "meters", main = 'PP - pocket mouse')      
 xline(expm1(mean(log1p(ppmeters))+sd(log1p(ppmeters))), lwd = 2, col = "cadetblue")
 xline(Hgran_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 pfcount = hist(pfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 30), 
                xlab = "meters", main = 'PF - pocket mouse')  
 xline(expm1(mean(log1p(pfmeters))+sd(log1p(pfmeters))), lwd = 2, col = "cadetblue")
 xline(Hgran_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 pecount = hist(pemeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
                xlab = "meters", main = 'PE - cactus mouse')
 xline(expm1(mean(log1p(pemeters))+sd(log1p(pemeters))), lwd = 2, col = "cadetblue")
 xline(Cgran_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 pmcount = hist(pmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
                xlab = "meters", main = 'PM - deer mouse')
 xline(expm1(mean(log1p(pmmeters))+sd(log1p(pmmeters))), lwd = 2, col = "cadetblue")
 xline(foli_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 rmcount = hist(rmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
                xlab = "meters", main = 'RM - harvest mouse')
 xline(expm1(mean(log1p(rmmeters))+sd(log1p(rmmeters))), lwd = 2, col = "cadetblue")
 xline(foli_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
                xlab = "meters", main = 'NA - pack rat')
 xline(expm1(mean(log1p(naometers))+sd(log1p(naometers))), lwd = 2, col = "cadetblue")
 xline(nao_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 shcount = hist(shmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
                xlab = "meters", main = 'SH - cotton rat')
 xline(expm1(mean(log1p(shmeters))+sd(log1p(shmeters))), lwd = 2, col = "cadetblue")
 xline(nao_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 sfcount = hist(sfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
                xlab = "meters", main = 'SF - cotton rat')
 xline(expm1(mean(log1p(sfmeters))+sd(log1p(sfmeters))), lwd = 2, col = "cadetblue")
 xline(nao_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 otcount = hist(otmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,100), 
                xlab = "meters", main = 'OT - grasshopper mouse')
 xline(expm1(mean(log1p(otmeters))+sd(log1p(otmeters))), lwd = 2, col = "cadetblue")
 xline(ins_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 olcount = hist(olmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
                xlab = "meters", main = 'OL - grasshopper mouse')
 xline(expm1(mean(log1p(olmeters))+sd(log1p(olmeters))), lwd = 2, col = "cadetblue")
 xline(ins_brkpt, lwd = 2, col = "indianred")
+xline(allbrk, lwd = 2, col = "chartreuse3")
 
 dev.off()
 
