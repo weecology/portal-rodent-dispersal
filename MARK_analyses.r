@@ -20,7 +20,7 @@ setwd(wd)
 
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
 ms_data <- convert.inp("mark_datafiles//all_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
-                      covariates = c("sd_mass", "guild", "species"))
+                      covariates = c("sd_mass", "guild", "species", "status"))
 #convert to factor
 ms_data$guild = as.factor(ms_data$guild)
 ms_data$species = as.factor(ms_data$species)
