@@ -21,7 +21,7 @@ insec = read.csv("rawdata//onychomys_2000-2009.csv")   # OT, OL
 
 # output directed to rodent_results.txt in wd. output is appended
 # to existing file. output also sent to terminal. 
-sink("rodent_results.txt", append=TRUE, split=TRUE)
+#sink("rodent_results.txt", append=TRUE, split=TRUE)
 
 #---------------------------------------------------------------------------------
 #          clean up the data
