@@ -541,8 +541,8 @@ dev.off()
 
 
 #------------------------------------------
-pdf("Fig11_species_movement_hist.pdf", 8, 5, pointsize = 10)
-par(mfrow=c(3,2), mar=c(3,1.5,2,0.5), oma=c(1.5,2,1,1))
+pdf("Fig11_species_movement_hist.pdf", 10, 8, pointsize = 10)
+par(mfrow=c(5,3), mar=c(3,1.5,2,0.5), oma=c(1.5,2,1,1))
 
 #plot histogram of all consecutive movement for rodents within a species 2000-2009
 #create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
