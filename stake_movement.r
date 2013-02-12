@@ -112,6 +112,8 @@ Cgran = c(pemeters, pmmeters, rmmeters)
 foli = c(shmeters, sfmeters) #separate NAO because they use different strategy - MIDDENS
 insectiv = c(otmeters, olmeters)
 
+all = c(Hgran, Cgran, foli, naometers, insectiv)
+
 # find breakpoints to use in MARK data structure for future analyses
 # data reasonably well fits a lognormal distribution (eyeball and J. Powell)
 # breakpoint = mean(logdata) + sd(logdata) of all the distances traveled by recaptured individuals    
@@ -121,6 +123,8 @@ Cgran_brkpt = expm1(mean(log1p(Cgran)) + sd(log1p(Cgran)))
 foli_brkpt = expm1(mean(log1p(foli)) + sd(log1p(foli)))
 nao_brkpt = expm1(mean(log1p(naometers)) + sd(log1p(naometers)))
 ins_brkpt = expm1(mean(log1p(insectiv)) + sd(log1p(insectiv)))
+
+allbrk = expm1(mean(log1p(all)) + sd(log1p(all)))
 
 # Get MARK capture histories
 ## add unique breakpoints for each species based on histogram data of movement
