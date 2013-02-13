@@ -4,6 +4,10 @@
 # Will compare data among species and guilds. 
 # Major covariates include sex, guild, and average body mass
 
+# Do psi and S significantly differ among species/guilds?
+
+# Within a species/guild, do covariates (sex, body mass) influence psi and S?
+
 rm(list=ls(all=TRUE))   # clears the computer's memory
 library(RMark) 
 
@@ -11,8 +15,7 @@ library(RMark)
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
 #set working directory and import source code
-wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal"
-setwd(wd)
+setwd("~/")
 
 # Run the line below to generate new .inp files 
 #source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
@@ -24,12 +27,13 @@ ms_data <- convert.inp("mark_datafiles//all_mark.inp", group.df=data.frame(sex =
 #convert to factor
 ms_data$guild = as.factor(ms_data$guild)
 ms_data$species = as.factor(ms_data$species)
+ms_data$status = as.factor(ms_data$status)
 
 #---------------------------------------------------------------------------------
 #          process multistrata data, includes capture at home, and dipsersal transitions 
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
-ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 261, groups = c("sex", "guild", "species"))
+ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 261, groups = c("sex", "guild", "species", "status"))
 
 ms_ddl <- make.design.data(ms_process) #ddl = design data list
 
@@ -67,12 +71,7 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 
 
 #--------------------------------------------------------------------------------
-    # TODO: Build up the models
-
-    # Do psi and S significantly differ among species/guilds?
-
-    # Within a species/guild, do covariates (sex, body mass) influence psi and S?
-
+#           Build up the models
 #---------------------------------------------------------------------------------
 #          Define model structures for S (survival probability)
 #---------------------------------------------------------------------------------
@@ -83,6 +82,8 @@ Sstrata <- list(formula = ~stratum)   # S is dependent on strata (in A or in B)
 Sguild <- list(formula = ~guild)  # testing if S differs among guilds
 
 Sspecies <- list(formula = ~species) # test for differences among species
+
+Sstatus <- list(formula = ~status) # test for differences among status
 
 #---------------------------------------------------------------------------------
 #          Define model structures for p (capture probability)
@@ -143,17 +144,24 @@ pstrata <- list(formula = ~stratum, fixed = list(index = c(p267, p277, p278, p28
                                                        p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                        p344val, p351val), link = "cloglog"))
 # Guild effect 
-pguild <- list(formula = ~as.factor(guild), fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+pguild <- list(formula = ~guild, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                                    p318, p321, p323, p337, p339, p344, p351), 
                                                          value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                                    p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                                    p344val, p351val), link = "cloglog"))
 # Species effect
-pspecies <- list(formula = ~as.factor(species), fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+pspecies <- list(formula = ~species, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                                        p318, p321, p323, p337, p339, p344, p351), 
                                                              value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                                        p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                                        p344val, p351val), link = "cloglog"))
+# status effect
+pstatus <- list(formula = ~status, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+                                                                       p318, p321, p323, p337, p339, p344, p351), 
+                                                             value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                                       p313val, p314val, p318val, p321val, p323val, p337val, p339val,
+                                                                       p344val, p351val), link = "cloglog"))
+
 
 
 #---------------------------------------------------------------------------------
@@ -167,12 +175,14 @@ Psiguild <- list(formula = ~guild, link = "logit")
 
 Psispecies <- list(formula = ~species, link = "logit")
 
+Psistatus <- list(formula = ~status, link = "logit")
+
 
 #---------------------------------------------------------------------------------
 #          Run Models and collect results
 #---------------------------------------------------------------------------------
 #send results to new folder - change working directory
-wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_output"
+wd = "mark_output"
 setwd(wd)
 
 # #SIMANNEAL should be best for multistrata models, but may take longer to run
@@ -188,6 +198,9 @@ Sguild_pguild_Psiguild <- mark(ms_process, ms_ddl, model.parameters = list(S = S
 Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
                                      options = "SIMANNEAL")
 
+Sstatus_pstatus_Psistatus <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstatus, p = pstatus, Psi = Psistatus), 
+                                  options = "SIMANNEAL")
+
 #summarize results
 ms_results <- collect.models(type = "Multistrata")
 
@@ -195,13 +208,16 @@ ms_results <- collect.models(type = "Multistrata")
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
+write.csv(Snull_pnull_Psinull$results$beta, "ms_null_beta.csv")
+write.csv(Snull_pnull_Psinull$results$real, "ms_null_real.csv")
 write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_strata_beta.csv")
 write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_strata_real.csv")
 write.csv(Sguild_pguild_Psiguild$results$beta, "ms_guild_beta.csv")
 write.csv(Sguild_pguild_Psiguild$results$real, "ms_guild_real.csv")
 write.csv(Sspecies_pspecies_Psispecies$results$beta, "ms_species_beta.csv")
 write.csv(Sspecies_pspecies_Psispecies$results$real, "ms_species_real.csv")
-
+write.csv(Sstatus_pstatus_Psistatus$results$beta, "ms_status_beta.csv")
+write.csv(Sstatus_pstatus_Psistatus$results$real, "ms_status_real.csv")
 
 
 
