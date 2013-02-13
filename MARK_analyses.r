@@ -75,15 +75,17 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 #---------------------------------------------------------------------------------
 #          Define model structures for S (survival probability)
 #---------------------------------------------------------------------------------
-Snull <- list(formula = ~1)           # null model, S is not dependent on strata
+Snull <- list(formula = ~1)          
 
-Sstrata <- list(formula = ~stratum)   # S is dependent on strata (in A or in B)
+Sstrata <- list(formula = ~stratum)   
 
-Sguild <- list(formula = ~guild)  # testing if S differs among guilds
+Sguild <- list(formula = ~guild)  
 
-Sspecies <- list(formula = ~species) # test for differences among species
+Sspecies <- list(formula = ~species) 
 
-Sstatus <- list(formula = ~status) # test for differences among status
+Sstatus <- list(formula = ~status) 
+
+Sspeciesstrata <- list(formula = ~species * strata) 
 
 #---------------------------------------------------------------------------------
 #          Define model structures for p (capture probability)
@@ -177,6 +179,7 @@ Psispecies <- list(formula = ~species, link = "logit")
 
 Psistatus <- list(formula = ~status, link = "logit")
 
+Psispeciesstrata <- list(formulat = ~species * strata, link = "logit")
 
 #---------------------------------------------------------------------------------
 #          Run Models and collect results
@@ -200,6 +203,10 @@ Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list
 
 Sstatus_pstatus_Psistatus <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstatus, p = pstatus, Psi = Psistatus), 
                                   options = "SIMANNEAL")
+
+
+Sspeciesstrata_pguild_Psispeciesstrata <- mark(ms_process, ms_ddl, model.parameters = list (s = Sspeciesstrata, p = pguild, Psi = Psispeciesstrata),
+                                               options = "SIMANNEAL")
 
 #summarize results
 ms_results <- collect.models(type = "Multistrata")
