@@ -134,12 +134,15 @@ Cgran = c(pemeters, pmmeters, rmmeters)
 foli = c(shmeters, sfmeters) #separate NAO because they use different strategy - MIDDENS
 insectiv = c(otmeters, olmeters)
 
+corehet = c(dmmeters, dometers, pbmeters, ppmeters)
+
 all = c(Hgran, Cgran, foli, naometers, insectiv)
 
 # find breakpoints to use in MARK data structure for future analyses
 # data reasonably well fits a lognormal distribution (eyeball and J. Powell)
 # breakpoint = mean(logdata) + sd(logdata) of all the distances traveled by recaptured individuals    
   # using log1p, and back transforming using expm1 should solve the problem of lots of zeros 
+corehet_brkpt = expm1(mean(log1p(corehet)) + sd(log1p(corehet)))
 Hgran_brkpt = expm1(mean(log1p(Hgran)) + sd(log1p(Hgran)))
 Cgran_brkpt = expm1(mean(log1p(Cgran)) + sd(log1p(Cgran)))
 foli_brkpt = expm1(mean(log1p(foli)) + sd(log1p(foli)))
@@ -153,22 +156,22 @@ allbrk = expm1(mean(log1p(all)) + sd(log1p(all)))
 periods = c(261:380)
 exclosures = c(5, 7, 10, 16, 23, 24)
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
-DO_MARK = noplacelikehome(subset(het, species == "DO"), periods, krat_excl, Hgran_brkpt)
-DM_MARK = noplacelikehome(subset(het, species == "DM"), periods, krat_excl, Hgran_brkpt)
-PB_MARK = noplacelikehome(subset(het, species == "PB"), periods, exclosures, Hgran_brkpt)
-PP_MARK = noplacelikehome(subset(het, species == "PP"), periods, exclosures, Hgran_brkpt)
-PF_MARK = noplacelikehome(subset(het, species == "PF"), periods, exclosures, Hgran_brkpt)
+DO_MARK = noplacelikehome(subset(het, species == "DO"), periods, krat_excl, corehet_brkpt)
+DM_MARK = noplacelikehome(subset(het, species == "DM"), periods, krat_excl, corehet_brkpt)
+PB_MARK = noplacelikehome(subset(het, species == "PB"), periods, exclosures, corehet_brkpt)
+PP_MARK = noplacelikehome(subset(het, species == "PP"), periods, exclosures, corehet_brkpt)
+PF_MARK = noplacelikehome(subset(het, species == "PF"), periods, exclosures, corehet_brkpt)
                           
-PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, exclosures, Hgran_brkpt) 
-PM_MARK = noplacelikehome(subset(cricet, species == "PM"), periods, exclosures, Hgran_brkpt)
-RM_MARK = noplacelikehome(subset(cricet, species == "RM"), periods, exclosures, Hgran_brkpt)
+PE_MARK = noplacelikehome(subset(cricet, species == "PE"), periods, exclosures, corehet_brkpt) 
+PM_MARK = noplacelikehome(subset(cricet, species == "PM"), periods, exclosures, corehet_brkpt)
+RM_MARK = noplacelikehome(subset(cricet, species == "RM"), periods, exclosures, corehet_brkpt)
                           
-SH_MARK = noplacelikehome(subset(foliv, species == "SH"), periods, exclosures, Hgran_brkpt)
-SF_MARK = noplacelikehome(subset(foliv, species == "SF"), periods, exclosures, Hgran_brkpt)
-NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, exclosures, Hgran_brkpt)
+SH_MARK = noplacelikehome(subset(foliv, species == "SH"), periods, exclosures, corehet_brkpt)
+SF_MARK = noplacelikehome(subset(foliv, species == "SF"), periods, exclosures, corehet_brkpt)
+NAO_MARK = noplacelikehome(subset(foliv, species == "NAO"), periods, exclosures, corehet_brkpt)
                           
-OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, exclosures, Hgran_brkpt)
-OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, exclosures, Hgran_brkpt)
+OT_MARK = noplacelikehome(subset(insec, species == "OT"), periods, exclosures, corehet_brkpt)
+OL_MARK = noplacelikehome(subset(insec, species == "OL"), periods, exclosures, corehet_brkpt)
 
 #---------------------------------------------------------------------------------
 #          write files to folder for later analysis using RMark - .inp required
