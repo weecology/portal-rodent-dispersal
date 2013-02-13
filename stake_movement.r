@@ -32,10 +32,7 @@ pp = subset(het, species == "PP")
   barplot(table(pp$mo))
 pf = subset(het, species == "PF")
   barplot(table(pf$mo))
-rm = subset(cricet, species == "RM")
-  barplot(table(rm$mo))
-dm = subset(het, species = "DM")
-  barplot(table(dm$mo))
+
 
 prds = c(261:380)
   winter = c()
