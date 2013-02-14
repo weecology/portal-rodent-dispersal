@@ -499,3 +499,25 @@ plot_recap_hist = function (data, name) {
 #        col = c('peru', 'black', 'mediumpurple4','maroon4','deepskyblue3', 'royalblue3','darkgreen', 'darkolivegreen'))
 # abline(v = 70.71, lty = 2, col = 'gray60', lwd = 2)
 
+#---------------------------------------------------------------------------------
+#           mark winter months
+#---------------------------------------------------------------------------------
+# small-bodied species may be rare during winter months (go into torpor)
+# we want to mark the months that this is, so we can later denote them properly in MARK
+pp = subset(het, species == "PP")
+barplot(table(pp$mo))
+pf = subset(het, species == "PF")
+barplot(table(pf$mo))
+
+
+prds = c(261:380)
+winter = c()
+
+for (p in 1:length(prds)){
+  dat = subset(allrats, period == prds[p])
+  mo = dat[1,2]
+  if (mo %in% list(12, 1, 2)){
+    winter = append(winter, prds[p])
+  }
+}
+
