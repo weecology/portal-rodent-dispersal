@@ -562,54 +562,67 @@ v6 = seq(-3,500,6)
 docount = hist(dometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 350), 
                xlab = "meters", main = 'DO - * - CORE')      
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(dometers)) + sd(log1p(dometers))), lty = 3, lwd = 2) 
 
 dmcount = hist(dmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 500), 
                xlab = "meters", main = 'DM - * - CORE')  
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(dmmeters)) + sd(log1p(dmmeters))), lty = 3, lwd = 2) 
 
 pbcount = hist(pbmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2000), 
                xlab = "meters", main = 'PB - * - CORE')   
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(pbmeters)) + sd(log1p(pbmeters))), lty = 3, lwd = 2) 
 
 ppcount = hist(ppmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 600), 
                xlab = "meters", main = 'PP - * - CORE')      
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(ppmeters)) + sd(log1p(ppmeters))), lty = 3, lwd = 2) 
 
 otcount = hist(otmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,100), 
                xlab = "meters", main = 'OT - CORE')
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(otmeters)) + sd(log1p(otmeters))), lty = 3, lwd = 2) 
 
 pecount = hist(pemeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
                xlab = "meters", main = 'PE - * - INT')
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(pemeters)) + sd(log1p(pemeters))), lty = 3, lwd = 2) 
 
 rmcount = hist(rmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
                xlab = "meters", main = 'RM - * - INT')
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(rmmeters)) + sd(log1p(rmmeters))), lty = 3, lwd = 2) 
 
 nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
                xlab = "meters", main = 'NA - INT')
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(naometers)) + sd(log1p(naometers))), lty = 3, lwd = 2) 
 
 pfcount = hist(pfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 30), 
                xlab = "meters", main = 'PF - * - TRANS')  
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(pfmeters)) + sd(log1p(pfmeters))), lty = 3, lwd = 2) 
 
 pmcount = hist(pmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
                xlab = "meters", main = 'PM - * - TRANS')
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(pmmeters)) + sd(log1p(pmmeters))), lty = 3, lwd = 2) 
 
 shcount = hist(shmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
                xlab = "meters", main = 'SH - TRANS')
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(shmeters)) + sd(log1p(shmeters))), lty = 3, lwd = 2) 
 
 sfcount = hist(sfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
                xlab = "meters", main = 'SF - TRANS')
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(sfmeters)) + sd(log1p(sfmeters))), lty = 3, lwd = 2) 
 
 olcount = hist(olmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
                xlab = "meters", main = 'OL - TRANS')
 xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(olmeters)) + sd(log1p(olmeters))), lty = 3, lwd = 2) 
 
 dev.off()
 
