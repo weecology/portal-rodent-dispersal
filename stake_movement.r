@@ -178,6 +178,164 @@ write.table(allspp, file = "mark_datafiles//all_mark.inp", row.names = F, col.na
 #          plot results
 #---------------------------------------------------------------------------------
 
+
+#------------------------------------------ FIGURE 1
+pdf("Fig10_temporal_occ_spp_rank.pdf", 5, 5, pointsize = 10)
+par(mfrow=c(1,1))
+
+#average rank of each species 2000-2009 on control plots
+#ordered: DM, DO, PB, PP, PF, PE, PM, RM, SH, SF, NA, OT, OL
+conranks = c(2.9, 4, 2.6, 1, 7.875, 7.1, 9.8, 9.333, 9, 8.6, 8.5, 4.8, 10.5)
+
+plot(conranks[5], pfyr, xlim = c(1,13), ylim = c(0,1), xlab = "species average rank", ylab = "across-year occupancy", pch = 19, col = "hotpink")
+textxy(conranks[5], pfyr, "PF")
+points(conranks[4],ppyr, pch = 19, col = "hotpink")
+textxy(conranks[4],ppyr, "PP")
+points(conranks[2], doyr, pch = 19, col = "hotpink")
+textxy(conranks[2], doyr, "DO")
+points(conranks[1], dmyr, pch = 19, col = "hotpink")
+textxy(conranks[1], dmyr, "DM")
+points(conranks[3], pbyr, pch = 19, col = "hotpink")
+textxy(conranks[3], pbyr, "PB")
+points(conranks[6], peyr, pch = 19)
+textxy(conranks[6], peyr, "PE")
+points(conranks[7], pmyr, pch = 19)
+textxy(conranks[7], pmyr, "PM")
+points(conranks[8], rmyr, pch = 19)
+textxy(conranks[8], rmyr, "RM")
+points(conranks[12], otyr, pch = 15, col = "chartreuse3")
+textxy(conranks[12], otyr, "OT")
+points(conranks[13], olyr, pch = 15, col = "chartreuse3")
+textxy(conranks[13], olyr, "OL")
+points(conranks[9], shyr, pch = 17, col = "chartreuse3")
+textxy(conranks[9], shyr, "SH")
+points(conranks[10], sfyr, pch = 17, col = "chartreuse3")
+textxy(conranks[10], sfyr, "SF")
+points(conranks[11], naoyr, pch = 17, col = "chartreuse3")
+textxy(conranks[11], naoyr, "NA")
+
+abline(v = 5, lty = 2, col = 'gray40', lwd = 1)
+abline(h = 0.95, lty = 2, col = 'gray40', lwd = 1)
+
+dev.off()
+
+
+#------------------------------------------ FIGURE 2
+pdf("Fig6_indiv_repro_trends.pdf", 6, 6, pointsize = 10)
+par(mfrow=c(2,2))
+
+#plot the relative abundance of females who represent each number of reproductive events per year
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "heteromyids")
+points(c(0:3), table(doirep$num_reprod)/sum(table(doirep$num_reprod)), type = "b", pch = 19, col = "indianred")
+points(c(0:4), table(dmirep$num_reprod)/sum(table(dmirep$num_reprod)), type = "b", pch = 19, col = "magenta")
+points(c(0:4), table(pbirep$num_reprod)/sum(table(pbirep$num_reprod)), type = "b", pch = 19, col = "red")
+points(c(0:4), table(ppirep$num_reprod)/sum(table(ppirep$num_reprod)), type = "b", pch = 19, col = "hotpink")
+points(c(0:2), table(pfirep$num_reprod)/sum(table(pfirep$num_reprod)), type = "b", pch = 19, col = "purple")
+legend('topright', c('do', 'dm', 'cb', 'cp', 'pf'), bty = 'n', 
+       col = c('indianred', 'magenta', 'red', 'hotpink', 'purple'), pch = 19)
+
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "cricetids")
+points(c(0:2), table(peirep$num_reprod)/sum(table(peirep$num_reprod)), type = "b", pch = 19, col = "green")
+points(c(0:2), table(pmirep$num_reprod)/sum(table(pmirep$num_reprod)), type = "b", pch = 19, col = "darkgreen")
+points(c(0:1), table(rmirep$num_reprod)/sum(table(rmirep$num_reprod)), type = "b", pch = 19, col = "yellowgreen")
+legend('topright', c('pe', 'pm', 'rm'), bty = 'n', col = c('green', 'darkgreen', 'yellowgreen'), pch = 19)
+
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "folivores")
+points(c(0:1), table(shirep$num_reprod)/sum(table(shirep$num_reprod)), type = "b", pch = 17, col = "brown")
+points(c(0:1), table(sfirep$num_reprod)/sum(table(sfirep$num_reprod)), type = "b", pch = 17, col = "brown4")
+points(c(0:3), table(naoirep$num_reprod)/sum(table(naoirep$num_reprod)), type = "b", pch = 17, col = "goldenrod4")
+legend('topright', c('sh', 'sf', 'na'), bty = 'n', col = c('brown', 'brown4', 'goldenrod4'), pch = 17)
+
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", bty = "n", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), main = "carnivores")
+points(c(0:3), table(otirep$num_reprod)/sum(table(otirep$num_reprod)), type = "b", pch = 15, col = "orange3")
+points(c(0:1), table(olirep$num_reprod)/sum(table(olirep$num_reprod)), type = "b", pch = 15, col = "orange4")
+legend('topright', c('ot', 'ol'), bty = 'n', col = c('orange3', 'orange4'), pch = 15)
+
+dev.off()
+
+
+#------------------------------------------ FIGURE 3
+pdf("Fig11_species_movement_hist.pdf", 10, 8, pointsize = 10)
+par(mfrow=c(5,3), mar=c(3,1.5,2,0.5), oma=c(1.5,2,1,1))
+
+#plot histogram of all consecutive movement for rodents within a species 2000-2009
+#create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
+v6 = seq(-3,500,6)
+docount = hist(dometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 350), 
+               xlab = "meters", main = 'DO - * - CORE')      
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(dometers)) + sd(log1p(dometers))), lty = 3, lwd = 2) 
+
+dmcount = hist(dmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 500), 
+               xlab = "meters", main = 'DM - * - CORE')  
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(dmmeters)) + sd(log1p(dmmeters))), lty = 3, lwd = 2) 
+
+pbcount = hist(pbmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2000), 
+               xlab = "meters", main = 'PB - * - CORE')   
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(pbmeters)) + sd(log1p(pbmeters))), lty = 3, lwd = 2) 
+
+ppcount = hist(ppmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 600), 
+               xlab = "meters", main = 'PP - * - CORE')      
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(ppmeters)) + sd(log1p(ppmeters))), lty = 3, lwd = 2) 
+
+otcount = hist(otmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,100), 
+               xlab = "meters", main = 'OT - CORE')
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(otmeters)) + sd(log1p(otmeters))), lty = 3, lwd = 2) 
+
+pecount = hist(pemeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
+               xlab = "meters", main = 'PE - * - INT')
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(pemeters)) + sd(log1p(pemeters))), lty = 3, lwd = 2) 
+
+rmcount = hist(rmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
+               xlab = "meters", main = 'RM - * - INT')
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(rmmeters)) + sd(log1p(rmmeters))), lty = 3, lwd = 2) 
+
+nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
+               xlab = "meters", main = 'NA - INT')
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(naometers)) + sd(log1p(naometers))), lty = 3, lwd = 2) 
+
+pfcount = hist(pfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 30), 
+               xlab = "meters", main = 'PF - * - TRANS')  
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(pfmeters)) + sd(log1p(pfmeters))), lty = 3, lwd = 2) 
+
+pmcount = hist(pmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
+               xlab = "meters", main = 'PM - * - TRANS')
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(pmmeters)) + sd(log1p(pmmeters))), lty = 3, lwd = 2) 
+
+shcount = hist(shmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
+               xlab = "meters", main = 'SH - TRANS')
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(shmeters)) + sd(log1p(shmeters))), lty = 3, lwd = 2) 
+
+sfcount = hist(sfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
+               xlab = "meters", main = 'SF - TRANS')
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(sfmeters)) + sd(log1p(sfmeters))), lty = 3, lwd = 2) 
+
+olcount = hist(olmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
+               xlab = "meters", main = 'OL - TRANS')
+xline(corehet_brkpt, lwd = 2, col = "indianred")
+xline(expm1(mean(log1p(olmeters)) + sd(log1p(olmeters))), lty = 3, lwd = 2) 
+
+dev.off()
+
+
+#--------------------------------------------------------------
+#           FIGURES NOT INCLUDED IN THE MAIN PAPER
+#--------------------------------------------------------------
 pdf("Fig1_guild_movement_hist.pdf", 8, 5, pointsize = 10)
 par(mfrow=c(3,2), mar=c(3,1.5,2,0.5), oma=c(1.5,2,1,1))
 
@@ -367,44 +525,6 @@ for (row in 1:nrow(conabuns)){
 dev.off()
 
 
-#------------------------------------------ FIGURE 2
-pdf("Fig6_indiv_repro_trends.pdf", 6, 6, pointsize = 10)
-par(mfrow=c(2,2))
-
-#plot the relative abundance of females who represent each number of reproductive events per year
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "heteromyids")
-  points(c(0:3), table(doirep$num_reprod)/sum(table(doirep$num_reprod)), type = "b", pch = 19, col = "indianred")
-  points(c(0:4), table(dmirep$num_reprod)/sum(table(dmirep$num_reprod)), type = "b", pch = 19, col = "magenta")
-  points(c(0:4), table(pbirep$num_reprod)/sum(table(pbirep$num_reprod)), type = "b", pch = 19, col = "red")
-  points(c(0:4), table(ppirep$num_reprod)/sum(table(ppirep$num_reprod)), type = "b", pch = 19, col = "hotpink")
-  points(c(0:2), table(pfirep$num_reprod)/sum(table(pfirep$num_reprod)), type = "b", pch = 19, col = "purple")
-    legend('topright', c('do', 'dm', 'cb', 'cp', 'pf'), bty = 'n', 
-           col = c('indianred', 'magenta', 'red', 'hotpink', 'purple'), pch = 19)
-
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "cricetids")
-  points(c(0:2), table(peirep$num_reprod)/sum(table(peirep$num_reprod)), type = "b", pch = 19, col = "green")
-  points(c(0:2), table(pmirep$num_reprod)/sum(table(pmirep$num_reprod)), type = "b", pch = 19, col = "darkgreen")
-  points(c(0:1), table(rmirep$num_reprod)/sum(table(rmirep$num_reprod)), type = "b", pch = 19, col = "yellowgreen")
-  legend('topright', c('pe', 'pm', 'rm'), bty = 'n', col = c('green', 'darkgreen', 'yellowgreen'), pch = 19)
-
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "folivores")
-  points(c(0:1), table(shirep$num_reprod)/sum(table(shirep$num_reprod)), type = "b", pch = 17, col = "brown")
-  points(c(0:1), table(sfirep$num_reprod)/sum(table(sfirep$num_reprod)), type = "b", pch = 17, col = "brown4")
-  points(c(0:3), table(naoirep$num_reprod)/sum(table(naoirep$num_reprod)), type = "b", pch = 17, col = "goldenrod4")
-  legend('topright', c('sh', 'sf', 'na'), bty = 'n', col = c('brown', 'brown4', 'goldenrod4'), pch = 17)
-
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", bty = "n", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), main = "carnivores")
-  points(c(0:3), table(otirep$num_reprod)/sum(table(otirep$num_reprod)), type = "b", pch = 15, col = "orange3")
-  points(c(0:1), table(olirep$num_reprod)/sum(table(olirep$num_reprod)), type = "b", pch = 15, col = "orange4")
-  legend('topright', c('ot', 'ol'), bty = 'n', col = c('orange3', 'orange4'), pch = 15)
-
-dev.off()
-
-
 #------------------------------------------
 pdf("Fig7_mo-yr_repro_trends.pdf", 7, 10, paper = "letter", pointsize = 10)
 par(mfrow=c(4,3))
@@ -508,121 +628,6 @@ textxy(naoyr, naomo, "NA")
 
 abline(v = 0.5, lty = 2, col = 'gray40', lwd = 1)
 abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
-
-dev.off()
-
-#------------------------------------------ FIGURE 1
-pdf("Fig10_temporal_occ_spp_rank.pdf", 5, 5, pointsize = 10)
-par(mfrow=c(1,1))
-
-#average rank of each species 2000-2009 on control plots
-#ordered: DM, DO, PB, PP, PF, PE, PM, RM, SH, SF, NA, OT, OL
-conranks = c(2.9, 4, 2.6, 1, 7.875, 7.1, 9.8, 9.333, 9, 8.6, 8.5, 4.8, 10.5)
-
-plot(conranks[5], pfyr, xlim = c(1,13), ylim = c(0,1), xlab = "species average rank", ylab = "across-year occupancy", pch = 19, col = "hotpink")
-  textxy(conranks[5], pfyr, "PF")
-points(conranks[4],ppyr, pch = 19, col = "hotpink")
-  textxy(conranks[4],ppyr, "PP")
-points(conranks[2], doyr, pch = 19, col = "hotpink")
-  textxy(conranks[2], doyr, "DO")
-points(conranks[1], dmyr, pch = 19, col = "hotpink")
-  textxy(conranks[1], dmyr, "DM")
-points(conranks[3], pbyr, pch = 19, col = "hotpink")
-  textxy(conranks[3], pbyr, "PB")
-points(conranks[6], peyr, pch = 19)
-  textxy(conranks[6], peyr, "PE")
-points(conranks[7], pmyr, pch = 19)
-  textxy(conranks[7], pmyr, "PM")
-points(conranks[8], rmyr, pch = 19)
-  textxy(conranks[8], rmyr, "RM")
-points(conranks[12], otyr, pch = 15, col = "chartreuse3")
-  textxy(conranks[12], otyr, "OT")
-points(conranks[13], olyr, pch = 15, col = "chartreuse3")
-  textxy(conranks[13], olyr, "OL")
-points(conranks[9], shyr, pch = 17, col = "chartreuse3")
-  textxy(conranks[9], shyr, "SH")
-points(conranks[10], sfyr, pch = 17, col = "chartreuse3")
-  textxy(conranks[10], sfyr, "SF")
-points(conranks[11], naoyr, pch = 17, col = "chartreuse3")
-  textxy(conranks[11], naoyr, "NA")
-
-abline(v = 5, lty = 2, col = 'gray40', lwd = 1)
-abline(h = 0.95, lty = 2, col = 'gray40', lwd = 1)
-
-dev.off()
-
-
-#------------------------------------------ FIGURE 3
-pdf("Fig11_species_movement_hist.pdf", 10, 8, pointsize = 10)
-par(mfrow=c(5,3), mar=c(3,1.5,2,0.5), oma=c(1.5,2,1,1))
-
-#plot histogram of all consecutive movement for rodents within a species 2000-2009
-#create vector of breaks, incrementing by 6 meters (represents approx. 1 stake) since data are not actually continuous
-v6 = seq(-3,500,6)
-docount = hist(dometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 350), 
-               xlab = "meters", main = 'DO - * - CORE')      
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(dometers)) + sd(log1p(dometers))), lty = 3, lwd = 2) 
-
-dmcount = hist(dmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 500), 
-               xlab = "meters", main = 'DM - * - CORE')  
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(dmmeters)) + sd(log1p(dmmeters))), lty = 3, lwd = 2) 
-
-pbcount = hist(pbmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 2000), 
-               xlab = "meters", main = 'PB - * - CORE')   
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(pbmeters)) + sd(log1p(pbmeters))), lty = 3, lwd = 2) 
-
-ppcount = hist(ppmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 600), 
-               xlab = "meters", main = 'PP - * - CORE')      
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(ppmeters)) + sd(log1p(ppmeters))), lty = 3, lwd = 2) 
-
-otcount = hist(otmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,100), 
-               xlab = "meters", main = 'OT - CORE')
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(otmeters)) + sd(log1p(otmeters))), lty = 3, lwd = 2) 
-
-pecount = hist(pemeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
-               xlab = "meters", main = 'PE - * - INT')
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(pemeters)) + sd(log1p(pemeters))), lty = 3, lwd = 2) 
-
-rmcount = hist(rmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
-               xlab = "meters", main = 'RM - * - INT')
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(rmmeters)) + sd(log1p(rmmeters))), lty = 3, lwd = 2) 
-
-nacount = hist(naometers, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,25), 
-               xlab = "meters", main = 'NA - INT')
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(naometers)) + sd(log1p(naometers))), lty = 3, lwd = 2) 
-
-pfcount = hist(pfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0, 30), 
-               xlab = "meters", main = 'PF - * - TRANS')  
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(pfmeters)) + sd(log1p(pfmeters))), lty = 3, lwd = 2) 
-
-pmcount = hist(pmmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15),
-               xlab = "meters", main = 'PM - * - TRANS')
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(pmmeters)) + sd(log1p(pmmeters))), lty = 3, lwd = 2) 
-
-shcount = hist(shmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
-               xlab = "meters", main = 'SH - TRANS')
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(shmeters)) + sd(log1p(shmeters))), lty = 3, lwd = 2) 
-
-sfcount = hist(sfmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
-               xlab = "meters", main = 'SF - TRANS')
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(sfmeters)) + sd(log1p(sfmeters))), lty = 3, lwd = 2) 
-
-olcount = hist(olmeters, breaks = v6, col = 'gray60', xlim = c(0,500), ylim = c(0,15), 
-               xlab = "meters", main = 'OL - TRANS')
-xline(corehet_brkpt, lwd = 2, col = "indianred")
-xline(expm1(mean(log1p(olmeters)) + sd(log1p(olmeters))), lty = 3, lwd = 2) 
 
 dev.off()
 
