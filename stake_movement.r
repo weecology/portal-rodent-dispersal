@@ -179,8 +179,8 @@ write.table(allspp, file = "mark_datafiles//all_mark.inp", row.names = F, col.na
 #---------------------------------------------------------------------------------
 
 
-#------------------------------------------ FIGURE 1
-pdf("Fig10_temporal_occ_spp_rank.pdf", 5, 5, pointsize = 10)
+#------------------------------------------ FIGURE 2
+pdf("Fig2_temporal_occ_spp_rank.pdf", 5, 5, pointsize = 10)
 par(mfrow=c(1,1))
 
 #average rank of each species 2000-2009 on control plots
@@ -188,32 +188,32 @@ par(mfrow=c(1,1))
 conranks = c(2.9, 4, 2.6, 1, 7.875, 7.1, 9.8, 9.333, 9, 8.6, 8.5, 4.8, 10.5)
 
 plot(conranks[5], pfyr, xlim = c(1,13), ylim = c(0,1), xlab = "species average ranked abundance", 
-     ylab = "proportion of years present", pch = 19, col = "black")
-  textxy(conranks[5], pfyr, "PF")
-points(conranks[4],ppyr, pch = 19, col = "black")
-  textxy(conranks[4],ppyr, "PP")
-points(conranks[2], doyr, pch = 19, col = "black")
-  textxy(conranks[2], doyr, "DO")
-points(conranks[1], dmyr, pch = 19, col = "black")
-  textxy(conranks[1], dmyr, "DM")
-points(conranks[3], pbyr, pch = 19, col = "black")
-  textxy(conranks[3], pbyr, "PB")
-points(conranks[6], peyr, pch = 19, col = "gray30")
-  textxy(conranks[6], peyr, "PE")
-points(conranks[7], pmyr, pch = 19, col = "gray30")
-  textxy(conranks[7], pmyr, "PM")
-points(conranks[8], rmyr, pch = 19, col = "gray30")
-  textxy(conranks[8], rmyr, "RM")
-points(conranks[12], otyr, pch = 6, col = "gray30")
-  textxy(conranks[12], otyr, "OT")
-points(conranks[13], olyr, pch = 6, col = "gray30")
-  textxy(conranks[13], olyr, "OL")
-points(conranks[9], shyr, pch = 0, col = "gray30")
-  textxy(conranks[9], shyr, "SH")
-points(conranks[10], sfyr, pch = 0, col = "gray30")
-  textxy(conranks[10], sfyr, "SF")
-points(conranks[11], naoyr, pch = 0, col = "gray30")
-  textxy(conranks[11], naoyr, "NA")
+     ylab = "proportion of years present", pch = 19, col = "black", cex = 1.5, cex.axis = 1.5, cex.lab = 1.5)
+  textxy(conranks[5], pfyr, "PF", cx = 1)
+points(conranks[4],ppyr, pch = 19, col = "black", cex = 1.5)
+  textxy(conranks[4],ppyr, "PP", cx = 1)
+points(conranks[2], doyr, pch = 19, col = "black", cex = 1.5)
+  textxy(conranks[2], doyr, "DO", cx = 1)
+points(conranks[1], dmyr, pch = 19, col = "black", cex = 1.5)
+  textxy(conranks[1], dmyr, "DM", cx = 1)
+points(conranks[3], pbyr, pch = 19, col = "black", cex = 1.5)
+  textxy(conranks[3], pbyr, "PB", cx = 1)
+points(conranks[6], peyr, pch = 19, col = "gray30", cex = 1.5)
+  textxy(conranks[6], peyr, "PE", cx = 1)
+points(conranks[7], pmyr, pch = 19, col = "gray30", cex = 1.5)
+  textxy(conranks[7], pmyr, "PM", cx = 1)
+points(conranks[8], rmyr, pch = 19, col = "gray30", cex = 1.5)
+  textxy(conranks[8], rmyr, "RM", cx = 1)
+points(conranks[12], otyr, pch = 6, col = "gray30", cex = 1.5)
+  textxy(conranks[12], otyr, "OT", cx = 1)
+points(conranks[13], olyr, pch = 6, col = "gray30", cex = 1.5)
+  textxy(conranks[13], olyr, "OL", cx = 1)
+points(conranks[9], shyr, pch = 0, col = "gray30", cex = 1.5)
+  textxy(conranks[9], shyr, "SH", cx = 1)
+points(conranks[10], sfyr, pch = 0, col = "gray30", cex = 1.5)
+  textxy(conranks[10], sfyr, "SF", cx = 1)
+points(conranks[11], naoyr, pch = 0, col = "gray30", cex = 1.5)
+  textxy(conranks[11], naoyr, "NA", cx = 1)
 
 abline(v = 5, lty = 2, col = 'gray40', lwd = 1)
 abline(h = 0.95, lty = 2, col = 'gray40', lwd = 1)
@@ -221,8 +221,8 @@ abline(h = 0.95, lty = 2, col = 'gray40', lwd = 1)
 dev.off()
 
 
-#------------------------------------------ FIGURE 2
-pdf("Fig6_indiv_repro_trends.pdf", 6, 6, pointsize = 10)
+#------------------------------------------ FIGURE 3
+pdf("Fig3_indiv_repro_trends.pdf", 6, 6, pointsize = 10)
 par(mfrow=c(2,2))
 
 #plot the relative abundance of females who represent each number of reproductive events per year
