@@ -191,13 +191,13 @@ plot(conranks[5], pfyr, xlim = c(1,13), ylim = c(0,1), xlab = "species average r
      ylab = "proportion of years present", pch = 19, col = "black", cex = 1.5, cex.axis = 1.5, cex.lab = 1.5)
   textxy(conranks[5], pfyr, "PF", cx = 1)
 points(conranks[4],ppyr, pch = 19, col = "black", cex = 1.5)
-  textxy(conranks[4],ppyr, "PP", cx = 1)
+  textxy(conranks[4],ppyr, "CP", cx = 1)
 points(conranks[2], doyr, pch = 19, col = "black", cex = 1.5)
   textxy(conranks[2], doyr, "DO", cx = 1)
 points(conranks[1], dmyr, pch = 19, col = "black", cex = 1.5)
   textxy(conranks[1], dmyr, "DM", cx = 1)
 points(conranks[3], pbyr, pch = 19, col = "black", cex = 1.5)
-  textxy(conranks[3], pbyr, "PB", cx = 1)
+  textxy(conranks[3], pbyr, "CB", cx = 1)
 points(conranks[6], peyr, pch = 19, col = "gray30", cex = 1.5)
   textxy(conranks[6], peyr, "PE", cx = 1)
 points(conranks[7], pmyr, pch = 19, col = "gray30", cex = 1.5)
@@ -226,35 +226,39 @@ pdf("Fig3_indiv_repro_trends.pdf", 6, 6, pointsize = 10)
 par(mfrow=c(2,2))
 
 #plot the relative abundance of females who represent each number of reproductive events per year
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "heteromyids")
-points(c(0:3), table(doirep$num_reprod)/sum(table(doirep$num_reprod)), type = "b", pch = 19, col = "indianred")
-points(c(0:4), table(dmirep$num_reprod)/sum(table(dmirep$num_reprod)), type = "b", pch = 19, col = "magenta")
-points(c(0:4), table(pbirep$num_reprod)/sum(table(pbirep$num_reprod)), type = "b", pch = 19, col = "red")
-points(c(0:4), table(ppirep$num_reprod)/sum(table(ppirep$num_reprod)), type = "b", pch = 19, col = "hotpink")
-points(c(0:2), table(pfirep$num_reprod)/sum(table(pfirep$num_reprod)), type = "b", pch = 19, col = "purple")
-legend('topright', c('do', 'dm', 'cb', 'cp', 'pf'), bty = 'n', 
-       col = c('indianred', 'magenta', 'red', 'hotpink', 'purple'), pch = 19)
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
+     main = "heteromyid granivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:3), table(doirep$num_reprod)/sum(table(doirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:4), table(dmirep$num_reprod)/sum(table(dmirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:4), table(pbirep$num_reprod)/sum(table(pbirep$num_reprod)), type = "b", pch = 17, col = "black")
+points(c(0:4), table(ppirep$num_reprod)/sum(table(ppirep$num_reprod)), type = "b", pch = 25, col = "black")
+points(c(0:2), table(pfirep$num_reprod)/sum(table(pfirep$num_reprod)), type = "b", pch = 24, col = "black")
+legend('topright', c('DO', 'DM', 'CB', 'CP', 'PF'), bty = 'n', 
+       col = 'black', pch = c(19,15,17,25,24), cex = 0.75)
 
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "cricetids")
-points(c(0:2), table(peirep$num_reprod)/sum(table(peirep$num_reprod)), type = "b", pch = 19, col = "green")
-points(c(0:2), table(pmirep$num_reprod)/sum(table(pmirep$num_reprod)), type = "b", pch = 19, col = "darkgreen")
-points(c(0:1), table(rmirep$num_reprod)/sum(table(rmirep$num_reprod)), type = "b", pch = 19, col = "yellowgreen")
-legend('topright', c('pe', 'pm', 'rm'), bty = 'n', col = c('green', 'darkgreen', 'yellowgreen'), pch = 19)
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
+     main = "cricetid granivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:2), table(peirep$num_reprod)/sum(table(peirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:2), table(pmirep$num_reprod)/sum(table(pmirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:1), table(rmirep$num_reprod)/sum(table(rmirep$num_reprod)), type = "b", pch = 17, col = "black")
+legend('topright', c('PE', 'PM', 'RM'), bty = 'n', col = 'black', pch = c(19,15,17), cex = 0.75)
 
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", main = "folivores")
-points(c(0:1), table(shirep$num_reprod)/sum(table(shirep$num_reprod)), type = "b", pch = 17, col = "brown")
-points(c(0:1), table(sfirep$num_reprod)/sum(table(sfirep$num_reprod)), type = "b", pch = 17, col = "brown4")
-points(c(0:3), table(naoirep$num_reprod)/sum(table(naoirep$num_reprod)), type = "b", pch = 17, col = "goldenrod4")
-legend('topright', c('sh', 'sf', 'na'), bty = 'n', col = c('brown', 'brown4', 'goldenrod4'), pch = 17)
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n",
+     main = "folivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:1), table(shirep$num_reprod)/sum(table(shirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:1), table(sfirep$num_reprod)/sum(table(sfirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:3), table(naoirep$num_reprod)/sum(table(naoirep$num_reprod)), type = "b", pch = 17, col = "black")
+legend('topright', c('SH', 'SF', 'NA'), bty = 'n', col = 'black', pch = c(19,15,17), cex = 0.75)
 
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events", bty = "n", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), main = "carnivores")
-points(c(0:3), table(otirep$num_reprod)/sum(table(otirep$num_reprod)), type = "b", pch = 15, col = "orange3")
-points(c(0:1), table(olirep$num_reprod)/sum(table(olirep$num_reprod)), type = "b", pch = 15, col = "orange4")
-legend('topright', c('ot', 'ol'), bty = 'n', col = c('orange3', 'orange4'), pch = 15)
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", bty = "n", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), 
+     main = "carnivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:3), table(otirep$num_reprod)/sum(table(otirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:1), table(olirep$num_reprod)/sum(table(olirep$num_reprod)), type = "b", pch = 15, col = "black")
+legend('topright', c('OT', 'OL'), bty = 'n', col = 'black', pch = c(19,15), cex = 0.75)
 
 dev.off()
 
