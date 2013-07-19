@@ -69,7 +69,7 @@ for (i in 1:length(spplist)){
       assign(paste(spplist[i], 'reprd', sep = ""), reprd)
     # proportion of reproductive females by month and year
     reprdyr = mo_repro(spdataF) #matrix with 120 x 5
-      assign(paste(spplist[i], 'reprdyr', sep = ""), reprodyr)
+      assign(paste(spplist[i], 'reprdyr', sep = ""), reprdyr)
     # track the number of times individual females uniquely reproduce within years
     irep = indiv_repro(spdataF) #matix with cols "tag", "year" and "num_reprod"
       assign(paste(spplist[i], 'irep', sep = ""), irep)
