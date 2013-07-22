@@ -50,29 +50,29 @@ for (i in 1:length(spplist)){
   
     # proportion of years they were seen in
     propyrs = length(unique(spdata$yr))/10
-      assign(paste(spplist[i], 'yr', sep = ""), propyrs)
+      assign(paste0(spplist[i], 'yr'), propyrs)
     # average number of months they were seen in during years in which they were present
     avgmos = mean_win_yr_occ(spdata)
-      assign(paste(spplist[i], 'avgmos', sep = ""), avgmos)
+      assign(paste0(spplist[i], 'avgmos'), avgmos)
     # mean abundance within all years 
     avgabun = allyrs_abun(spdata)
-      assign(paste(spplist[i], 'avgabun', sep = ""), avgabun)
+      assign(paste0(spplist[i], 'avgabun'), avgabun)
     #mean abundances within all years on control plots only
     conabun = allyrs_abun(subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22)))
-      assign(paste(spplist[i], 'conabun', sep = ""), conabun)
+      assign(paste0(spplist[i], 'conabun'), conabun)
   
   #subset females for each species
   spdataF = subset(spdata, sex == "F")
   
     #average proportion of reproductive females by month across all years
     reprd = mean_mo_repro(spdataF) #vector with 12 items
-      assign(paste(spplist[i], 'reprd', sep = ""), reprd)
+      assign(paste0(spplist[i], 'reprd'), reprd)
     # proportion of reproductive females by month and year
     reprdyr = mo_repro(spdataF) #matrix with 120 x 5
-      assign(paste(spplist[i], 'reprdyr', sep = ""), reprdyr)
+      assign(paste0(spplist[i], 'reprdyr'), reprdyr)
     # track the number of times individual females uniquely reproduce within years
     irep = indiv_repro(spdataF) #matix with cols "tag", "year" and "num_reprod"
-      assign(paste(spplist[i], 'irep', sep = ""), irep)
+      assign(paste0(spplist[i], 'irep'), irep)
 }
 
 abuns = cbind(*abun)
@@ -86,9 +86,9 @@ for (i in 1:length(spplist)){
   
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
-      assign(paste(spplist[i], 'propyrs', sep = ""), tags)
+      assign(paste0(spplist[i], 'propyrs'), tags)
     meters = distance_moved(spdata, tags)
-     assign(paste(spplist[i], 'propyrs', sep = ""), meters)
+     assign(paste0(spplist[i], 'propyrs'), meters)
 }
 
 # concatenate core heteromyid data - used to ask if these species behave differently from others
@@ -136,7 +136,7 @@ par(mfrow=c(1,1))
 #ordered: DM, DO, PB, PP, PF, PE, PM, RM, SH, SF, NA, OT, OL
 conranks = c(2.9, 4, 2.6, 1, 7.875, 7.1, 9.8, 9.333, 9, 8.6, 8.5, 4.8, 10.5)
 
-plot(conranks[5], PFyr, xlim = c(1,13), ylim = c(0,1), ylab = "species average ranked abundance", 
+plot(conranks[5], PFyr, xlim = c(0,1), ylim = c(1,13), ylab = "species average ranked abundance", 
      xlab = "proportion of years present", pch = 19, col = "black", cex = 1.5, cex.axis = 1.5, cex.lab = 1.5)
 textxy(PFyr, conranks[5], "PF", cx = 1)
 points(PPyr, conranks[4], pch = 19, col = "black", cex = 1.5)
