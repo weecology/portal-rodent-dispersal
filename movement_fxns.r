@@ -325,10 +325,10 @@ mo_repro = function (femaledata){
   r_mo_df =data.frame("year" = 1, "month" = 1, "proprepro" = 1, "numfemales" = 1, "species" = 1)
   
   for (m in 1:length(mos)){
-    
+      tmp = subset(femaledata, mo == mos[m])
+      
     for (y in 1:length(years)){
-      tmp = subset(femaledata, yr == years[y])
-      tmp = subset(tmp, mo == mos[m])
+      tmp = subset(tmp, yr == years[y])
       
       if (nrow(tmp) > 0){
         num_females = nrow(tmp)
@@ -373,6 +373,9 @@ count_repro = function(reprodata){
 
 indiv_repro = function (femaledata){
   # returns the reproductive history of females in the time series
+  # for each individual, all rows of data where nipples are red, enlarged or both, or it is pregnant,
+  # are set aside. Within a year, the trapping periods are ordered to detect timing of reproduction
+  # and the number of unique reproduction events, per year, for each individual female.
   tags = unique(femaledata$tag)
 
   reprod_df = data.frame("tag" = 1, "year" = 1, "num_reprod" = 1)

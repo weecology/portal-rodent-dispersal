@@ -57,7 +57,7 @@ for (i in 1:length(spplist)){
     # mean abundance within all years 
     avgabun = allyrs_abun(spdata)
       assign(paste0(spplist[i], 'avgabun'), avgabun)
-    #mean abundances within all years on control plots only
+    # number of unique individuals in each year on control plots only
     conabun = allyrs_abun(subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22)))
       assign(paste0(spplist[i], 'conabun'), conabun)
   
@@ -70,7 +70,7 @@ for (i in 1:length(spplist)){
     # proportion of reproductive females by month and year
     reprdyr = mo_repro(spdataF) #matrix with 120 x 5
       assign(paste0(spplist[i], 'reprdyr'), reprdyr)
-    # track the number of times individual females uniquely reproduce within years
+    # track the number of times individual females uniquely reproduce within each year
     irep = indiv_repro(spdataF) #matix with cols "tag", "year" and "num_reprod"
       assign(paste0(spplist[i], 'irep'), irep)
 }
