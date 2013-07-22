@@ -39,10 +39,10 @@ all2 = subsetDat(all2)
 #          calculate life-history details - reproduction, temporal persistence
 #---------------------------------------------------------------------------------
 
-spplist = c("DO", "DM", "DS", "PI", "PP", "PB", "PF",
-             "RM", "RF","RO", "PE", "PM", "PL", "BA",
-             "NAO", "SH", "SF",
-             "OT", "OL")
+spplist = c("DO", "DM", "DS", "PP", "PB", "PF","PI", 
+            "PE", "PM", "PL", "RM", "RF","RO", "BA",
+            "NAO", "SH", "SF",
+            "OT", "OL")
 
 for (i in 1:length(spplist)){
   #subset species data
@@ -51,6 +51,10 @@ for (i in 1:length(spplist)){
     # proportion of years they were seen in
     propyrs = length(unique(spdata$yr))/10
       assign(paste0(spplist[i], 'yr'), propyrs)
+    # proportion of years they were seen in CONTROL plots
+    conspdata = subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22))
+    conpropyrs = length(unique(conspdata$yr))/10
+    assign(paste0(spplist[i], 'conyr'), conpropyrs)
     # average number of months they were seen in during years in which they were present
     avgmos = mean_win_yr_occ(spdata)
       assign(paste0(spplist[i], 'avgmos'), avgmos)
@@ -60,6 +64,12 @@ for (i in 1:length(spplist)){
     # number of unique individuals in each year on control plots only
     conabun = allyrs_abun(subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22)))
       assign(paste0(spplist[i], 'conabun'), conabun)
+    # mean number of unique individuals on control plots only
+    meanconabun = mean(conabun)
+      assign(paste0(spplist[i],'meanconabun'), meanconabun)
+    # max number of unique individuals on control plots only
+    maxconabun = max(conabun)
+      assign(paste0(spplist[i], 'maxconabun'), maxconabun)
   
   #subset females for each species
   spdataF = subset(spdata, sex == "F")
@@ -79,7 +89,15 @@ control_abuns = ls(pattern = "*conabun")
 abuns = cbind(BAconabun, DMconabun, DOconabun, DSconabun, NAOconabun, OLconabun, OTconabun, 
               PBconabun, PEconabun, PFconabun, PIconabun, PLconabun, PMconabun, PPconabun,
               RFconabun, RMconabun, ROconabun, SFconabun, SHconabun)
-
+meanabuns = c(BAmeanconabun, DMmeanconabun, DOmeanconabun, DSmeanconabun, NAOmeanconabun, OLmeanconabun, OTmeanconabun,
+              PBmeanconabun, PEmeanconabun, PFmeanconabun, PImeanconabun, PLmeanconabun, PMmeanconabun, PPmeanconabun,
+              RFmeanconabun, RMmeanconabun, ROmeanconabun, SFmeanconabun, SHmeanconabun)
+maxabuns = c(BAmaxconabun, DMmaxconabun, DOmaxconabun, DSmaxconabun, NAOmaxconabun, OLmaxconabun, OTmaxconabun, 
+             PBmaxconabun, PEmaxconabun, PFmaxconabun, PImaxconabun, PLmaxconabun, PMmaxconabun, PPmaxconabun, 
+             RFmaxconabun, RMmaxconabun, ROmaxconabun, SFmaxconabun, SHmaxconabun)
+conyears = cbind(BAconyr, DMconyr, DOconyr, DSconyr, NAOconyr, OLconyr, OTconyr,
+                 PBconyr, PEconyr, PFconyr, PIconyr, PLconyr, PMconyr, PPconyr,
+                 RFconyr, RMconyr, ROconyr, SFconyr, SHconyr)
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
