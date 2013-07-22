@@ -61,7 +61,10 @@ for (i in 1:length(spplist)){
     # mean abundance within all years 
     avgabun = allyrs_abun(spdata)
       assign(paste0(spplist[i], 'avgabun'), avgabun)
-    # number of unique individuals in each year on control plots only
+    # average number of months they were seen in during years in which they were present on CONTROLS
+    conavgmos = mean_win_yr_occ(subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22)))
+      assign(paste0(spplist[i], 'conavgmos'), conavgmos)
+   # number of unique individuals in each year on control plots only
     conabun = allyrs_abun(subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22)))
       assign(paste0(spplist[i], 'conabun'), conabun)
     # mean number of unique individuals on control plots only
@@ -98,6 +101,9 @@ maxabuns = c(BAmaxconabun, DMmaxconabun, DOmaxconabun, DSmaxconabun, NAOmaxconab
 conyears = cbind(BAconyr, DMconyr, DOconyr, DSconyr, NAOconyr, OLconyr, OTconyr,
                  PBconyr, PEconyr, PFconyr, PIconyr, PLconyr, PMconyr, PPconyr,
                  RFconyr, RMconyr, ROconyr, SFconyr, SHconyr)
+conmos = cbind(BAconavgmos, DMconavgmos, DOconavgmos, DSconavgmos, NAOconavgmos, OLconavgmos, OTconavgmos, 
+               PBconavgmos, PEconavgmos, PFconavgmos, PIconavgmos, PLconavgmos, PMconavgmos, PPconavgmos, 
+               RFconavgmos, RMconavgmos, ROconavgmos, SFconavgmos, SHconavgmos)
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
@@ -148,6 +154,24 @@ write.table(MARK, file = "mark_datafiles//all_mark.inp", row.names = F, col.name
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
+
+#----------------------------------------- plot abundance vs. years, ala core v. transient literature
+plot(conyears, maxabuns, pch = 19, xlab = "Persistence (proportion of years present)",
+     ylab = "Maximum abundance in any year", bty = "n")
+  textxy(conyears, maxabuns, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
+                              "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
+
+plot(conyears, meanabuns, pch = 19, xlab = "Persistence (proportion of years present)",
+     ylab = "Mean yearly abundance across time-series", bty = "n")
+textxy(conyears, meanabuns, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
+                             "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
+
+plot(conyears, conmos, pch = 19, xlab = "Persistence (proportion of years present)", 
+     ylab = "Average proportion of months present", xlim = c(0,1), ylim = c(0,1), bty = "n")
+      textxy(conyears, conmos, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
+                                    "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
+    abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
+    abline(v = 0.5, lty = 2, col = 'gray40', lwd = 1)
 
 
 #------------------------------------------ FIGURE 2
