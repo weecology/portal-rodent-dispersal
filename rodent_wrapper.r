@@ -75,7 +75,11 @@ for (i in 1:length(spplist)){
       assign(paste0(spplist[i], 'irep'), irep)
 }
 
-abuns = cbind(*abun)
+control_abuns = ls(pattern = "*conabun")
+abuns = cbind(BAconabun, DMconabun, DOconabun, DSconabun, NAOconabun, OLconabun, OTconabun, 
+              PBconabun, PEconabun, PFconabun, PIconabun, PLconabun, PMconabun, PPconabun,
+              RFconabun, RMconabun, ROconabun, SFconabun, SHconabun)
+
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
