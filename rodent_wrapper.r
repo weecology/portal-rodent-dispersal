@@ -167,93 +167,54 @@ textxy(conyears, meanabuns, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "P
                              "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
 
 plot(conyears, conmos, pch = 19, xlab = "Persistence (proportion of years present)", 
-     ylab = "Average proportion of months present", xlim = c(0,1), ylim = c(0,1), bty = "n")
-      textxy(conyears, conmos, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
-                                    "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
-    abline(h = 0.5, lty = 2, col = 'gray40', lwd = 1)
-    abline(v = 0.5, lty = 2, col = 'gray40', lwd = 1)
+     ylab = "Average proportion of months present", xlim = c(0,1), ylim = c(0,1), bty = "n",
+     cex.axis = 1.5, cex.lab = 1.5, cex = 1.5)
+#      textxy(conyears, conmos, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
+#                                    "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
+    abline(h = 0.66, lty = 2, col = 'gray40', lwd = 1, cex = 1.5)
+    abline(v = 0.66, lty = 2, col = 'gray40', lwd = 1, cex = 1.5)
 
 
-#------------------------------------------ FIGURE 2
-pdf("Fig2_temporal_occ_spp_rank.pdf", 5, 5, pointsize = 10)
-par(mfrow=c(1,1))
-
-#average rank of each species 2000-2009 on control plots
-#ordered: DM, DO, PB, PP, PF, PE, PM, RM, SH, SF, NA, OT, OL
-conranks = c(2.9, 4, 2.6, 1, 7.875, 7.1, 9.8, 9.333, 9, 8.6, 8.5, 4.8, 10.5)
-
-plot(conranks[5], PFyr, xlim = c(0,1), ylim = c(1,13), ylab = "species average ranked abundance", 
-     xlab = "proportion of years present", pch = 19, col = "black", cex = 1.5, cex.axis = 1.5, cex.lab = 1.5)
-textxy(PFyr, conranks[5], "PF", cx = 1)
-points(PPyr, conranks[4], pch = 19, col = "black", cex = 1.5)
-textxy(PPyr, conranks[4],"CP", cx = 1)
-points(DOyr, conranks[2], pch = 19, col = "black", cex = 1.5)
-textxy(DOyr, conranks[2], "DO", cx = 1)
-points(DMyr, conranks[1], pch = 19, col = "black", cex = 1.5)
-textxy(DMyr, conranks[1], "DM", cx = 1)
-points(PByr, conranks[3], pch = 19, col = "black", cex = 1.5)
-textxy(PByr, conranks[3], "CB", cx = 1)
-points(PEyr, conranks[6], pch = 19, col = "gray30", cex = 1.5)
-textxy(PEyr, conranks[6], "PE", cx = 1)
-points(PMyr, conranks[7], pch = 19, col = "gray30", cex = 1.5)
-textxy(PMyr, conranks[7], "PM", cx = 1)
-points(RMyr, conranks[8], pch = 19, col = "gray30", cex = 1.5)
-textxy(RMyr, conranks[8], "RM", cx = 1)
-points(OTyr, conranks[12], pch = 6, col = "gray30", cex = 1.5)
-textxy(OTyr, conranks[12], "OT", cx = 1)
-points(OLyr, conranks[13], pch = 6, col = "gray30", cex = 1.5)
-textxy(OLyr, conranks[13], "OL", cx = 1)
-points(SHyr, conranks[9], pch = 0, col = "gray30", cex = 1.5)
-textxy(SHyr, conranks[9], "SH", cx = 1)
-points(SFyr, conranks[10], pch = 0, col = "gray30", cex = 1.5)
-textxy(SFyr, conranks[10], "SF", cx = 1)
-points(NAOyr, conranks[11], pch = 0, col = "gray30", cex = 1.5)
-textxy(NAOyr, conranks[11], "NA", cx = 1)
-
-abline(v = 0.95, lty = 2, col = 'gray40', lwd = 1)
-abline(h = 5, lty = 2, col = 'gray40', lwd = 1)
-
-dev.off()
-
-#------------------------------------------ FIGURE 3
-pdf("Fig3_indiv_repro_trends.pdf", 6, 6, pointsize = 10)
-par(mfrow=c(2,2))
+#------------------------------------------ FIGURE - for ESA talk
 
 #plot the relative abundance of females who represent each number of reproductive events per year
 plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
      ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
-     main = "heteromyid granivores", cex.axis = 1.5, cex.lab = 1.5)
+     main = "core granivores", cex.axis = 1.5, cex.lab = 1.5)
 points(c(0:3), table(DOirep$num_reprod)/sum(table(DOirep$num_reprod)), type = "b", pch = 19, col = "black")
-points(c(0:4), table(DMirep$num_reprod)/sum(table(DMirep$num_reprod)), type = "b", pch = 15, col = "black")
-points(c(0:4), table(PBirep$num_reprod)/sum(table(PBirep$num_reprod)), type = "b", pch = 17, col = "black")
-points(c(0:4), table(PPirep$num_reprod)/sum(table(PPirep$num_reprod)), type = "b", pch = 25, col = "black")
-points(c(0:2), table(PFirep$num_reprod)/sum(table(PFirep$num_reprod)), type = "b", pch = 24, col = "black")
-legend('topright', c('DO', 'DM', 'CB', 'CP', 'PF'), bty = 'n', 
-       col = 'black', pch = c(19,15,17,25,24), cex = 0.75)
+points(c(0:4), table(DMirep$num_reprod)/sum(table(DMirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:4), table(PBirep$num_reprod)/sum(table(PBirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:4), table(PPirep$num_reprod)/sum(table(PPirep$num_reprod)), type = "b", pch = 29, col = "black")
 
 plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
      ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
-     main = "cricetid granivores", cex.axis = 1.5, cex.lab = 1.5)
-points(c(0:2), table(PEirep$num_reprod)/sum(table(PEirep$num_reprod)), type = "b", pch = 19, col = "black")
+     main = "transient granivores", cex.axis = 1.5, cex.lab = 1.5)
 points(c(0:2), table(PMirep$num_reprod)/sum(table(PMirep$num_reprod)), type = "b", pch = 15, col = "black")
-points(c(0:1), table(RMirep$num_reprod)/sum(table(RMirep$num_reprod)), type = "b", pch = 17, col = "black")
-legend('topright', c('PE', 'PM', 'RM'), bty = 'n', col = 'black', pch = c(19,15,17), cex = 0.75)
+points(c(0:2), table(PEirep$num_reprod)/sum(table(PEirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:1), table(PLirep$num_reprod)/sum(table(PLirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:2), table(PFirep$num_reprod)/sum(table(PFirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:1), table(RMirep$num_reprod)/sum(table(RMirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:1), table(ROirep$num_reprod)/sum(table(ROirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(0, table(RFirep$num_reprod)/sum(table(RFirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(0, table(DSirep$num_reprod)/sum(table(DSirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:1), table(PIirep$num_reprod)/sum(table(PIirep$num_reprod)), type = "b", pch = 15, col = "black")
 
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n",
-     main = "folivores", cex.axis = 1.5, cex.lab = 1.5)
-points(c(0:1), table(SHirep$num_reprod)/sum(table(SHirep$num_reprod)), type = "b", pch = 19, col = "black")
-points(c(0:1), table(SFirep$num_reprod)/sum(table(SFirep$num_reprod)), type = "b", pch = 15, col = "black")
-points(c(0:3), table(NAOirep$num_reprod)/sum(table(NAOirep$num_reprod)), type = "b", pch = 17, col = "black")
-legend('topright', c('SH', 'SF', 'NA'), bty = 'n', col = 'black', pch = c(19,15,17), cex = 0.75)
 
-plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", bty = "n", 
-     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), 
-     main = "carnivores", cex.axis = 1.5, cex.lab = 1.5)
-points(c(0:3), table(OTirep$num_reprod)/sum(table(OTirep$num_reprod)), type = "b", pch = 19, col = "black")
-points(c(0:1), table(OLirep$num_reprod)/sum(table(OLirep$num_reprod)), type = "b", pch = 15, col = "black")
-legend('topright', c('OT', 'OL'), bty = 'n', col = 'black', pch = c(19,15), cex = 0.75)
+#------------------------------------------ FIGURE - for ESA talk
 
-dev.off()
+#granivore data from dissertation chapter table 2-3
+Psi = c(0.09, 0.13, 0.08, 0.14, 0.48, 0.23, 0.49, 0.41)
+S = c(0.76, 0.78, 0.80, 0.81, 0.67, 0.81, 0.76, 0.62)
+distbench = c(28.36, 32.64, 25.57, 36.22, 93.05, 74.29, 29.12, 93.30)
+
+# S vs. Psi
+plot(Psi, S, pch = 19, xlim = c(0:1), ylim = c(0:1), bty = "n", cex.axis = 1.5, cex.lab = 1.5, cex = 1.5,
+     ylab = "survival probability", xlab = "long distance movement probability")
+plot(distbench, S, pch = 19, bty = "n", xlab = "transition distance (meters)", ylab = "survival", 
+     xlim = c(0,100), ylim = c(0,1), cex.axis = 1.5, cex.lab = 1.5, cex = 1.5)
+
+lm1 = lm(S~Psi)
+lm2 = lm(S~distbench)
+
 
   
