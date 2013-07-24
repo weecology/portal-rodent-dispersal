@@ -114,9 +114,9 @@ for (i in 1:length(spplist)){
   
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
-      assign(paste0(spplist[i], 'propyrs'), tags)
+      assign(paste0(spplist[i], 'tags'), tags)
     meters = distance_moved(spdata, tags)
-     assign(paste0(spplist[i], 'propyrs'), meters)
+     assign(paste0(spplist[i], 'meters'), meters)
 }
 
 # concatenate core heteromyid data - used to ask if these species behave differently from others

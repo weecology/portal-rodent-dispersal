@@ -12,6 +12,9 @@ wd = "/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
 setwd(wd)
 source("movement_fxns.R")
 
+#import all data
+all = read.table('rawdata/all_1980-2009.txt', sep = ',')
+
 #import the data by guild
 allrats = read.csv("rawdata//allrodents_1978-2012.csv") #all rodents, for temporal figure
 het = read.csv("rawdata//heteromyids_2000-2009.csv")   # DO, DM, PB, PP, PF
