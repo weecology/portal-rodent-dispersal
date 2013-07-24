@@ -206,15 +206,25 @@ points(c(0:1), table(PIirep$num_reprod)/sum(table(PIirep$num_reprod)), type = "b
 Psi = c(0.09, 0.13, 0.08, 0.14, 0.48, 0.23, 0.49, 0.41)
 S = c(0.76, 0.78, 0.80, 0.81, 0.67, 0.81, 0.76, 0.62)
 distbench = c(28.36, 32.64, 25.57, 36.22, 93.05, 74.29, 29.12, 93.30)
+littersize = c(2.37, 2, 3.6, 4.72, 2.53, 3.6, 4, 4.29)
+
+lm1 = lm(S~Psi)
+lm2 = lm(S~distbench)
+lm3 = lm(littersize~S)
+lm4 = lm(littersize~distbench)
 
 # S vs. Psi
 plot(Psi, S, pch = 19, xlim = c(0:1), ylim = c(0:1), bty = "n", cex.axis = 1.5, cex.lab = 1.5, cex = 1.5,
      ylab = "survival probability", xlab = "long distance movement probability")
+    abline(lm1, col = "turquoise")
+# S vs. distance benchmark
 plot(distbench, S, pch = 19, bty = "n", xlab = "transition distance (meters)", ylab = "survival", 
      xlim = c(0,100), ylim = c(0,1), cex.axis = 1.5, cex.lab = 1.5, cex = 1.5)
-
-lm1 = lm(S~Psi)
-lm2 = lm(S~distbench)
-
+    abline(lm2, col = "turquoise")
+# littersize vs. S
+plot(S, littersize, pch = 19, bty = "n", xlab = "survival probability", ylab = "mean litter size",
+     xlim = c(0,1), ylim = c(1,6))
+#littersize vs. distance benchmark
+plot(distbench, littersize, pch = 19)
 
   
