@@ -15,9 +15,9 @@ and Reithrodontomys montanus (RM).
 
 NOTE: The project and code in this repository is still under development. 
 
-Requirements: R 2.x, Python 2.7 or higher, Program MARK (http://www.phidot.org/software/mark/) and the files
+**Requirements:** R 2.x, Python 2.7 or higher, Program MARK (http://www.phidot.org/software/mark/) and the files
 containing data and functions specific to this code, `movement_fxns.R`. 
-*R Packages:* `RMark`, `calibrate`, `fields`, `plyr`, `ggmap`, and `ggplot2`
+**R Packages:** `RMark`, `calibrate`, `fields`, `plyr`, `ggmap`, and `ggplot2`
 
 The analyses can be replicated by changing the working directory at the top of the file `stake_movements.R` to the 
 location on your computer where you have stored the `.R` and `.csv` files.
@@ -25,25 +25,25 @@ location on your computer where you have stored the `.R` and `.csv` files.
 Code should take approximately XX minutes to run start to finish. 
 Figures should output as pdfs to your working directory. 
 
-*Data use:* Data is provided in this supplement for the purposes of replication. 
+**Data use:** Data is provided in this supplement for the purposes of replication. 
 If you wish to use the data for additional research, they should be obtained from the published source 
 (Ecological Archives E090-118-D1; S. K. Morgan Ernest, Thomas J. Valone, and James H. Brown. 2009. Long-term monitoring 
 and experimental manipulation of a Chihuahuan Desert ecosystem near Portal, Arizona, USA. Ecology 90:1708. doi:10.1890/08-1222.1)
 
-*Included Files*
-`rodent_wrapper.R` script -- runs through all the analyses, starting with the 30 year dataset.
-`stake_movment.R` script -- cleans up the data, runs the statistical analyses, and outputs figures.
-`movement_fxns.R` script -- holds the relevant functions for executing the stake_movement.R script.
-`life_history_analyses.R` -- for extracting life-history trait data (i.e., fecundity) for all the species.
-`MARK_analyses.R` script -- code to run Program MARK models. Should be run on a server - takes a long tiime to finish!
-`rodent_data. R`  -- old code that explores only 2 species - IGNORE
-`additional_movement_fxns.R` -- code that I'm not currently using for the main product, but would like to keep around - IGNORE
-`RodentQueries.ipynb` script -- ipython notebook code to query the main server for Portal data.
-`cricetids_2000-2009.csv` -- individual level data for granivores in the family Cricetidae. Includes the species Peromyscus eremicus, Peromyscus maniculatus, and Reithrodontomys megalotis
-`folivores_2000-2009.csv` -- individual level data for folivores in the family Cricetidae. Includes the species Sigmodon hispidus, Sigmodon fulviventer, and Neotoma albigula.
-`heteromyids_2000-2009.csv` -- individual level data for granivores in the family Heteromyidae. Includes the species Dipodomys merriami, Dipodomys ordii, Chaetodipus baileyi, Chaetodipus penicillatus, and Perognathus flavus.
-`onychomys_2000-2009.csv` -- individual level data for carnivores in the family Cricetidae. Includes the species Onychomys leucogaster and Onychomys torridus.
-`all_1980-2009.txt` -- individual level data for all the species from 1980-2009.
+**Included Files**
+* `rodent_wrapper.R` script -- runs through all the analyses, starting with the 30 year dataset.
+* `stake_movment.R` script -- cleans up the data, runs the statistical analyses, and outputs figures.
+* `movement_fxns.R` script -- holds the relevant functions for executing the stake_movement.R script.
+* `life_history_analyses.R` -- for extracting life-history trait data (i.e., fecundity) for all the species.
+* `MARK_analyses.R` script -- code to run Program MARK models. Should be run on a server - takes a long tiime to finish!
+* `rodent_data. R`  -- old code that explores only 2 species - IGNORE
+* `additional_movement_fxns.R` -- code that I'm not currently using for the main product, but would like to keep around - IGNORE
+* `RodentQueries.ipynb` script -- ipython notebook code to query the main server for Portal data.
+* `cricetids_2000-2009.csv` -- individual level data for granivores in the family Cricetidae. Includes the species Peromyscus eremicus, Peromyscus maniculatus, and Reithrodontomys megalotis
+* `folivores_2000-2009.csv` -- individual level data for folivores in the family Cricetidae. Includes the species Sigmodon hispidus, Sigmodon fulviventer, and Neotoma albigula.
+* `heteromyids_2000-2009.csv` -- individual level data for granivores in the family Heteromyidae. Includes the species Dipodomys merriami, Dipodomys ordii, Chaetodipus baileyi, Chaetodipus penicillatus, and Perognathus flavus.
+* `onychomys_2000-2009.csv` -- individual level data for carnivores in the family Cricetidae. Includes the species Onychomys leucogaster and Onychomys torridus.
+* `all_1980-2009.txt` -- individual level data for all the species from 1980-2009.
 
 License
 This code is available under a BSD 2-Clause License.
