@@ -39,11 +39,15 @@ and experimental manipulation of a Chihuahuan Desert ecosystem near Portal, Ariz
 * `rodent_data. R`  -- old code that explores only 2 species - IGNORE
 * `additional_movement_fxns.R` -- code that I'm not currently using for the main product, but would like to keep around - IGNORE
 * `RodentQueries.ipynb` script -- ipython notebook code to query the main server for Portal data.
-* `cricetids_2000-2009.csv` -- individual level data for granivores in the family Cricetidae. Includes the species Peromyscus eremicus, Peromyscus maniculatus, and Reithrodontomys megalotis
-* `folivores_2000-2009.csv` -- individual level data for folivores in the family Cricetidae. Includes the species Sigmodon hispidus, Sigmodon fulviventer, and Neotoma albigula.
-* `heteromyids_2000-2009.csv` -- individual level data for granivores in the family Heteromyidae. Includes the species Dipodomys merriami, Dipodomys ordii, Chaetodipus baileyi, Chaetodipus penicillatus, and Perognathus flavus.
-* `onychomys_2000-2009.csv` -- individual level data for carnivores in the family Cricetidae. Includes the species Onychomys leucogaster and Onychomys torridus.
-* `all_1980-2009.txt` -- individual level data for all the species from 1980-2009.
+* rawdata -- folder containing data queried from the published Portal database
+  * `cricetids_2000-2009.csv` -- individual level data for granivores in the family Cricetidae. Includes the species Peromyscus eremicus, Peromyscus maniculatus, and Reithrodontomys megalotis
+  * `folivores_2000-2009.csv` -- individual level data for folivores in the family Cricetidae. Includes the species Sigmodon hispidus, Sigmodon fulviventer, and Neotoma albigula.
+  * `heteromyids_2000-2009.csv` -- individual level data for granivores in the family Heteromyidae. Includes the species Dipodomys merriami, Dipodomys ordii, Chaetodipus baileyi, Chaetodipus penicillatus, and Perognathus flavus.
+  * `onychomys_2000-2009.csv` -- individual level data for carnivores in the family Cricetidae. Includes the species Onychomys leucogaster and Onychomys torridus.
+  * `all_1980-2009.txt` -- individual level data for all the species from 1980-2009.
+* mark_datafiles -- folder created by RMark
+* mark_output -- folder created by RMark
+* output -- folder that stores past versions of the figures and text generated for this project
 
 License
 This code is available under a BSD 2-Clause License.
