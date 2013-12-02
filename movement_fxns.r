@@ -61,8 +61,10 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
   numcount = 100
   
   for (t in 1:length(tags)){
-    tmp <- which(dat$tag == tags[t])
     
+    if (nchar(tags[t]) < 6){ #only run on ear and toe tags, pit tags are very unlikely to be duplicated
+      tmp <- which(dat$tag == tags[t])
+      
     if (nrow(dat[tmp,]) > 1) {    # if indiv was captured multiple times
       
       if (max(dat[tmp,1]) - min(dat[tmp,1]) > 4){ #more than 4 years between recaptures?
@@ -85,7 +87,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
 #    else { #if less than 4 years between captures, check sex
 #      
 #    }
-    }
+    }}
   return (dat)
 }
 
