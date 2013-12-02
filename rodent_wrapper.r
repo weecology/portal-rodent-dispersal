@@ -42,6 +42,9 @@ dups = is_duplicate_tag(all, tags, 10, 9, 16) #check to see if can separate tags
 
 # get rid of 'bad data'; deletes data that is not a pit tag, where sex is inconsistent or where species is inconsistent. 
 all2 = subsetDat(all2)
+all3 = subsetDat(all)
+all3 = subset(all, yr > 1988)
+  all2=all3
 
 #---------------------------------------------------------------------------------
 #          calculate life-history details - reproduction, temporal persistence
@@ -51,6 +54,8 @@ spplist = c("DO", "DM", "DS", "PP", "PB", "PF","PI",
             "PE", "PM", "PL", "RM", "RF","RO", "BA",
             "NAO", "SH", "SF",
             "OT", "OL")
+
+spplist = unique(all3$species)
 
 for (i in 1:length(spplist)){
   #subset species data
@@ -98,20 +103,21 @@ for (i in 1:length(spplist)){
 
 control_abuns = ls(pattern = "*conabun")
 abuns = cbind(BAconabun, DMconabun, DOconabun, DSconabun, NAOconabun, OLconabun, OTconabun, 
-              PBconabun, PEconabun, PFconabun, PIconabun, PLconabun, PMconabun, PPconabun,
-              RFconabun, RMconabun, ROconabun, SFconabun, SHconabun)
+              PBconabun, PEconabun, PFconabun, PHconabun, PIconabun, PLconabun, PMconabun, PPconabun,
+              RFconabun, RMconabun, ROconabun, SFconabun, SHconabun, SOconabun)
 meanabuns = c(BAmeanconabun, DMmeanconabun, DOmeanconabun, DSmeanconabun, NAOmeanconabun, OLmeanconabun, OTmeanconabun,
-              PBmeanconabun, PEmeanconabun, PFmeanconabun, PImeanconabun, PLmeanconabun, PMmeanconabun, PPmeanconabun,
-              RFmeanconabun, RMmeanconabun, ROmeanconabun, SFmeanconabun, SHmeanconabun)
+              PBmeanconabun, PEmeanconabun, PFmeanconabun, PHmeanconabun, PImeanconabun, PLmeanconabun, PMmeanconabun, PPmeanconabun,
+              RFmeanconabun, RMmeanconabun, ROmeanconabun, SFmeanconabun, SHmeanconabun, SOmeanconabun)
 maxabuns = c(BAmaxconabun, DMmaxconabun, DOmaxconabun, DSmaxconabun, NAOmaxconabun, OLmaxconabun, OTmaxconabun, 
-             PBmaxconabun, PEmaxconabun, PFmaxconabun, PImaxconabun, PLmaxconabun, PMmaxconabun, PPmaxconabun, 
-             RFmaxconabun, RMmaxconabun, ROmaxconabun, SFmaxconabun, SHmaxconabun)
+             PBmaxconabun, PEmaxconabun, PFmaxconabun, PHmaxconabun, PImaxconabun, PLmaxconabun, PMmaxconabun, PPmaxconabun, 
+             RFmaxconabun, RMmaxconabun, ROmaxconabun, SFmaxconabun, SHmaxconabun, SOmaxconabun)
 conyears = cbind(BAconyr, DMconyr, DOconyr, DSconyr, NAOconyr, OLconyr, OTconyr,
-                 PBconyr, PEconyr, PFconyr, PIconyr, PLconyr, PMconyr, PPconyr,
-                 RFconyr, RMconyr, ROconyr, SFconyr, SHconyr)
+                 PBconyr, PEconyr, PFconyr, PHconyr, PIconyr, PLconyr, PMconyr, PPconyr,
+                 RFconyr, RMconyr, ROconyr, SFconyr, SHconyr, SOconyr)
 conmos = cbind(BAconavgmos, DMconavgmos, DOconavgmos, DSconavgmos, NAOconavgmos, OLconavgmos, OTconavgmos, 
-               PBconavgmos, PEconavgmos, PFconavgmos, PIconavgmos, PLconavgmos, PMconavgmos, PPconavgmos, 
-               RFconavgmos, RMconavgmos, ROconavgmos, SFconavgmos, SHconavgmos)
+               PBconavgmos, PEconavgmos, PFconavgmos, PHconavgmos, PIconavgmos, PLconavgmos, PMconavgmos, PPconavgmos, 
+               RFconavgmos, RMconavgmos, ROconavgmos, SFconavgmos, SHconavgmos, SOconavgmos)
+
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
@@ -138,7 +144,8 @@ corehet = c(DMmeters, DOmeters, PBmeters, PPmeters)
 
 # Get MARK capture histories
 #------------------------------
-periods = c(261:380)
+periods = c(261:380) #2000-2009
+periods = c(130:380) #1989-2009
 exclosures = c(5, 7, 10, 16, 23, 24)
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
 
