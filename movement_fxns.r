@@ -100,47 +100,19 @@ find_bad_data2 = function(dat, tags, sex_col, spp_col){
   
   flagged_rats = data.frame("tag"=1, "reason"=1, "occurrences"=1)
   outcount = 0
-  numcount = 100
   
   for (t in 1:length(tags)){
     tmp <- which(dat$tag == tags[t])
-    
+
     if (nrow(dat[tmp,]) > 1) {    # if indiv was captured multiple times
-      
-      if (max(dat[tmp,1]) - min(dat[tmp,1] > 4)){
-        
-        # check for consistent species
-        spp_list = unique(dat[tmp,spp_col])
-        for (sp in 1:length(spp_list)) {
-          dat_2 = dat[tmp,]
-          dat_2 = dat_2[which(dat_2$species == spp_list[sp]),]
-          if(max(dat_2$yr) - min(dat_2$yr) < 4) {
-            newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-            dat[irow,tag_col] = unk
-          }
-          else {
-            outcount = outcount + 1
-            flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
-          }
-        }
-        
-        spp = spp_list[1]
-        for (s in 2:length(spp_list)){  
-          if (spp_list[s] != spp){
-            
-        outcount = outcount + 1
-        flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
-      }
-      
       sex_list = dat[tmp,sex_col]
       sex = sex_list[1]
       for (i in 2:length(sex_list)){  # check for consistent sex
         if (sex_list[i] != sex) {
-          outcount = outcount + 1
+         outcount = outcount + 1
           flagged_rats[outcount,] <- c(tags[t], "sex", nrow(dat[tmp,]))
           break
         }}
-      
       spp_list = dat[tmp,spp_col]
       spp = spp_list[1]
       for (s in 2:length(spp_list)){  # check for consistent species
@@ -149,22 +121,24 @@ find_bad_data2 = function(dat, tags, sex_col, spp_col){
           flagged_rats[outcount,] <- c(tags[t], "spp", nrow(dat[tmp,]))
           break
         }}
-      
-      
     }}
   return(flagged_rats)
 }
-
+  
 
 subsetDat = function(dataset){
   ## function to subset out proper data 
   ##### will find bad data, then delete it from the dataset and get rid of incompletely sampled periods
   tags = as.character(unique(dataset$tag)) # get list of unique tags
-  flags = find_bad_data(dataset, tags, 10, 9)   # list of flagged data
-  badtags = unique(flags$tag)    # get list of unique 'bad tags'
-  for (i in 1:length(badtags)) {  #deletes bad tags from dataset
-    dataset = subset(dataset, tag != badtags[i])
-  }  
+  flags = find_bad_data2(dataset, tags, 10, 9)   # list of flagged data
+  #first, mark all uncertain or unmarked sex as "U" for unknown
+  badsextags = unique(flags[which(flags$reason == "sex"),1])
+  dataset[which(dataset$tag %in% badsextags),10] = "U"
+  dataset[which(dataset$sex %in% c("", "P", "Z")),10] = "U" #get rid of other weird typos in sex column
+  #get rid of results where we don't know the species for sure
+  badspptags = unique(flags[which(flags$reason == "spp"), 1])    
+  dataset = dataset[-which(dataset$tag %in% badspptags),] #delete rows where species is unsure
+  
   #don't use negative period numbers and periods with only one day of trapping
   dataset = subset(dataset, period != 267 & period != 277 & period != 278 & period != 283 &
                           period != 284 & period != 300 & period != 311 & period != 313 &
