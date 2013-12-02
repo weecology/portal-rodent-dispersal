@@ -53,6 +53,43 @@ for (t in 1:length(tags)){
 return(flagged_rats)
 }
 
+is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
+  # check the min to max year for a given tag. 
+  # If > 4, considered suspicious
+  # If multiple species, considered suspicious
+  # If adequately resolved, given a new unique tag number, that ends with d for "duplicate"
+  numcount = 100
+  
+  for (t in 1:length(tags)){
+    tmp <- which(dat$tag == tags[t])
+    
+    if (nrow(dat[tmp,]) > 1) {    # if indiv was captured multiple times
+      
+      if (max(dat[tmp,1]) - min(dat[tmp,1]) > 4){ #more than 4 years between recaptures?
+        
+        # check num species recorded? does it look ok if separated on species?
+        spp_list = unique(dat[tmp,spp_col])
+        for (sp in 1:length(spp_list)) {
+          tmp2 = which(dat$tag == tags[t] & dat$species == spp_list[sp])
+          if(max(dat[tmp2,1]) - min(dat[tmp2,1]) < 4) {
+            newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+            dat[tmp2,tag_col] = newtag
+            numcount = numcount + 1
+          }
+#          else {
+#            outcount = outcount + 1
+#            flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
+          }
+        }
+      }
+#    else { #if less than 4 years between captures, check sex
+#      
+#    }
+    }
+  return (dat)
+}
+
+
 
 find_bad_data2 = function(dat, tags, sex_col, spp_col){
   # check for consistent sex and species, outputs flagged tags to check
@@ -61,14 +98,37 @@ find_bad_data2 = function(dat, tags, sex_col, spp_col){
   
   flagged_rats = data.frame("tag"=1, "reason"=1, "occurrences"=1)
   outcount = 0
+  numcount = 100
   
   for (t in 1:length(tags)){
     tmp <- which(dat$tag == tags[t])
-    # if (nchar(tags[t]) < 6) {
-     # outcount = outcount + 1
-      # flagged_rats[outcount,] <- c(tags[t], 'not_a_PIT', nrow(dat[tmp,]))
-    # }
+    
     if (nrow(dat[tmp,]) > 1) {    # if indiv was captured multiple times
+      
+      if (max(dat[tmp,1]) - min(dat[tmp,1] > 4)){
+        
+        # check for consistent species
+        spp_list = unique(dat[tmp,spp_col])
+        for (sp in 1:length(spp_list)) {
+          dat_2 = dat[tmp,]
+          dat_2 = dat_2[which(dat_2$species == spp_list[sp]),]
+          if(max(dat_2$yr) - min(dat_2$yr) < 4) {
+            newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+            dat[irow,tag_col] = unk
+          }
+          else {
+            outcount = outcount + 1
+            flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
+          }
+        }
+        
+        spp = spp_list[1]
+        for (s in 2:length(spp_list)){  
+          if (spp_list[s] != spp){
+            
+        outcount = outcount + 1
+        flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
+      }
       
       sex_list = dat[tmp,sex_col]
       sex = sex_list[1]
@@ -88,10 +148,6 @@ find_bad_data2 = function(dat, tags, sex_col, spp_col){
           break
         }}
       
-      if (max(dat[tmp,1]) - min(dat[tmp,1] > 4)){
-        outcount = outcount + 1
-        flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
-      }
       
     }}
   return(flagged_rats)
@@ -463,6 +519,5 @@ allyrs_abun = function(sp_data){
       abun = append(abun, length(indivs))
     }
   }
-  
   return (abun)
 }
