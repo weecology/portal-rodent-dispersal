@@ -146,7 +146,7 @@ corehet = c(DMmeters, DOmeters, PBmeters, PPmeters)
 #------------------------------
 #periods = c(261:380) #2000-2009
 periods = c(130:380) #1989-2009
-#exclosures = c(5, 7, 10, 16, 23, 24)
+#exclosures = c(5, 7, 10, 16, 23, 24) #TODO: check that the correct exclosres are being used for each species!
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
 
 for (i in 1:length(spplist)){

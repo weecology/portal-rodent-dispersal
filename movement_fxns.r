@@ -284,36 +284,33 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
     ind_dat = ind_dat[order(ind_dat$period),] #order chronologically
     
-    p1 = min(ind_dat$period) # first capture period
-    index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
-    capture_history[t,index] = 1  #mark first capture with 1 ("home")      
-    
-    #mark sex in Male, Female, or Unidentified columsn of Covariates
+    #mark sex in Male, Female, or Unidentified columns of Covariates
     sex = ind_dat[1,]$sex 
     if (sex == "M") {covariates[t,1] = 1 } 
     else if (sex == "F") {covariates[t,2] = 1 }
-    else {covariates[t,3] = 1 }
+    else {
+      covariates[t,3] = 1 }
     
-    # record standard deviations away from species average mass as another covariate
+    # record standard deviations away from species average mass as another Covariate
     covariates[t,4] = sd_avg_mass(ind_dat, mean_mass, sd_mass) 
+    
+    p1 = min(ind_dat$period) # record first capture period for the individual
+    index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
+    capture_history[t,index] = 1  #mark first capture with 1 ("home")      
     
     for (i in 1:nrow(ind_dat)){ #record capture history data
       
       if (i+1 <= nrow(ind_dat)){
         meters = sqrt((ind_dat[i,8]-ind_dat[i+1,8])**2 + (ind_dat[i,7]-ind_dat[i+1,7])**2)
-        pnext = ind_dat[i+1,]$period #next capture period, where the distance will be recorded in the matrix
+        pnext = ind_dat[i+1,]$period #next capture period, where the distance will be recorded in the matrix (first capture period is always marked as "home")
         
-        if (meters <= breakpoint) {
-          dist = 1 #captured close to "home"
-        }
+        if (meters <= breakpoint) {dist = 1} #captured close to "home"
         
-        else if (meters > breakpoint) {
-          dist = 2 #captured far from "home"
-        }
+        else if (meters > breakpoint) {dist = 2} #captured far from "home"
 
-        if (ind_dat[i+1,]$plot %in% exclosures){ #was it captured on an exclosure?
-          covariates[t,group] = covariates[t,group]*-1
-        }
+        #was it captured on an exclosure? If yes, remove from study at this point.
+        if (ind_dat[i+1,]$plot %in% exclosures) {
+          covariates[t,group] = covariates[t,group] * -1 }
         
         index = match(pnext, prd)
         capture_history[t,index] = dist #mark subsequent captures 
