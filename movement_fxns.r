@@ -174,7 +174,7 @@ sd_avg_mass = function (dat, ind_dat) {
   # finds the average of all the masses for all the captures in the species data, as a baseline. 
   ## Then takes the average mass for an individual and calculates the proportional difference away from that avg. species
   ## level mass.
-  spp_mean = mean(dat$wgt, na.rm = TRUE) #include ALL indivs (should I NOT INCLUDE juveniles and pregnant indivs?)
+  spp_mean = mean(dat$wgt, na.rm = TRUE) #include ALL indivs (should I NOT INCLUDE juveniles and pregnant indivs?) #FIXME: exclude J and P
   spp_sd = sd(dat$wgt, na.rm = TRUE)
   ind_mean = mean(ind_dat$wgt, na.rm = TRUE)
   
@@ -193,68 +193,87 @@ sd_avg_mass = function (dat, ind_dat) {
 }
 
 
+feeding_guild = function(speciesname) {
+  # grab the species name and decide what feeding guild it is in, based on the lit
+  
+  # heteromyidae granivores == 1
+  if (speciesname %in% list("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI")){guild = 1}
+  # cricetidae granivores == 2
+  else if (speciesname %in% list("PE", "PM", "PL", "RM", "RF", "RO", "BA")){guild = 2}
+  # folivores == 3
+  else if (speciesname %in% list("SH", "SF", "SO", "NAO")){guild = 3 }  
+  # insectivores == 4
+  else {guild = 4}
+  
+  return(guild)
+}
+
+
+enumerate_species = function(speciesname) {
+  #each species needs to be replaced with a number instead of a name,
+  #for input into Program MARK later
+  
+  if (speciesname == "DO") {speciesnum = 1}
+  else if (speciesname == "DM"){speciesnum = 2}
+  else if (speciesname == "DS"){speciesnum = 3}
+  else if (speciesname == "PB"){speciesnum = 4}
+  else if (speciesname == "PP"){speciesnum = 5}
+  else if (speciesname == "PF"){speciesnum = 6}
+  else if (speciesname == "PE"){speciesnum = 7}
+  else if (speciesname == "PM"){speciesnum = 8}
+  else if (speciesname == "PL"){speciesnum = 9}
+  else if (speciesname == "PH"){speciesnum = 10}
+  else if (speciesname == "PI"){speciesnum = 11}
+  else if (speciesname == "RM"){speciesnum = 12}
+  else if (speciesname == "RF"){speciesnum = 13}
+  else if (speciesname == "RO"){speciesnum = 14}
+  else if (speciesname == "BA"){speciesnum = 15}
+  else if (speciesname == "SH"){speciesnum = 16}
+  else if (speciesname == "SF"){speciesnum = 17}
+  else if (speciesname == "SO"){speciesnum = 18}
+  else if (speciesname == "NAO"){speciesnum = 19}
+  else if (speciesname == "OT"){speciesnum = 20}
+  else if (speciesname == "OL"){speciesnum = 21}
+  
+  return(speciesnum)
+}
+
+temporal_status = function (speciesname){
+  #assigns temporal status to each species based on its across year and within year presence thru span of the entire 30+ year dataset
+  #core = 1, intermediate = 2, transient = 3 
+  #FIXME: For now, coding as Core vs. Not Core - decide if this is correct later
+  
+  if (speciesname %in% list("DO", "DM", "PB", "PP", "OT")) {status = 1}
+  else if (speciesname %in% list("PE", "RM", "NAO")) {status = 2}
+  else if (speciesname %in% list("PF", "PM", "SH", "SF", "OL")) {status = 2}
+  
+  return(status)
+}
+
 noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ### Create a set of MARK capture histories by home vs away from home
   # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
   ## 1 (stayed home), and 2 (away from home). 
   ## Home is determined using the mean + 1 sd of the logged data.
   # guild (1 = heteromyid granivore, 2 = cricetid granivore, 3 = folivore, 4 = carnivore)
-  # species (1 = DO, 2 = DM, 3 = PB, 4 = PP, 5 = PF, 6 = PE, 7 = PM, 8 = RM, 9 = SH, 10 = SF, 11 = NAO, 12 = OT, 13 = OL)
-  # status (1 = core, 2 = intermediate, 3 = occasional)
+  # species (assigned using function enumerate_species)
+  # status (1 = core, 2 = intermediate, 3 = transient)
   
   tags = unique(dat$tag)
   capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
   covariates = matrix(0, nrow = length(tags), ncol = 7)
     colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "guild", "species", "status")
-    group = c(1,2,3) #represent the "group"
-  
+    group = c(1,2,3) #represent the "group" (core, transient, intermediate)
+
+  # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
   # record guild in col 5 of covariates
-  # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
-  if (dat[1,]$species %in% list("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI")){ 
-    covariates[, 5] = 1 }
-  else if (dat[1,]$species %in% list("PE", "PM", "PL", "RM", "RF", "RO", "BA")){
-    covariates[, 5] = 2}
-  else if (dat[1,]$species %in% list("SH", "SF", "SO", "NAO")){
-    covariates[,5] = 3 }  
-  else {
-    covariates[,5] = 4}
-  
-  # record species in col 6 of covariates    #TODO: ENUMERATE ALL SPECIES (MAKE SEPARATE FXN?)
-  if (dat[1,]$species == "DO") {
-    covariates[,6] = 1}
-  else if (dat[1,]$species == "DM"){
-    covariates[,6] = 2}
-  else if (dat[1,]$species == "PB"){
-    covariates[,6] = 3}
-  else if (dat[1,]$species == "PP"){
-    covariates[,6] = 4}
-  else if (dat[1,]$species == "PF"){
-    covariates[,6] = 5}
-  else if (dat[1,]$species == "PE"){
-    covariates[,6] = 6}
-  else if (dat[1,]$species == "PM"){
-    covariates[,6] = 7}
-  else if (dat[1,]$species == "RM"){
-    covariates[,6] = 8}
-  else if (dat[1,]$species == "SH"){
-    covariates[,6] = 9}
-  else if (dat[1,]$species == "SF"){
-    covariates[,6] = 10}
-  else if (dat[1,]$species == "NAO"){
-    covariates[,6] = 11}
-  else if (dat[1,]$species == "OT"){
-    covariates[,6] = 12}
-  else if (dat[1,]$species == "OL"){
-    covariates[,6] = 13}
-  
-  # record hypothesized status in col 7 of covariates   #TODO: RECATEGORIZE SPECIES INTO CORE, TRANSIENT, & INTERMEDIATE STATUS BASED ON NEW FIGURE
-  # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
-  if (dat[1,]$species %in% list("DO", "DM", "PB", "PP", "OT")){ 
-    covariates[, 7] = 1 }
-  else if (dat[1,]$species %in% list("PE", "RM", "NAO")){
-    covariates[,7] = 2}
-  else if (dat[1,]$species %in% list("PF", "PM", "SH", "SF", "OL")) {
-    covariates[,7] = 3}
+  covariates[,5] = feeding_guild(dat[1,]$species)
+ 
+  # record species in col 6 of covariates    
+  covariates[,6] = enumerate_species(dat[1,]$species)
+ 
+  # record hypothesized status in col 7 of covariates   
+  covariates[,7] = temporal_status(dat[1,]$species)
 
   #loop through each tag to get individual-level data
   for (t in 1:length(tags)) {

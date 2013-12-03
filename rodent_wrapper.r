@@ -146,17 +146,19 @@ corehet = c(DMmeters, DOmeters, PBmeters, PPmeters)
 #------------------------------
 #periods = c(261:380) #2000-2009
 periods = c(130:380) #1989-2009
-exclosures = c(5, 7, 10, 16, 23, 24)
+#exclosures = c(5, 7, 10, 16, 23, 24)
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
 
 for (i in 1:length(spplist)){
-  #subset species data
+  #subset species data, for each species in turn
   spdata = subset(all2, species == spplist[i])
   
+  #the first species begins the new data matrix for MARK
   if (i == 1) {
   MARK = noplacelikehome(spdata, periods, krat_excl, corehet_brkpt)
   }
   
+  #all subsequent species are appended onto the end of the existing MARK data matrix
   else {
   nextMARK = noplacelikehome(spdata, periods, krat_excl, corehet_brkpt)
   MARK = rbind(MARK, nextMARK)
@@ -169,7 +171,7 @@ write.table(MARK, file = "mark_datafiles//all_mark.inp", row.names = F, col.name
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
-
+#FIXME: These plot labels are not necessarily correct anymore
 #----------------------------------------- plot abundance vs. years, ala core v. transient literature
 plot(conyears, maxabuns, pch = 19, xlab = "Persistence (proportion of years present)",
      ylab = "Maximum abundance in any year", bty = "n")
