@@ -50,6 +50,9 @@ totalyears = c(1989:2009) #will need to be adjusted based on time frame want to 
 controlplots = c(1,2,4,8,9,11,12,14,17,22)
 months = count_months(all2, totalyears)
 
+persistence = data.frame(species = NA, propyrs = NA, propmos = NA)
+  outcount = 1
+
 for (i in 1:length(spplist)){
   #subset species data
   spdata = subset(all2, species == spplist[i])
@@ -67,7 +70,7 @@ for (i in 1:length(spplist)){
     # mean abundance within all years 
     avgabun = allyrs_abun(spdata, totalyears)
       assign(paste0(spplist[i], 'avgabun'), avgabun)
-    # average number of months they were seen in during years in which they were present on CONTROLS
+    # average proportion of months they were seen in during years in which they were present on CONTROLS
     conavgmos = mean_win_yr_occ(subset(spdata, plot %in% controlplots), totalyears, months)
       assign(paste0(spplist[i], 'conavgmos'), conavgmos)
    # number of unique individuals in each year on control plots only
@@ -79,6 +82,9 @@ for (i in 1:length(spplist)){
     # max number of unique individuals on control plots only
     maxconabun = max(conabun)
       assign(paste0(spplist[i], 'maxconabun'), maxconabun)
+  
+  persistence[outcount,] = c(spplist[i], round(conpropyrs,4), round(conavgmos,4))
+  outcount = outcount + 1
   
   #subset females for each species
   spdataF = subset(spdata, sex == "F")
@@ -94,7 +100,13 @@ for (i in 1:length(spplist)){
       assign(paste0(spplist[i], 'irep'), irep)
 }
 
-#FIXME: There has got to be a cleaner way to concatenate all this data!
+#Identify Core species based on results
+corespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos >= 0.666),1]
+intermediatespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos < 0.666),1]
+transientspecies = persistence[which(persistence$propyrs < 0.666),1]
+
+
+#FIXME: There has got to be a cleaner way to concatenate all this data! cbind in the loop? Name using paste/assign?
 control_abuns = ls(pattern = "*conabun")
 abuns = cbind(BAconabun, DMconabun, DOconabun, DSconabun, NAOconabun, OLconabun, OTconabun, 
               PBconabun, PEconabun, PFconabun, PHconabun, PIconabun, PLconabun, PMconabun, PPconabun,
@@ -111,6 +123,8 @@ conyears = cbind(BAconyr, DMconyr, DOconyr, DSconyr, NAOconyr, OLconyr, OTconyr,
 conmos = cbind(BAconavgmos, DMconavgmos, DOconavgmos, DSconavgmos, NAOconavgmos, OLconavgmos, OTconavgmos, 
                PBconavgmos, PEconavgmos, PFconavgmos, PHconavgmos, PIconavgmos, PLconavgmos, PMconavgmos, PPconavgmos, 
                RFconavgmos, RMconavgmos, ROconavgmos, SFconavgmos, SHconavgmos, SOconavgmos)
+
+#ADD CODE SNIPPET TO IDENTIFY CORE, INTERMEDIATE, AND TRANSIENT SPECIES BASED ON THESE RESULTS (NO "EYEBALLING" LATER)
 
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
