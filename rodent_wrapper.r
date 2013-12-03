@@ -24,27 +24,23 @@ all$tag = as.character(all$tag)
 all$species = as.character(all$species)
 all$sex = as.character(all$sex)
 
-#subset data for 10 year of analysis
-all2 = subset(all, yr > 1999)
+#subset data for years of analysis
+all2 = subset(all, yr > 1988)
 #subset data where species are known (e.g., no "unidentified rodents" or genus-only)
 all2 = subset(all2, species!="DX" & species!="UR" & species!="RX" & species!="SX" & species!="PX" & species != "OX")
-all = subset(all, species!="DX" & species!="UR" & species!="RX" & species!="SX" & species!="PX" & species != "OX")
 
 # give untagged individuals a unique 7-number code
 all2 = id_unknowns(all2, 16)
-all = id_unknowns(all, 16)
 
 # check for individuals with same tag, but captured over long timespan (may be able to separate them) 
 # necessary if using ALL data (ear and toe tags)
 # returns the dataset with new IDs for those that can easily be sorted out based on sex and year
-tags = unique(all$tag)
-dups = is_duplicate_tag(all, tags, 10, 9, 16) #check to see if can separate tags based on 
+tags = unique(all2$tag)
+dups = is_duplicate_tag(all2, tags, 10, 9, 16) #check to see if can separate tags based on 
 
 # get rid of 'bad data'; deletes data that is not a pit tag, where sex is inconsistent or where species is inconsistent. 
 all2 = subsetDat(all2)
-all3 = subsetDat(all)
-all3 = subset(all, yr > 1988)
-  all2=all3
+
 
 #---------------------------------------------------------------------------------
 #          calculate life-history details - temporal persistence, reproduction
@@ -172,7 +168,6 @@ write.table(MARK, file = "mark_datafiles//all_mark.inp", row.names = F, col.name
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
-#FIXME: These plot labels are not necessarily correct anymore
 #----------------------------------------- plot abundance vs. years, ala core v. transient literature
 plot(conyears, maxabuns, pch = 19, xlab = "Persistence (proportion of years present)",
      ylab = "Maximum abundance in any year", bty = "n")
