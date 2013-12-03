@@ -82,6 +82,7 @@ for (i in 1:length(spplist)){
   yearly_control_abundance = cbind(yearly_control_abundance, conabun)
   outcount = outcount + 1
   
+  #FIXME: concatenate reproductive data into several dataframes - don't rely on assign and ls to find them.
   #subset females for each species
   spdataF = subset(spdata, sex == "F")
   
