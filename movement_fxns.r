@@ -210,16 +210,16 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   
   # record guild in col 5 of covariates
   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
-  if (dat[1,]$species %in% list("DO", "DM", "PB", "PP", "PF")){ 
+  if (dat[1,]$species %in% list("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI")){ 
     covariates[, 5] = 1 }
-  else if (dat[1,]$species %in% list("PE", "PM", "RM")){
+  else if (dat[1,]$species %in% list("PE", "PM", "PL", "RM", "RF", "RO", "BA")){
     covariates[, 5] = 2}
-  else if (dat[1,]$species %in% list("SH", "SF", "NAO")){
+  else if (dat[1,]$species %in% list("SH", "SF", "SO", "NAO")){
     covariates[,5] = 3 }  
   else {
     covariates[,5] = 4}
   
-  # record species in col 6 of covariates
+  # record species in col 6 of covariates    #TODO: ENUMERATE ALL SPECIES (MAKE SEPARATE FXN?)
   if (dat[1,]$species == "DO") {
     covariates[,6] = 1}
   else if (dat[1,]$species == "DM"){
@@ -247,7 +247,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   else if (dat[1,]$species == "OL"){
     covariates[,6] = 13}
   
-  # record hypothesized status in col 7 of covariates
+  # record hypothesized status in col 7 of covariates   #TODO: RECATEGORIZE SPECIES INTO CORE, TRANSIENT, & INTERMEDIATE STATUS BASED ON NEW FIGURE
   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
   if (dat[1,]$species %in% list("DO", "DM", "PB", "PP", "OT")){ 
     covariates[, 7] = 1 }
@@ -270,9 +270,9 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
       covariates[t,1] = 1 } 
     else if (sex == "F") {
       covariates[t,2] = 1 }
-    else { 
+    else { #unidentified sex or conflicted sex
       covariates[t,3] = 1 }
-    
+                                        #TODO: check that this fxn works and makes sense
     sd_mass = sd_avg_mass(dat, ind_dat) # record standard deviations away from species average mass
     covariates[t,4] = sd_mass 
     
@@ -336,6 +336,8 @@ mean_win_yr_occ = function (data){
 
 
 mean_win_yr_alldat = function (data){
+  #TODO: uniq_mos will not be correct now that we have changed the number of years sampled
+    # add a fxn that will concatenate the number of unique mos sampled in a given year
   #finds the mean within year occupancy for each month for a given species, returns a single value
   uniq_mos = c(12, 10, 12, 11, 10, 12,  9, 11, 10, 11, 12, 11, 12,
                12, 10, 12, 11, 10, 12, 10, 11, 10, 10, 11, 11, 10,
@@ -482,10 +484,10 @@ indiv_repro = function (femaledata){
 }
 
 
-allyrs_abun = function(sp_data){
+allyrs_abun = function(sp_data, years){  #TODO: fix inputs so that you can input a range of years to use, instead of assuming fixed range
   #function to find abundance in years in which the species is present. input the species dataframe, For each
   # year the species occurs in, calculates the abundance (total number of unique individuals). Returns a vector
-  years = c(2000:2009)
+  years = years #TODO: Make sure inputs in rodent_wrapper.r are correct
   abun = c()
   
   for (y in 1:length(years)){
