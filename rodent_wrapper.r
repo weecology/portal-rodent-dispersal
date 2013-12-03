@@ -55,6 +55,7 @@ months = count_months(all2, totalyears)
 
 persistence = data.frame(species=NA, propyrs=NA, propmos=NA, meanabun=NA, maxabun=NA)
   outcount = 1
+yearly_control_abundance = data.frame(year = totalyears)
 
 for (i in 1:length(spplist)){
   #subset species data
@@ -78,6 +79,7 @@ for (i in 1:length(spplist)){
   
   #record persistence and abundance data from control plots
   persistence[outcount,] = c(spplist[i], round(conpropyrs,4), round(conavgmos,4), round(meanconabun,4), maxconabun)
+  yearly_control_abundance = cbind(yearly_control_abundance, conabun)
   outcount = outcount + 1
   
   #subset females for each species
@@ -94,17 +96,13 @@ for (i in 1:length(spplist)){
       assign(paste0(spplist[i], 'irep'), irep)
 }
 
+#add species names to the dataframe of abundance vectors
+names(yearly_control_abundance) = c("year", spplist)
+
 #Identify Core species based on results
 corespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos >= 0.666),1]
 intermediatespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos < 0.666),1]
 transientspecies = persistence[which(persistence$propyrs < 0.666),1]
-
-
-#FIXME: There has got to be a cleaner way to concatenate all this data! cbind in the loop? Name using paste/assign?
-control_abuns = ls(pattern = "*conabun")
-abuns = cbind(BAconabun, DMconabun, DOconabun, DSconabun, NAOconabun, OLconabun, OTconabun, 
-              PBconabun, PEconabun, PFconabun, PHconabun, PIconabun, PLconabun, PMconabun, PPconabun,
-              RFconabun, RMconabun, ROconabun, SFconabun, SHconabun, SOconabun)
 
 
 #---------------------------------------------------------------------------------
