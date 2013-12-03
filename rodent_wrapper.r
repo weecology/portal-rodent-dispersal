@@ -144,7 +144,7 @@ corehet = c(DMmeters, DOmeters, PBmeters, PPmeters)
 
 # Get MARK capture histories
 #------------------------------
-periods = c(261:380) #2000-2009
+#periods = c(261:380) #2000-2009
 periods = c(130:380) #1989-2009
 exclosures = c(5, 7, 10, 16, 23, 24)
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
