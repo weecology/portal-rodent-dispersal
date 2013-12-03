@@ -78,12 +78,12 @@ for (i in 1:length(spplist)){
     avgabun = allyrs_abun(spdata, totalyears)
       assign(paste0(spplist[i], 'avgabun'), avgabun)
     # average number of months they were seen in during years in which they were present on CONTROLS
-    conavgmos = mean_win_yr_occ(subset(spdata, plot %in% controlplots))
+    conavgmos = mean_win_yr_occ(subset(spdata, plot %in% controlplots), totalyears, months)
       assign(paste0(spplist[i], 'conavgmos'), conavgmos)
    # number of unique individuals in each year on control plots only
-    conabun = allyrs_abun(subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22)))
+    conabun = allyrs_abun(subset(spdata, plot %in% controlplots), totalyears)
       assign(paste0(spplist[i], 'conabun'), conabun)
-    # mean number of unique individuals on control plots only
+    # mean number of unique individuals on control plots only, includes ZEROES
     meanconabun = mean(conabun)
       assign(paste0(spplist[i],'meanconabun'), meanconabun)
     # max number of unique individuals on control plots only
