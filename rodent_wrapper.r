@@ -47,14 +47,8 @@ all3 = subset(all, yr > 1988)
   all2=all3
 
 #---------------------------------------------------------------------------------
-#          calculate life-history details - reproduction, temporal persistence
+#          calculate life-history details - temporal persistence, reproduction
 #---------------------------------------------------------------------------------
-
-spplist = c("DO", "DM", "DS", "PP", "PB", "PF","PI", 
-            "PE", "PM", "PL", "RM", "RF","RO", "BA",
-            "NAO", "SH", "SF",
-            "OT", "OL")
-
 spplist = unique(all2$species)
 totalyears = c(1989:2009) #will need to be adjusted based on time frame want to use
 controlplots = c(1,2,4,8,9,11,12,14,17,22)
@@ -104,6 +98,7 @@ for (i in 1:length(spplist)){
       assign(paste0(spplist[i], 'irep'), irep)
 }
 
+#FIXME: There has got to be a cleaner way to concatenate all this data!
 control_abuns = ls(pattern = "*conabun")
 abuns = cbind(BAconabun, DMconabun, DOconabun, DSconabun, NAOconabun, OLconabun, OTconabun, 
               PBconabun, PEconabun, PFconabun, PHconabun, PIconabun, PLconabun, PMconabun, PPconabun,
