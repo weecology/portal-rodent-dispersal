@@ -390,7 +390,7 @@ mean_mo_repro = function (femaledata){
   #returns the proportion of females that are reproductive (nipples enlarged - E - red - R- or both - B - or pregnant - P-)
   #on average in a given month across all the years. Only looks at data during years and months in which the species is present. 
   mos = c(1:12)
-  years = sort(unique(femaledata$yr)) #only look at data during years in which the species is present
+  years = sort(unique(femaledata$yr)) #only look at data during years in which females of the species are present
 
   avg_r_mo = c()
   
@@ -398,8 +398,7 @@ mean_mo_repro = function (femaledata){
     mo_repros = c()
     
     for (y in 1:length(years)){
-      tmp = subset(femaledata, yr == years[y])
-      tmp = subset(tmp, mo == mos[m])
+      tmp = subset(femaledata, yr == years[y] & mo == mos[m])
       
       if (nrow(tmp) > 0){
         num_females = nrow(tmp)
@@ -408,7 +407,7 @@ mean_mo_repro = function (femaledata){
         mo_repros = append(mo_repros, prop_repro)
       }
       else {
-        mo_repros = append(mo_repros, NA)
+        mo_repros = append(mo_repros, NA) 
       }
     }
     avg_mo = round(mean(mo_repros, na.rm = T),4)
@@ -429,10 +428,8 @@ mo_repro = function (femaledata){
   r_mo_df =data.frame("year" = 1, "month" = 1, "proprepro" = 1, "numfemales" = 1, "species" = 1)
   
   for (m in 1:length(mos)){
-      tmp = subset(femaledata, mo == mos[m])
-      
     for (y in 1:length(years)){
-      tmp = subset(tmp, yr == years[y])
+      tmp = subset(femaledata, yr == years[y] & mo == mos[m])
       
       if (nrow(tmp) > 0){
         num_females = nrow(tmp)
@@ -492,7 +489,7 @@ indiv_repro = function (femaledata){
     
     for (y in 1:length(years)){
       tmp = subset(indiv, yr == years[y])
-      repro = subset(tmp, nipples == "E" | nipples == "B" | nipples == "R" | pregnant == "P")
+      repro = subset(tmp, nipples == "E" |  nipples == "B" | nipples == "R" | pregnant == "P") #count as reproductive if pregnant or nursing, NOT if swollen vagina
       
       if (nrow(repro) > 0){
         numreprod = count_repro(repro)

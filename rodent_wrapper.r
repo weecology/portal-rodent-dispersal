@@ -94,7 +94,7 @@ for (i in 1:length(spplist)){
   spdataF = subset(spdata, sex == "F")
   
     #average proportion of reproductive females by month across all years
-    reprd = mean_mo_repro(spdataF) #vector with 12 items
+    reprd = mean_mo_repro(spdataF) #vector with 12 items (one for each month)
       assign(paste0(spplist[i], 'reprd'), reprd)
     # proportion of reproductive females by month and year
     reprdyr = mo_repro(spdataF) #matrix with 120 x 5
