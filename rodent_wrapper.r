@@ -75,7 +75,7 @@ for (i in 1:length(spplist)){
     avgmos = mean_win_yr_occ(spdata, totalyears, months)
       assign(paste0(spplist[i], 'avgmos'), avgmos)
     # mean abundance within all years 
-    avgabun = allyrs_abun(spdata)
+    avgabun = allyrs_abun(spdata, totalyears)
       assign(paste0(spplist[i], 'avgabun'), avgabun)
     # average number of months they were seen in during years in which they were present on CONTROLS
     conavgmos = mean_win_yr_occ(subset(spdata, plot %in% controlplots))

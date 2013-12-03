@@ -510,18 +510,19 @@ indiv_repro = function (femaledata){
 }
 
 
-allyrs_abun = function(sp_data, years){  #TODO: fix inputs so that you can input a range of years to use, instead of assuming fixed range
-  #function to find abundance in years in which the species is present. input the species dataframe, For each
-  # year the species occurs in, calculates the abundance (total number of unique individuals). Returns a vector
-  years = years #TODO: Make sure inputs in rodent_wrapper.r are correct
+allyrs_abun = function(spdata, years){
+  #function to find abundance for a species across the timeseries. 
+  # input the species dataframe, calculates total number of unique individuals. Returns a vector.
+ 
   abun = c()
   
   for (y in 1:length(years)){
-    dat = subset(sp_data, sp_data[,1] == years[y])
+    dat = subset(spdata, spdata[,1] == years[y])
     if (length(dat) > 0) {
-      indivs = sort(unique(dat$tag))
-      abun = append(abun, length(indivs))
+      indivs = sort(unique(dat$tag))  #grab unique individuals by tag ID
+      abun = append(abun, length(indivs)) #count the number of unique tags
     }
+    else { abun = append(abun, 0)}
   }
   return (abun)
 }
