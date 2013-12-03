@@ -146,21 +146,24 @@ corehet = c(DMmeters, DOmeters, PBmeters, PPmeters)
 #------------------------------
 #periods = c(261:380) #2000-2009
 periods = c(130:380) #1989-2009
-#exclosures = c(5, 7, 10, 16, 23, 24) #TODO: check that the correct exclosres are being used for each species!
+all_excl = c(5, 7, 10, 16, 23, 24) 
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
 
 for (i in 1:length(spplist)){
   #subset species data, for each species in turn
   spdata = subset(all2, species == spplist[i])
   
+  if (spplist[i] %in% list("DM", "DS", "DO")) { exclosures = krat_excl} 
+  else { exclosures = all_excl} #TOOD: OK unless good reason to only use control plots
+  
   #the first species begins the new data matrix for MARK
   if (i == 1) {
-  MARK = noplacelikehome(spdata, periods, krat_excl, corehet_brkpt)
+  MARK = noplacelikehome(spdata, periods, exclosures, corehet_brkpt)
   }
   
   #all subsequent species are appended onto the end of the existing MARK data matrix
   else {
-  nextMARK = noplacelikehome(spdata, periods, krat_excl, corehet_brkpt)
+  nextMARK = noplacelikehome(spdata, periods, exclosures, corehet_brkpt)
   MARK = rbind(MARK, nextMARK)
   }
 }
