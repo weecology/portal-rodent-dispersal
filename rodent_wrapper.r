@@ -55,27 +55,30 @@ spplist = c("DO", "DM", "DS", "PP", "PB", "PF","PI",
             "NAO", "SH", "SF",
             "OT", "OL")
 
-spplist = unique(all3$species)
+spplist = unique(all2$species)
+totalyears = c(1989:2009) #will need to be adjusted based on time frame want to use
+controlplots = c(1,2,4,8,9,11,12,14,17,22)
+months = count_months(all2, totalyears)
 
 for (i in 1:length(spplist)){
   #subset species data
   spdata = subset(all2, species == spplist[i])
   
     # proportion of years they were seen in
-    propyrs = length(unique(spdata$yr))/10
+    propyrs = length(unique(spdata$yr))/length(totalyears)
       assign(paste0(spplist[i], 'yr'), propyrs)
     # proportion of years they were seen in CONTROL plots
-    conspdata = subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22))
-    conpropyrs = length(unique(conspdata$yr))/10
+    conspdata = subset(spdata, plot %in% controlplots)
+    conpropyrs = length(unique(conspdata$yr))/length(totalyears)
     assign(paste0(spplist[i], 'conyr'), conpropyrs)
     # average number of months they were seen in during years in which they were present
-    avgmos = mean_win_yr_occ(spdata)
+    avgmos = mean_win_yr_occ(spdata, totalyears, months)
       assign(paste0(spplist[i], 'avgmos'), avgmos)
     # mean abundance within all years 
     avgabun = allyrs_abun(spdata)
       assign(paste0(spplist[i], 'avgabun'), avgabun)
     # average number of months they were seen in during years in which they were present on CONTROLS
-    conavgmos = mean_win_yr_occ(subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22)))
+    conavgmos = mean_win_yr_occ(subset(spdata, plot %in% controlplots))
       assign(paste0(spplist[i], 'conavgmos'), conavgmos)
    # number of unique individuals in each year on control plots only
     conabun = allyrs_abun(subset(spdata, plot %in% c(1,2,4,8,9,11,12,14,17,22)))

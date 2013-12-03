@@ -331,12 +331,20 @@ concat_ch = function (ch_matrix, cov_matrix){
   return (mark_df)
 }
 
+count_months = function (data, years) {
+  #counts the number of unique months sampled in each year. Returns an ordered list (should be same length as number of years)
+  months = as.numeric()
+  
+  for (y in 1:length(years)){
+    yrdata = data[which(data$yr == years[y]),]
+    num_mos = length(unique(yrdata$mo))
+    months = append(months, num_mos)
+  }
+  return(months)
+}
 
-mean_win_yr_occ = function (data){
+mean_win_yr_occ = function (data, years, uniq_mos){
   #finds the mean within year occupancy for each month for a given species, returns a single value
-  uniq_mos = c(10, 8, 10, 10, 8, 9, 9, 10, 12, 12) #not all months were trapped in all years
-  mos = c(1:12)
-  years = c(2000:2009)
   
   proportion_mos = c()
   
@@ -347,9 +355,9 @@ mean_win_yr_occ = function (data){
       proportion_mos = append(proportion_mos, m)
     }
   }
-    months = round(mean(proportion_mos),4)
+    mean_mos = round(mean(proportion_mos),4)
     
-  return (months)
+  return (mean_mos)
 }
 
 
