@@ -24,6 +24,9 @@ all$tag = as.character(all$tag)
 all$species = as.character(all$species)
 all$sex = as.character(all$sex)
 
+allmonths = count_months(all, c(1980:2009))
+
+
 #subset data for years of analysis
 all2 = subset(all, yr > 1988)
 #subset data where species are known (e.g., no "unidentified rodents" or genus-only)
@@ -57,15 +60,9 @@ for (i in 1:length(spplist)){
   #subset species data
   spdata = subset(all2, species == spplist[i])
   
-    # proportion of years they were seen in
-    propyrs = length(unique(spdata$yr))/length(totalyears)
-      assign(paste0(spplist[i], 'yr'), propyrs)
     # proportion of years they were seen in CONTROL plots
     conspdata = subset(spdata, plot %in% controlplots)
     conpropyrs = length(unique(conspdata$yr))/length(totalyears)
-    # average number of months they were seen in during years in which they were present, on all plots
-    avgmos = mean_win_yr_occ(spdata, totalyears, months)
-      assign(paste0(spplist[i], 'avgmos'), avgmos)
     # mean abundance within all years, on all plots
     avgabun = allyrs_abun(spdata, totalyears)
       assign(paste0(spplist[i], 'avgabun'), avgabun)

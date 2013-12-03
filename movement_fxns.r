@@ -361,15 +361,13 @@ mean_win_yr_occ = function (data, years, uniq_mos){
 }
 
 
-mean_win_yr_alldat = function (data){
-  #TODO: uniq_mos will not be correct now that we have changed the number of years sampled
-    # add a fxn that will concatenate the number of unique mos sampled in a given year
+mean_win_yr_alldat = function (data, years, years, uniq_mos){
   #finds the mean within year occupancy for each month for a given species, returns a single value
-  uniq_mos = c(12, 10, 12, 11, 10, 12,  9, 11, 10, 11, 12, 11, 12,
-               12, 10, 12, 11, 10, 12, 10, 11, 10, 10, 11, 11, 10,
-               12, 11, 11, 12, 12, 12, 8, 9, 12) #not all months were trapped in all years
+  #uniq_mos is the number of months sampled in a given year (not all mos sampled in all years)
+  #years should be the number of years that you are interested in
+  #THIS FXN NO LONGER OCCURS IN RODENT_WRAPPER - DON'T NEED?
+  
   mos = c(1:12)
-  years = c(1978:2012)
   
   proportion_mos = c()
   
