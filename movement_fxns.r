@@ -170,12 +170,10 @@ distance_moved = function (data, tags) {
 }
 
 
-sd_avg_mass = function (dat, ind_dat) {
-  # finds the average of all the masses for all the captures in the species data, as a baseline. 
-  ## Then takes the average mass for an individual and calculates the proportional difference away from that avg. species
-  ## level mass.
-  spp_mean = mean(dat$wgt, na.rm = TRUE) #include ALL indivs (should I NOT INCLUDE juveniles and pregnant indivs?) #FIXME: exclude J and P
-  spp_sd = sd(dat$wgt, na.rm = TRUE)
+sd_avg_mass = function (ind_dat, spp_mean, spp_sd) {
+  # Then takes the average mass for an individual (across all recaptures) 
+  # and calculates the proportional difference away from that avg. species level mass.
+
   ind_mean = mean(ind_dat$wgt, na.rm = TRUE)
   
   if (is.na(ind_mean)) {
@@ -197,11 +195,11 @@ feeding_guild = function(speciesname) {
   # grab the species name and decide what feeding guild it is in, based on the lit
   
   # heteromyidae granivores == 1
-  if (speciesname %in% list("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI")){guild = 1}
+  if (speciesname %in% list("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI")) {guild = 1}
   # cricetidae granivores == 2
-  else if (speciesname %in% list("PE", "PM", "PL", "RM", "RF", "RO", "BA")){guild = 2}
+  else if (speciesname %in% list("PE", "PM", "PL", "RM", "RF", "RO", "BA")) {guild = 2}
   # folivores == 3
-  else if (speciesname %in% list("SH", "SF", "SO", "NAO")){guild = 3 }  
+  else if (speciesname %in% list("SH", "SF", "SO", "NAO")) {guild = 3 }  
   # insectivores == 4
   else {guild = 4}
   
@@ -214,26 +212,26 @@ enumerate_species = function(speciesname) {
   #for input into Program MARK later
   
   if (speciesname == "DO") {speciesnum = 1}
-  else if (speciesname == "DM"){speciesnum = 2}
-  else if (speciesname == "DS"){speciesnum = 3}
-  else if (speciesname == "PB"){speciesnum = 4}
-  else if (speciesname == "PP"){speciesnum = 5}
-  else if (speciesname == "PF"){speciesnum = 6}
-  else if (speciesname == "PE"){speciesnum = 7}
-  else if (speciesname == "PM"){speciesnum = 8}
-  else if (speciesname == "PL"){speciesnum = 9}
-  else if (speciesname == "PH"){speciesnum = 10}
-  else if (speciesname == "PI"){speciesnum = 11}
-  else if (speciesname == "RM"){speciesnum = 12}
-  else if (speciesname == "RF"){speciesnum = 13}
-  else if (speciesname == "RO"){speciesnum = 14}
-  else if (speciesname == "BA"){speciesnum = 15}
-  else if (speciesname == "SH"){speciesnum = 16}
-  else if (speciesname == "SF"){speciesnum = 17}
-  else if (speciesname == "SO"){speciesnum = 18}
-  else if (speciesname == "NAO"){speciesnum = 19}
-  else if (speciesname == "OT"){speciesnum = 20}
-  else if (speciesname == "OL"){speciesnum = 21}
+  else if (speciesname == "DM") {speciesnum = 2}
+  else if (speciesname == "DS") {speciesnum = 3}
+  else if (speciesname == "PB") {speciesnum = 4}
+  else if (speciesname == "PP") {speciesnum = 5}
+  else if (speciesname == "PF") {speciesnum = 6}
+  else if (speciesname == "PE") {speciesnum = 7}
+  else if (speciesname == "PM") {speciesnum = 8}
+  else if (speciesname == "PL") {speciesnum = 9}
+  else if (speciesname == "PH") {speciesnum = 10}
+  else if (speciesname == "PI") {speciesnum = 11}
+  else if (speciesname == "RM") {speciesnum = 12}
+  else if (speciesname == "RF") {speciesnum = 13}
+  else if (speciesname == "RO") {speciesnum = 14}
+  else if (speciesname == "BA") {speciesnum = 15}
+  else if (speciesname == "SH") {speciesnum = 16}
+  else if (speciesname == "SF") {speciesnum = 17}
+  else if (speciesname == "SO") {speciesnum = 18}
+  else if (speciesname == "NAO") {speciesnum = 19}
+  else if (speciesname == "OT") {speciesnum = 20}
+  else if (speciesname == "OL") {speciesnum = 21}
   
   return(speciesnum)
 }
@@ -265,6 +263,12 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "guild", "species", "status")
     group = c(1,2,3) #represent the "group" (core, transient, intermediate)
 
+  # finds the average of all the masses for all non-pregnant adults in the species, as a baseline. 
+  # remove juveniles and pregnant females for adult mass estimation
+  adult_dat = dat[which(dat$reprod != "J" & dat$pregnant != "P"),] 
+  mean_mass = mean(adult_dat$wgt, na.rm = TRUE) 
+  sd_mass = sd(adult_dat$wgt, na.rm = TRUE)
+  
   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
   # record guild in col 5 of covariates
   covariates[,5] = feeding_guild(dat[1,]$species)
@@ -284,16 +288,14 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
     capture_history[t,index] = 1  #mark first capture with 1 ("home")      
     
-    sex = ind_dat[1,]$sex # don't need to acct for disputes in sex b/c should be already deleted (in flagged data fxn)
-    if (sex == "M") {
-      covariates[t,1] = 1 } 
-    else if (sex == "F") {
-      covariates[t,2] = 1 }
-    else { #unidentified sex or conflicted sex
-      covariates[t,3] = 1 }
-                                        #TODO: check that this fxn works and makes sense
-    sd_mass = sd_avg_mass(dat, ind_dat) # record standard deviations away from species average mass
-    covariates[t,4] = sd_mass 
+    #mark sex in Male, Female, or Unidentified columsn of Covariates
+    sex = ind_dat[1,]$sex 
+    if (sex == "M") {covariates[t,1] = 1 } 
+    else if (sex == "F") {covariates[t,2] = 1 }
+    else {covariates[t,3] = 1 }
+    
+    # record standard deviations away from species average mass as another covariate
+    covariates[t,4] = sd_avg_mass(ind_dat, mean_mass, sd_mass) 
     
     for (i in 1:nrow(ind_dat)){ #record capture history data
       
