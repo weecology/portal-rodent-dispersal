@@ -131,7 +131,7 @@ for (i in 1:length(spplist)){
      assign(paste0(spplist[i], 'meters'), meters)
 }
 
-# concatenate core heteromyid data - used to ask if these species behave differently from others
+# concatenate core granivore data - used to ask if these species behave differently from others
 corehet = c(DMmeters, DOmeters, PBmeters, PPmeters)
 
   # find breakpoints to use in MARK data structure for future analyses
@@ -187,8 +187,8 @@ textxy(conyears, meanabuns, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "P
 plot(conyears, conmos, pch = 19, xlab = "Persistence (proportion of years present)", 
      ylab = "Average proportion of months present", xlim = c(0,1), ylim = c(0,1), bty = "n",
      cex.axis = 1.5, cex.lab = 1.5, cex = 1.5)
-#      textxy(conyears, conmos, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
-#                                    "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
+      textxy(conyears, conmos, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
+                                    "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
     abline(h = 0.66, lty = 2, col = 'gray40', lwd = 1, cex = 1.5)
     abline(v = 0.66, lty = 2, col = 'gray40', lwd = 1, cex = 1.5)
 
@@ -218,13 +218,15 @@ points(0, table(DSirep$num_reprod)/sum(table(DSirep$num_reprod)), type = "b", pc
 points(c(0:1), table(PIirep$num_reprod)/sum(table(PIirep$num_reprod)), type = "b", pch = 15, col = "black")
 
 
-#------------------------------------------ FIGURE - for ESA talk
+#------------------------------------------ FIGURE - for ESA talk 
+#                                 REQUIRES DATA FROM MARK ANALYSES!
+#             #FIXME: Should be moved since it depends on other results and is thus out of order
 
 #granivore data from dissertation chapter table 2-3
 Psi = c(0.09, 0.13, 0.08, 0.14, 0.48, 0.23, 0.49, 0.41)
 S = c(0.76, 0.78, 0.80, 0.81, 0.67, 0.81, 0.76, 0.62)
 distbench = c(28.36, 32.64, 25.57, 36.22, 93.05, 74.29, 29.12, 93.30)
-littersize = c(2.37, 2, 3.6, 4.72, 2.53, 3.6, 4, 4.29)
+littersize = c(2.37, 2, 3.6, 4.72, 2.53, 3.6, 4, 4.29) #from Mammals of Arizona - Hoffmeister
 
 lm1 = lm(S~Psi)
 lm2 = lm(S~distbench)
