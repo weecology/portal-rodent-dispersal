@@ -50,7 +50,7 @@ totalyears = c(1989:2009) #will need to be adjusted based on time frame want to 
 controlplots = c(1,2,4,8,9,11,12,14,17,22)
 months = count_months(all2, totalyears)
 
-persistence = data.frame(species = NA, propyrs = NA, propmos = NA)
+persistence = data.frame(species=NA, propyrs=NA, propmos=NA, meanabun=NA, maxabun=NA)
   outcount = 1
 
 for (i in 1:length(spplist)){
@@ -63,27 +63,24 @@ for (i in 1:length(spplist)){
     # proportion of years they were seen in CONTROL plots
     conspdata = subset(spdata, plot %in% controlplots)
     conpropyrs = length(unique(conspdata$yr))/length(totalyears)
-    assign(paste0(spplist[i], 'conyr'), conpropyrs)
-    # average number of months they were seen in during years in which they were present
+    # average number of months they were seen in during years in which they were present, on all plots
     avgmos = mean_win_yr_occ(spdata, totalyears, months)
       assign(paste0(spplist[i], 'avgmos'), avgmos)
-    # mean abundance within all years 
+    # mean abundance within all years, on all plots
     avgabun = allyrs_abun(spdata, totalyears)
       assign(paste0(spplist[i], 'avgabun'), avgabun)
     # average proportion of months they were seen in during years in which they were present on CONTROLS
     conavgmos = mean_win_yr_occ(subset(spdata, plot %in% controlplots), totalyears, months)
-      assign(paste0(spplist[i], 'conavgmos'), conavgmos)
    # number of unique individuals in each year on control plots only
     conabun = allyrs_abun(subset(spdata, plot %in% controlplots), totalyears)
       assign(paste0(spplist[i], 'conabun'), conabun)
     # mean number of unique individuals on control plots only, includes ZEROES
     meanconabun = mean(conabun)
-      assign(paste0(spplist[i],'meanconabun'), meanconabun)
     # max number of unique individuals on control plots only
     maxconabun = max(conabun)
-      assign(paste0(spplist[i], 'maxconabun'), maxconabun)
   
-  persistence[outcount,] = c(spplist[i], round(conpropyrs,4), round(conavgmos,4))
+  #record persistence and abundance data from control plots
+  persistence[outcount,] = c(spplist[i], round(conpropyrs,4), round(conavgmos,4), round(meanconabun,4), maxconabun)
   outcount = outcount + 1
   
   #subset females for each species
@@ -111,20 +108,7 @@ control_abuns = ls(pattern = "*conabun")
 abuns = cbind(BAconabun, DMconabun, DOconabun, DSconabun, NAOconabun, OLconabun, OTconabun, 
               PBconabun, PEconabun, PFconabun, PHconabun, PIconabun, PLconabun, PMconabun, PPconabun,
               RFconabun, RMconabun, ROconabun, SFconabun, SHconabun, SOconabun)
-meanabuns = c(BAmeanconabun, DMmeanconabun, DOmeanconabun, DSmeanconabun, NAOmeanconabun, OLmeanconabun, OTmeanconabun,
-              PBmeanconabun, PEmeanconabun, PFmeanconabun, PHmeanconabun, PImeanconabun, PLmeanconabun, PMmeanconabun, PPmeanconabun,
-              RFmeanconabun, RMmeanconabun, ROmeanconabun, SFmeanconabun, SHmeanconabun, SOmeanconabun)
-maxabuns = c(BAmaxconabun, DMmaxconabun, DOmaxconabun, DSmaxconabun, NAOmaxconabun, OLmaxconabun, OTmaxconabun, 
-             PBmaxconabun, PEmaxconabun, PFmaxconabun, PHmaxconabun, PImaxconabun, PLmaxconabun, PMmaxconabun, PPmaxconabun, 
-             RFmaxconabun, RMmaxconabun, ROmaxconabun, SFmaxconabun, SHmaxconabun, SOmaxconabun)
-conyears = cbind(BAconyr, DMconyr, DOconyr, DSconyr, NAOconyr, OLconyr, OTconyr,
-                 PBconyr, PEconyr, PFconyr, PHconyr, PIconyr, PLconyr, PMconyr, PPconyr,
-                 RFconyr, RMconyr, ROconyr, SFconyr, SHconyr, SOconyr)
-conmos = cbind(BAconavgmos, DMconavgmos, DOconavgmos, DSconavgmos, NAOconavgmos, OLconavgmos, OTconavgmos, 
-               PBconavgmos, PEconavgmos, PFconavgmos, PHconavgmos, PIconavgmos, PLconavgmos, PMconavgmos, PPconavgmos, 
-               RFconavgmos, RMconavgmos, ROconavgmos, SFconavgmos, SHconavgmos, SOconavgmos)
 
-#ADD CODE SNIPPET TO IDENTIFY CORE, INTERMEDIATE, AND TRANSIENT SPECIES BASED ON THESE RESULTS (NO "EYEBALLING" LATER)
 
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
