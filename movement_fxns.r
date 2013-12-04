@@ -86,7 +86,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
             flagged_rats[outcount,] <- c(tags[t], "sameprd", nrow(dat[tmp,]))
           }
           
-   #FIXME: find a way to automate checking the flagged data for where the individual breaks should be
+           #Automate checking the flagged data for where the individual breaks should be
            #check for *, which indicates a new tag
            isnew = as.vector(dat[tmp2,]$note2)
            
@@ -111,6 +111,9 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
              }
            }
                
+    #FIXME: The above chunk may give new tags to the data based on *. Find a way to indicate this,
+          # as it will break teh next chunk of code.
+          
           #Dipodomys are long-lived. Raise the threshold for these indivs
           if(spp_list[sp] %in% list("DO", "DM", "DS")){ 
             
