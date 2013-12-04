@@ -197,6 +197,22 @@ ggplot(yrcontrolabuns, aes(x = year, y = abun, group = species)) +
 #------------------------- plot meters traveled by all species
 distances = ls(pattern = "*meters") #see all the vectors
 
+ggplot(data=data.frame(value=DOmeters)) +
+  stat_density(aes(x=value)) +
+  geom_segment(aes(x=value,xend=value),y=0,yend=0.0025,col='white')
+
+ggplot(data)+
+  geom_boxplot(aes(x="DO", y=value))
+
+ggplot(data=d2)+
+  geom_violin(aes(x=Distribution,y=Value),fill='grey',trim=F)+
+  geom_segment(aes(
+    x=match(Distribution,levels(Distribution))-0.1,
+    xend=match(Distribution,levels(Distribution))+0.1,
+    y=Value,yend=Value),
+               col='black'
+  )
+
 #------------------------------------------ FIGURE - for ESA talk
 
 #plot the relative abundance of females who represent each number of reproductive events per year
