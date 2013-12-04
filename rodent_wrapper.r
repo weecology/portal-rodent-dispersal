@@ -1,6 +1,8 @@
 # Code for working with individual-level rodent data
 # movement with stakes
 
+library(reshape)
+library(ggplot2)
 library(calibrate)
 library(fields)
 
@@ -9,6 +11,7 @@ library(fields)
 #---------------------------------------------------------------------------------
 #set working directory
 wd = "/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
+wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
 setwd(wd)
 source("movement_fxns.R")
 
