@@ -80,6 +80,26 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
         for (sp in 1:length(spp_list)) {
           tmp2 = which(dat$tag == tags[t] & dat$species == spp_list[sp])
           
+#           #check for *, which indicates a new tag
+#           isnew = as.vector(dat[tmp2,]$note2)
+#           
+#           if ("*" %in% isnew) {
+#             rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
+#             dat2 = dat[tmp2,]
+#             for (r in 1:length(rowbreaks)){
+#               if (r == 1) {
+#                 dat[tmp2,][1:rowbreaks[r]-1, ]
+#                 newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+#                 dat[tmp2,tag_col] = newtag
+#                 numcount = numcount + 1 
+#                 dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,])]
+#               }
+#               else {
+#                 dat[tmp2,][]
+#               }
+#             }
+#           }
+          
           #Dipodomys are long-lived. Raise the threshold for these indivs
           if(spp_list[sp] %in% list("DO", "DM", "DS")){ 
             
@@ -91,7 +111,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
             else {
               outcount = outcount + 1
               flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
-              #print(dat[tmp2,])
+              print(dat[tmp2,])
             }
           }
           
@@ -103,7 +123,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
               numcount = numcount + 1
             }
             else {
-              #print(dat[tmp2,])
+              print(dat[tmp2,])
               outcount = outcount + 1
               flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
             }
