@@ -2,8 +2,8 @@ portal-rodent-dispersal
 =======================
 
 Research on rodent dispersal patterns near Portal AZ. 
-Contains code for reproducing the results of analyses using individual-level tag dat for common rodent species at the Portal Project site. 
-Collaborators on this project include Sarah R. Supp, S. K. Morgan Ernest, and David Koons. 
+Contains code for reproducing the results of analyses using individual-level tag data for common rodent species at the Portal Project site. 
+Collaborators on this project include Sarah R. Supp, S. K. Morgan Ernest, and David N. Koons. 
 Code was written by Sarah R. Supp.
 
 The code and data in this repository all for the analyses and figures to be fully replicated using a subset of the published 
@@ -19,11 +19,11 @@ NOTE: The project and code in this repository is still under development.
 containing data and functions specific to this code, `movement_fxns.R`. 
 **R Packages:** `RMark`, `calibrate`, `fields`, `plyr`, `ggmap`, and `ggplot2`
 
-The analyses can be replicated by changing the working directory at the top of the file `stake_movements.R` to the 
+The analyses can be replicated by changing the working directory at the top of the file `rodent_wrapper.R` to the 
 location on your computer where you have stored the `.R` and `.csv` files.
 
-Code should take approximately XX minutes to run start to finish. 
-Figures should output as pdfs to your working directory. 
+Code should take approximately 30 minutes to run start to finish in `rodent_wrapper.R` and may take *days* or *weeks* to run start to finish in `MARK_analyses.R`. 
+Figures should output as pdfs to your working directory or print to the screen. 
 
 **Data use:** Data is provided in this supplement for the purposes of replication. 
 If you wish to use the data for additional research, they should be obtained from the published source 
@@ -31,11 +31,10 @@ If you wish to use the data for additional research, they should be obtained fro
 and experimental manipulation of a Chihuahuan Desert ecosystem near Portal, Arizona, USA. Ecology 90:1708. doi:10.1890/08-1222.1)
 
 **Included Files**
-* `rodent_wrapper.R` script -- runs through all the analyses, starting with the 30 year dataset.
-* `stake_movment.R` script -- cleans up the data, runs the statistical analyses, and outputs figures.
-* `movement_fxns.R` script -- holds the relevant functions for executing the stake_movement.R script.
-* `life_history_analyses.R` -- for extracting life-history trait data (i.e., fecundity) for all the species.
-* `MARK_analyses.R` script -- code to run Program MARK models. Should be run on a server - takes a long tiime to finish!
+* `rodent_wrapper.R` script -- runs through all the analyses, starting with the 30 year dataset. -USE
+* `movement_fxns.R` script -- holds the relevant functions for executing the stake_movement.R script. -USE
+* `MARK_analyses.R` script -- code to run Program MARK models. Should be run on a server - takes a long time to finish! -USE
+* `stake_movment.R` script -- cleans up the data, runs the statistical analyses, and outputs figures. - IGNORE
 * `rodent_data. R`  -- old code that explores only 2 species - IGNORE
 * `additional_movement_fxns.R` -- code that I'm not currently using for the main product, but would like to keep around - IGNORE
 * `RodentQueries.ipynb` script -- ipython notebook code to query the main server for Portal data.
