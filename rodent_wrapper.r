@@ -107,6 +107,10 @@ persistence$maxabun = as.numeric(persistence$maxabun)
 avg_mo_reprod = avg_mo_reprod[-1,]
 reprod_mo_yr = reprod_mo_yr[-1,]
 
+#melt control abundance data frame for later plotting
+yrcontrolabuns = melt(yearly_control_abundance, id.vars=c("year"))
+names(yrcontrolabuns) = c("year", "species", "abun")
+
 
 #Identify Core species based on results
 corespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos >= 0.666),1]
@@ -118,6 +122,9 @@ transientspecies = persistence[which(persistence$propyrs < 0.666),1]
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
 
+#FIXME: Create an empty list, add each species-level vector as an element in the list
+# Then don't have to worry about locating the data later
+
 for (i in 1:length(spplist)){
   #subset species data
   spdata = subset(all2, species == spplist[i])
@@ -125,8 +132,8 @@ for (i in 1:length(spplist)){
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
       assign(paste0(spplist[i], 'tags'), tags)
-    meters = distance_moved(spdata, tags)
-     assign(paste0(spplist[i], 'meters'), meters)
+    mtrs = distance_moved(spdata, tags)
+     assign(paste0(spplist[i], 'meters'), mtrs)
 }
 
 # concatenate core granivore data - used to ask if these species behave differently from others
@@ -170,7 +177,7 @@ write.table(MARK, file = "mark_datafiles//all_mark.inp", row.names = F, col.name
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
-#----------------------------------------- plot abundance vs. years, ala core v. transient literature
+#----------------------------- plot abundance vs. years, ala core v. transient literature
 ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = maxabun)) + theme_bw() + xlab("proportion years present") +
   ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
   geom_vline(xintercept=0.66, linetype="dotted", col = "red") + 
@@ -183,19 +190,12 @@ ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun)) + 
   geom_hline(yintercept=0.66, linetype="dotted", col = "red") +
   ggtitle("Rodents 1989 - 2009")
 
-cols2plot = names(yearly_control_abundance[2:ncol(yearly_control_abundance)])
-for (i in seq_along(cols2plot)){
-  print(ggplot(yearly_control_abundance, aes_string(x="year", y = cols2plot[i])) + 
-          geom_point() + geom_line() + theme_bw() + ylab("control plot abundance")+
-          ggtitle(cols2plot[i])) 
-}
-
-yrcontrolabuns = melt(yearly_control_abundance, id.vars=c("year"))
-  names(yrcontrolabuns) = c("year", "species", "abun")
-
+#------------------------- plot abundance for all species across timeseries
 ggplot(yrcontrolabuns, aes(x = year, y = abun, group = species)) + 
   geom_point() + geom_line() 
 
+#------------------------- plot meters traveled by all species
+distances = ls(pattern = "*meters") #see all the vectors
 
 #------------------------------------------ FIGURE - for ESA talk
 
