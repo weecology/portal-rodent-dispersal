@@ -42,7 +42,7 @@ all2 = id_unknowns(all2, 16)
 # necessary if using ALL data (ear and toe tags)
 # returns the dataset with new IDs for those that can easily be sorted out based on sex and year
 tags = unique(all2$tag)
-dups = is_duplicate_tag(all2, tags, 10, 9, 16) #check to see if can separate tags based on 
+dups = is_duplicate_tag(all2, tags, 10, 9, 16) #check to see if can separate tags based
 
 # get rid of 'bad data'; deletes data that is not a pit tag, where sex is inconsistent or where species is inconsistent. 
 all2 = subsetDat(all2)

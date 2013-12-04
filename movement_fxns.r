@@ -58,6 +58,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
   # If > 4, considered suspicious
   # If multiple species, considered suspicious
   # If adequately resolved, given a new unique tag number, that ends with d for "duplicate"
+  # returns a list with 2 elements [1] altered data, [2] flagged data
   numcount = 100
   flagged_rats = data.frame("tag"=1, "reason"=1, "occurrences"=1)
   outcount = 0
@@ -109,7 +110,8 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
           }
         }
     }}}}
-  return (dat)
+  info = list(data = dat, bad = flagged_rats)
+  return (info)
 }
 
 
