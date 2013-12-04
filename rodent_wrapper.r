@@ -99,6 +99,10 @@ for (i in 1:length(spplist)){
 
 #add species names to the dataframe of abundance vectors
 names(yearly_control_abundance) = c("year", spplist)
+persistence$propyrs = as.numeric(persistence$propyrs)
+persistence$propmos = as.numeric(persistence$propmos)
+persistence$meanabun = as.numeric(persistence$meanabun)
+persistence$maxabun = as.numeric(persistence$maxabun)
 
 #Identify Core species based on results
 corespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos >= 0.666),1]
@@ -163,6 +167,9 @@ write.table(MARK, file = "mark_datafiles//all_mark.inp", row.names = F, col.name
 #          plot results
 #---------------------------------------------------------------------------------
 #----------------------------------------- plot abundance vs. years, ala core v. transient literature
+ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = maxabun)) + theme_bw() + xlab("proportion years present") +
+  ylab("proportion of months present") 
+
 plot(conyears, maxabuns, pch = 19, xlab = "Persistence (proportion of years present)",
      ylab = "Maximum abundance in any year", bty = "n")
   textxy(conyears, maxabuns, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
