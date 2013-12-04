@@ -80,26 +80,37 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
         for (sp in 1:length(spp_list)) {
           tmp2 = which(dat$tag == tags[t] & dat$species == spp_list[sp])
           
-#           #check for *, which indicates a new tag
-#           isnew = as.vector(dat[tmp2,]$note2)
-#           
-#           if ("*" %in% isnew) {
-#             rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
-#             dat2 = dat[tmp2,]
-#             for (r in 1:length(rowbreaks)){
-#               if (r == 1) {
-#                 dat[tmp2,][1:rowbreaks[r]-1, ]
-#                 newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-#                 dat[tmp2,tag_col] = newtag
-#                 numcount = numcount + 1 
-#                 dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,])]
-#               }
-#               else {
-#                 dat[tmp2,][]
-#               }
-#             }
-#           }
+          #Check for duplicate tags in the same period and same species. This likely indicates multiple individuals with the same tag.
+          if(anyDuplicated(dat[tmp2,]) > 0) {
+            outcount = outcount + 1
+            flagged_rats[outcount,] <- c(tags[t], "sameprd", nrow(dat[tmp,]))
+          }
           
+   #FIXME: find a way to automate checking the flagged data for where the individual breaks should be
+           #check for *, which indicates a new tag
+           isnew = as.vector(dat[tmp2,]$note2)
+           
+           if ("*" %in% isnew) {
+             rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
+             dat2 = dat[tmp2,]
+             for (r in 1:length(rowbreaks)){
+               if (r == 1) {
+                 #GIVE an ID up to the first *
+                 newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+                 dat[tmp2,][1:rowbreaks[r]-1, tag_col] = newtag
+                 numcount = numcount + 1 
+                 #AND an ID to everything after the first * (the loop should take care of the next set and so on)
+                 newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+                 dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
+               }
+               else if (r > 1) {
+                 #GIVE an ID to everything after the next * 
+                 newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+                 dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
+               }
+             }
+           }
+               
           #Dipodomys are long-lived. Raise the threshold for these indivs
           if(spp_list[sp] %in% list("DO", "DM", "DS")){ 
             
