@@ -387,10 +387,10 @@ mean_win_yr_alldat = function (data, years, years, uniq_mos){
 mean_mo_repro = function (femaledata){
   #returns the proportion of females that are reproductive (nipples enlarged - E - red - R- or both - B - or pregnant - P-)
   #on average in a given month across all the years. Only looks at data during years and months in which the species is present. 
-  mos = c(1:12)
-  years = sort(unique(femaledata$yr)) #only look at data during years in which females of the species are present
-
-  avg_r_mo = c()
+  month = c(1:12)
+  species = rep(femaledata[1,9],12)
+    
+  proprepro = c()
   
   for (m in 1:length(mos)){
     mo_repros = c()
@@ -409,8 +409,10 @@ mean_mo_repro = function (femaledata){
       }
     }
     avg_mo = round(mean(mo_repros, na.rm = T),4)
-    avg_r_mo = append(avg_r_mo, avg_mo)
+    proprepro = append(proprepro, avg_mo)
   }
+
+  avg_r_mo = as.data.frame(cbind(species, month, proprepro))
   
   return(avg_r_mo)
 }

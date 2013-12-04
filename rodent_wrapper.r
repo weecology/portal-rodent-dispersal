@@ -56,6 +56,8 @@ months = count_months(all2, totalyears)
 persistence = data.frame(species=NA, propyrs=NA, propmos=NA, meanabun=NA, maxabun=NA)
   outcount = 1
 yearly_control_abundance = data.frame(year = totalyears)
+reprod_mo_yr = data.frame(year=NA, month=NA, proprepro=NA, numfemales=NA, species=NA)
+avg_mo_reprod = data.frame(species=NA, month=NA, proprepro=NA)
 
 for (i in 1:length(spplist)){
   #subset species data
@@ -64,14 +66,10 @@ for (i in 1:length(spplist)){
     # proportion of years they were seen in CONTROL plots
     conspdata = subset(spdata, plot %in% controlplots)
     conpropyrs = length(unique(conspdata$yr))/length(totalyears)
-    # mean abundance within all years, on all plots
-    avgabun = allyrs_abun(spdata, totalyears)
-      assign(paste0(spplist[i], 'avgabun'), avgabun)
     # average proportion of months they were seen in during years in which they were present on CONTROLS
-    conavgmos = mean_win_yr_occ(subset(spdata, plot %in% controlplots), totalyears, months)
-   # number of unique individuals in each year on control plots only
-    conabun = allyrs_abun(subset(spdata, plot %in% controlplots), totalyears)
-      assign(paste0(spplist[i], 'conabun'), conabun)
+    conavgmos = mean_win_yr_occ(conspdata, totalyears, months)
+    # number of unique individuals in each year on control plots only
+    conabun = allyrs_abun(conspdata, totalyears)
     # mean number of unique individuals on control plots only, includes ZEROES
     meanconabun = mean(conabun)
     # max number of unique individuals on control plots only
@@ -82,16 +80,17 @@ for (i in 1:length(spplist)){
   yearly_control_abundance = cbind(yearly_control_abundance, conabun)
   outcount = outcount + 1
   
-  #FIXME: concatenate reproductive data into several dataframes - don't rely on assign and ls to find them.
   #subset females for each species
   spdataF = subset(spdata, sex == "F")
   
     #average proportion of reproductive females by month across all years
     reprd = mean_mo_repro(spdataF) #vector with 12 items (one for each month)
-      assign(paste0(spplist[i], 'reprd'), reprd)
-    # proportion of reproductive females by month and year
+      avg_mo_reprod = rbind(avg_mo_reprod, reprd)    
+  
+  # proportion of reproductive females by month and year
     reprdyr = mo_repro(spdataF) #matrix with 120 x 5
-      assign(paste0(spplist[i], 'reprdyr'), reprdyr)
+      reprod_mo_yr = rbind(reprod_mo_yr, reprdyr)
+  
     # track the number of times individual females uniquely reproduce within each year
     irep = indiv_repro(spdataF) #matix with cols "tag", "year" and "num_reprod"
       assign(paste0(spplist[i], 'irep'), irep)
@@ -99,10 +98,15 @@ for (i in 1:length(spplist)){
 
 #add species names to the dataframe of abundance vectors
 names(yearly_control_abundance) = c("year", spplist)
+#make sure cols are numeric
 persistence$propyrs = as.numeric(persistence$propyrs)
 persistence$propmos = as.numeric(persistence$propmos)
 persistence$meanabun = as.numeric(persistence$meanabun)
 persistence$maxabun = as.numeric(persistence$maxabun)
+#delete Null rows
+avg_mo_reprod = avg_mo_reprod[-1,]
+reprod_mo_yr = reprod_mo_yr[-1,]
+
 
 #Identify Core species based on results
 corespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos >= 0.666),1]
