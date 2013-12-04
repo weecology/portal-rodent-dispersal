@@ -183,6 +183,19 @@ ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun)) + 
   geom_hline(yintercept=0.66, linetype="dotted", col = "red") +
   ggtitle("Rodents 1989 - 2009")
 
+cols2plot = names(yearly_control_abundance[2:ncol(yearly_control_abundance)])
+for (i in seq_along(cols2plot)){
+  print(ggplot(yearly_control_abundance, aes_string(x="year", y = cols2plot[i])) + 
+          geom_point() + geom_line() + theme_bw() + ylab("control plot abundance")+
+          ggtitle(cols2plot[i])) 
+}
+
+yrcontrolabuns = melt(yearly_control_abundance, id.vars=c("year"))
+  names(yrcontrolabuns) = c("year", "species", "abun")
+
+ggplot(yrcontrolabuns, aes(x = year, y = abun, group = species)) + 
+  geom_point() + geom_line() 
+
 
 #------------------------------------------ FIGURE - for ESA talk
 
