@@ -173,23 +173,11 @@ ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = maxabun)) + t
   geom_hline(yintercept=0.66, linetype="dotted", col = "red") +
   ggtitle("Rodents 1989 - 2009")
 
-plot(conyears, maxabuns, pch = 19, xlab = "Persistence (proportion of years present)",
-     ylab = "Maximum abundance in any year", bty = "n")
-  textxy(conyears, maxabuns, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
-                              "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
-
-plot(conyears, meanabuns, pch = 19, xlab = "Persistence (proportion of years present)",
-     ylab = "Mean yearly abundance across time-series", bty = "n")
-textxy(conyears, meanabuns, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
-                             "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
-
-plot(conyears, conmos, pch = 19, xlab = "Persistence (proportion of years present)", 
-     ylab = "Average proportion of months present", xlim = c(0,1), ylim = c(0,1), bty = "n",
-     cex.axis = 1.5, cex.lab = 1.5, cex = 1.5)
-      textxy(conyears, conmos, c("BA", "DM", "DO", "DS", "NA", "OL", "OT", "PB", "PE", "PF", "PI",
-                                    "PL", "PM", "PP", "RF", "RM", "RO", "SF", "SH"), cx = 0.5)
-    abline(h = 0.66, lty = 2, col = 'gray40', lwd = 1, cex = 1.5)
-    abline(v = 0.66, lty = 2, col = 'gray40', lwd = 1, cex = 1.5)
+ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun)) + theme_bw() + xlab("proportion years present") +
+  ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
+  geom_vline(xintercept=0.66, linetype="dotted", col = "red") + 
+  geom_hline(yintercept=0.66, linetype="dotted", col = "red") +
+  ggtitle("Rodents 1989 - 2009")
 
 
 #------------------------------------------ FIGURE - for ESA talk
