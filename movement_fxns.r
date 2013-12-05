@@ -441,7 +441,7 @@ mean_win_yr_alldat = function (data, years, uniq_mos){
 }
 
 
-mean_mo_repro = function (femaledata){
+mean_mo_repro = function (femaledata, years){
   #returns the proportion of females that are reproductive (nipples enlarged - E - red - R- or both - B - or pregnant - P-)
   #on average in a given month across all the years. Only looks at data during years and months in which the species is present. 
   month = c(1:12)
@@ -449,11 +449,11 @@ mean_mo_repro = function (femaledata){
     
   proprepro = c()
   
-  for (m in 1:length(mos)){
+  for (m in 1:length(month)){
     mo_repros = c()
     
     for (y in 1:length(years)){
-      tmp = subset(femaledata, yr == years[y] & mo == mos[m])
+      tmp = subset(femaledata, yr == years[y] & mo == month[m])
       
       if (nrow(tmp) > 0){
         num_females = nrow(tmp)

@@ -87,7 +87,7 @@ for (i in 1:length(spplist)){
   spdataF = subset(spdata, sex == "F")
   
     #average proportion of reproductive females by month across all years
-    reprd = mean_mo_repro(spdataF) #vector with 12 items (one for each month)
+    reprd = mean_mo_repro(spdataF, totalyears) #vector with 12 items (one for each month)
       avg_mo_reprod = rbind(avg_mo_reprod, reprd)    
   
   # proportion of reproductive females by month and year
@@ -106,9 +106,12 @@ persistence$propyrs = as.numeric(persistence$propyrs)
 persistence$propmos = as.numeric(persistence$propmos)
 persistence$meanabun = as.numeric(persistence$meanabun)
 persistence$maxabun = as.numeric(persistence$maxabun)
+avg_mo_reprod$proprepro = as.numeric(avg_mo_reprod$proprepro)
+avg_mo_reprod$month = as.numeric(avg_mo_reprod$month)
 #delete Null rows
 avg_mo_reprod = avg_mo_reprod[-1,]
 reprod_mo_yr = reprod_mo_yr[-1,]
+
 
 #melt control abundance data frame for later plotting
 yrcontrolabuns = melt(yearly_control_abundance, id.vars=c("year"))
@@ -191,11 +194,16 @@ ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun)) + 
   ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
   geom_vline(xintercept=0.66, linetype="dotted", col = "red") + 
   geom_hline(yintercept=0.66, linetype="dotted", col = "red") +
-  ggtitle("Rodents 1989 - 2009")
+  ggtitle("Rodents 1989 - 2009") + geom_text(aes(label = species), hjust=0, vjust=0)
 
 #------------------------- plot abundance for all species across timeseries
+guild = c(3,1,1,1,2,1,2,3,1,1,1,2,1,1,1,1,2,1,1,1,1) #TODO: Color by guild? Add guild to df?
 ggplot(yrcontrolabuns, aes(x = year, y = abun, group = species)) + 
-  geom_point() + geom_line() 
+  geom_point() + geom_line()
+
+#------------------------- plot monthly reproduction
+ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() + 
+  geom_line() + facet_wrap(~species)
 
 #------------------------- plot meters traveled by all species
 distances = ls(pattern = "*meters") #see all the vectors
