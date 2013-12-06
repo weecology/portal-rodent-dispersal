@@ -135,37 +135,6 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
             flagged_rats[outcount,] <- c(tags[t], "sameprd", nrow(dat[tmp,]))
           }
           
-#            #Automate checking the flagged data for where the individual breaks should be
-#            #check for *, which indicates a new tag
-#            isnew = as.vector(dat[tmp2,]$note2)
-#            
-#            if ("*" %in% isnew) {
-#              rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
-#              for (r in 1:length(rowbreaks)){
-#                if (r == 1) {
-#                  #GIVE an ID up to the first *
-#                  newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-#                  dat[tmp2,][1:rowbreaks[r]-1, tag_col] = newtag
-#                  numcount = numcount + 1 
-#                  
-#                  #AND an ID to everything after the first * (the loop should take care of the next set and so on)
-#                  newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-#                  dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
-#                  numcount = numcount + 1
-#                  tags2 = dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col][1]
-#                }
-#                else if (r > 1) {
-#                  #GIVE an ID to everything after the next * 
-#                  tmp3 = which(dat$tag == tags2 & dat$species == spp_list[sp])
-#                  newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-#                  dat[tmp3,][rowbreaks[r]:nrow(dat[tmp3,]),tag_col] = newtag
-#                }
-#              }
-#            }
-#                
-    #FIXME: The above chunk may give new tags to the data based on *. Find a way to indicate this,
-          # as it will break teh next chunk of code.
-          
           #Dipodomys are long-lived. Raise the threshold for these indivs
           if(spp_list[sp] %in% list("DO", "DM", "DS")){ 
             
