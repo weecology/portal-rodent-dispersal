@@ -56,11 +56,16 @@ return(dat)
 starred_tags = function(dat, tags){
   #Automate checking the flagged data for where the individual breaks should be
   #check for *, which indicates a new tag
-  #the pasted 's' indicates tag changed based on presence of * (star) in note2
+  #tags with multiple rows are sorted by species, then checked for *
+  #if a * exists, then each time it is given a new unique tag, that ends with "s" for "star" (from note2 column)
+  
   numcount = 1
 
   for (t in 1:length(tags)){
     
+    #only run on ear and toe tags, pit tags are very unlikely to be duplicated
+    #NOTE: there are some 6-character toe tags (e.g.1200DM, how to deal with these?)
+    if (nchar(tags[t]) < 6){ 
       tmp <- which(dat$tag == tags[t])
       
       # if indiv was captured multiple times  
@@ -97,7 +102,11 @@ starred_tags = function(dat, tags){
           numcount = numcount + 1
         }
       }
-    }}}}
+    }
+    }
+    }
+   }
+  }
   return(dat)
 }
 
