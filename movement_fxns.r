@@ -199,7 +199,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
           #Dipodomys are long-lived. Raise the threshold for these indivs
           if(spp_list[sp] %in% list("DO", "DM", "DS")){ 
             
-            if (max(dat[tmp2,1]) - min(dat[tmp2,1]) < 5) {  #TODO: would this be better as <5? Some DX are really long-lived!
+            if (max(dat[tmp2,1]) - min(dat[tmp2,1]) < 5) {  
               newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
               dat[tmp2,tag_col] = newtag
               numcount = numcount + 1 
@@ -207,7 +207,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
             else {
               outcount = outcount + 1
               flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
-              print(dat[tmp2,])
+              #print(dat[tmp2,])
             }
           }
           
@@ -219,7 +219,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
               numcount = numcount + 1
             }
             else {
-              print(dat[tmp2,])
+              #print(dat[tmp2,])
               outcount = outcount + 1
               flagged_rats[outcount,] <- c(tags[t], "year", nrow(dat[tmp,]))
             }
@@ -276,6 +276,7 @@ subsetDat = function(dataset){
   dataset = dataset[-which(dataset$tag %in% badspptags),] #delete rows where species is unsure
   
   #don't use negative period numbers and periods with only one day of trapping
+  #TODO: add periods from 1980-1999 that were incompletely sampled
   dataset = subset(dataset, period != 267 & period != 277 & period != 278 & period != 283 &
                           period != 284 & period != 300 & period != 311 & period != 313 &
                           period != 314 & period != 318 & period != 321 & period != 323 &

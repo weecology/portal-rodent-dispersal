@@ -43,19 +43,25 @@ all3 = starred_tags(all2, tags)
 
 #check for dead individuals, give all with same tag after marked dead a new unique ID
 tags = unique(all3$tag)
-all4 = is_dead(all3, tags, 16)
+all4 = is_dead(all3, tags, 16) #get warnings, but it seems to work - not sure what they are indicating?
 
 # check for individuals with same tag, but captured over long timespan (may be able to separate them) 
 # necessary if using ALL data (ear and toe tags)
 # returns the dataset with new IDs for those that can easily be sorted out based on sex and year
-tags = unique(all3$tag)
-dups = is_duplicate_tag(all3, tags, 10, 9, 16) #check to see if can separate tags based
+tags = unique(all4$tag)
+dups = is_duplicate_tag(all4, tags, 10, 9, 16) #check to see if can separate tags based
 
-#subset data for years of analysis
-all2 = subset(all, yr > 1988)
+#eliminate bad data based on tags identified in dups$bad
+duptags = unique(dups$bad$tag)
+all5 = dups$data[-which(dups$data$tag %in% duptags),] #delete rows flagged as duplicates without clear resolution
 
 # get rid of 'bad data'; deletes data where species is inconsistent. 
-all2 = subsetDat(all2)
+all6 = subsetDat(all5)
+
+#subset data for years of analysis
+all5 = subset(all, yr > 1988)
+
+
 
 
 #---------------------------------------------------------------------------------
