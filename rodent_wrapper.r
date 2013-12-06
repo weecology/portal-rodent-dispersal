@@ -59,7 +59,7 @@ all5 = dups$data[-which(dups$data$tag %in% duptags),] #delete rows flagged as du
 all6 = subsetDat(all5)
 
 #subset data for years of analysis
-all5 = subset(all, yr > 1988)
+all7 = subset(all6, yr > 1988)
 
 
 
@@ -134,10 +134,11 @@ yrcontrolabuns = melt(yearly_control_abundance, id.vars=c("year"))
 names(yrcontrolabuns) = c("year", "species", "abun")
 
 
-#Identify Core species based on results
+#Identify Core species based on results   #TODO: determine best thresholds to set
 corespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos >= 0.666),1]
-intermediatespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos < 0.666),1]
-transientspecies = persistence[which(persistence$propyrs < 0.666),1]
+intermediatespecies = persistence[which(persistence$propyrs > 0.333 & persistence$propyrs < 0.666 | 
+                                          persistence$propmos > 0.333 & persistence$propmos < 0.666),1]
+transientspecies = persistence[which(persistence$propyrs <= 0.333 & persistence$propmos <=0.333),1]
 
 
 #---------------------------------------------------------------------------------
