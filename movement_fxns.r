@@ -57,7 +57,7 @@ starred_tags = function(dat, tags){
   #Automate checking the flagged data for where the individual breaks should be
   #check for *, which indicates a new tag
   #the pasted 's' indicates tag changed based on presence of * (star) in note2
-  numcount = 100
+  numcount = 1
 
   for (t in 1:length(tags)){
     
@@ -75,7 +75,8 @@ starred_tags = function(dat, tags){
        isnew = as.vector(dat[tmp2,]$note2)
   
        if ("*" %in% isnew) {
-        rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
+         #print(dat[tmp2,])
+         rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
         
         for (r in 1:length(rowbreaks)){
           if (r == 1) {
@@ -88,13 +89,12 @@ starred_tags = function(dat, tags){
           newtag = paste(tags[t], numcount, "s", sep = "") #make a new tag to keep separate
           dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
           numcount = numcount + 1
-          tags2 = dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col][1]
         }
         else if (r > 1) {
           #GIVE an ID to everything after the next * 
-          tmp3 = which(dat$tag == tags2 & dat$species == spp_list[sp])
-          newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-          dat[tmp3,][rowbreaks[r]:nrow(dat[tmp3,]),tag_col] = newtag
+          newtag = paste(tags[t], numcount, "s", sep = "") #make a new tag to keep separate
+          dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
+          numcount = numcount + 1
         }
       }
     }}}}
