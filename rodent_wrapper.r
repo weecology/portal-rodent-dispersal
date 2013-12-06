@@ -29,11 +29,8 @@ all$sex = as.character(all$sex)
 
 allmonths = count_months(all, c(1980:2009))
 
-
-#subset data for years of analysis
-all2 = subset(all, yr > 1988)
 #subset data where species are known (e.g., no "unidentified rodents" or genus-only)
-all2 = subset(all2, species!="DX" & species!="UR" & species!="RX" & species!="SX" & species!="PX" & species != "OX")
+all2 = subset(all, species!="DX" & species!="UR" & species!="RX" & species!="SX" & species!="PX" & species != "OX")
 
 # give untagged individuals a unique 7-number code
 all2 = id_unknowns(all2, 16)
@@ -44,7 +41,10 @@ all2 = id_unknowns(all2, 16)
 tags = unique(all2$tag)
 dups = is_duplicate_tag(all2, tags, 10, 9, 16) #check to see if can separate tags based
 
-# get rid of 'bad data'; deletes data that is not a pit tag, where sex is inconsistent or where species is inconsistent. 
+#subset data for years of analysis
+all2 = subset(all, yr > 1988)
+
+# get rid of 'bad data'; deletes data where species is inconsistent. 
 all2 = subsetDat(all2)
 
 

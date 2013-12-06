@@ -53,6 +53,55 @@ return(dat)
 # return(flagged_rats)
 # }
 
+starred_tags = function(dat, tags){
+  #Automate checking the flagged data for where the individual breaks should be
+  #check for *, which indicates a new tag
+  #the pasted 's' indicates tag changed based on presence of * (star) in note2
+  numcount = 100
+
+  for (t in 1:length(tags)){
+    
+      tmp <- which(dat$tag == tags[t])
+      
+      # if indiv was captured multiple times  
+      if (nrow(dat[tmp,]) > 1) {    
+       
+      # check num species recorded. If more than one, does data look OK if separated on species?
+      spp_list = unique(dat[tmp,spp_col])
+        
+      for (sp in 1:length(spp_list)) {
+      tmp2 = which(dat$tag == tags[t] & dat$species == spp_list[sp])
+
+       isnew = as.vector(dat[tmp2,]$note2)
+  
+       if ("*" %in% isnew) {
+        rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
+        
+        for (r in 1:length(rowbreaks)){
+          if (r == 1) {
+          #GIVE an ID up to the first *
+          newtag = paste(tags[t], numcount, "s", sep = "") #make a new tag to keep separate
+          dat[tmp2,][1:rowbreaks[r]-1, tag_col] = newtag
+          numcount = numcount + 1 
+        
+          #AND an ID to everything after the first * (the loop should take care of the next set and so on)
+          newtag = paste(tags[t], numcount, "s", sep = "") #make a new tag to keep separate
+          dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
+          numcount = numcount + 1
+          tags2 = dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col][1]
+        }
+        else if (r > 1) {
+          #GIVE an ID to everything after the next * 
+          tmp3 = which(dat$tag == tags2 & dat$species == spp_list[sp])
+          newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+          dat[tmp3,][rowbreaks[r]:nrow(dat[tmp3,]),tag_col] = newtag
+        }
+      }
+    }}}}
+  return(dat)
+}
+
+
 is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
   # check the min to max year for a given tag. 
   # If > 4, considered suspicious
@@ -86,31 +135,34 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
             flagged_rats[outcount,] <- c(tags[t], "sameprd", nrow(dat[tmp,]))
           }
           
-           #Automate checking the flagged data for where the individual breaks should be
-           #check for *, which indicates a new tag
-           isnew = as.vector(dat[tmp2,]$note2)
-           
-           if ("*" %in% isnew) {
-             rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
-             dat2 = dat[tmp2,]
-             for (r in 1:length(rowbreaks)){
-               if (r == 1) {
-                 #GIVE an ID up to the first *
-                 newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-                 dat[tmp2,][1:rowbreaks[r]-1, tag_col] = newtag
-                 numcount = numcount + 1 
-                 #AND an ID to everything after the first * (the loop should take care of the next set and so on)
-                 newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-                 dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
-               }
-               else if (r > 1) {
-                 #GIVE an ID to everything after the next * 
-                 newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
-                 dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
-               }
-             }
-           }
-               
+#            #Automate checking the flagged data for where the individual breaks should be
+#            #check for *, which indicates a new tag
+#            isnew = as.vector(dat[tmp2,]$note2)
+#            
+#            if ("*" %in% isnew) {
+#              rowbreaks = which(isnew == "*", arr.in=TRUE) #find rows where * indicates a new tag
+#              for (r in 1:length(rowbreaks)){
+#                if (r == 1) {
+#                  #GIVE an ID up to the first *
+#                  newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+#                  dat[tmp2,][1:rowbreaks[r]-1, tag_col] = newtag
+#                  numcount = numcount + 1 
+#                  
+#                  #AND an ID to everything after the first * (the loop should take care of the next set and so on)
+#                  newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+#                  dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col] = newtag
+#                  numcount = numcount + 1
+#                  tags2 = dat[tmp2,][rowbreaks[r]:nrow(dat[tmp2,]),tag_col][1]
+#                }
+#                else if (r > 1) {
+#                  #GIVE an ID to everything after the next * 
+#                  tmp3 = which(dat$tag == tags2 & dat$species == spp_list[sp])
+#                  newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
+#                  dat[tmp3,][rowbreaks[r]:nrow(dat[tmp3,]),tag_col] = newtag
+#                }
+#              }
+#            }
+#                
     #FIXME: The above chunk may give new tags to the data based on *. Find a way to indicate this,
           # as it will break teh next chunk of code.
           
@@ -149,11 +201,8 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
 }
 
 
-
 find_bad_data2 = function(dat, tags, sex_col, spp_col){
-  # check for consistent sex and species, outputs flagged tags to check
-  # keeps ear and toe tags, checks for duplicates that appear over too long of a time period (exceed rodent lifetime)
-  # or duplicates that appear too close together (multiple indivs with same tag)
+  # check for consistent sex and species, outputs flagged tags to check, or to remove from study
   
   flagged_rats = data.frame("tag"=1, "reason"=1, "occurrences"=1)
   outcount = 0
