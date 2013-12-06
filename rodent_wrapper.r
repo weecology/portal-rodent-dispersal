@@ -35,15 +35,21 @@ all2 = subset(all, species!="DX" & species!="UR" & species!="RX" & species!="SX"
 # give untagged individuals a unique 7-number code
 all2 = id_unknowns(all2, 16)
 
-# make sure when note2 == * it is counted as a new tag
+# make sure when note2 == "*" it is counted as a new tag
+# necessary if using ALL data (ear and toe tags)
+# returns the dataset with new IDs for checking for duplicate tags that occur over a suspiciously long time period
 tags = unique(all2$tag)
 all3 = starred_tags(all2, tags)
+
+#check for dead individuals, give all with same tag after marked dead a new unique ID
+tags = unique(all3$tag)
+all4 = is_dead(all3, tags, 16)
 
 # check for individuals with same tag, but captured over long timespan (may be able to separate them) 
 # necessary if using ALL data (ear and toe tags)
 # returns the dataset with new IDs for those that can easily be sorted out based on sex and year
-
-dups = is_duplicate_tag(all2, tags, 10, 9, 16) #check to see if can separate tags based
+tags = unique(all3$tag)
+dups = is_duplicate_tag(all3, tags, 10, 9, 16) #check to see if can separate tags based
 
 #subset data for years of analysis
 all2 = subset(all, yr > 1988)

@@ -111,6 +111,58 @@ starred_tags = function(dat, tags){
 }
 
 
+is_dead = function(dat, tags, tag_col){
+  #checks note5 for "D", which indicated a dead rat. 
+  #by definition, all captures with the same tagID afterwards, must be a different individual
+  #assign these captures with a new tag ID that ends with 'm' for 'mortality.
+  numcount = 1
+  
+  for (t in 1:length(tags)){
+    tmp <- which(dat$tag == tags[t])
+    
+    # if indiv was captured multiple times  
+    if (nrow(dat[tmp,]) > 1) {    
+      
+      # check num species recorded. If more than one, does data look OK if separated on species?
+      spp_list = unique(dat[tmp,spp_col])
+      
+      for (sp in 1:length(spp_list)) {
+        tmp2 = which(dat$tag == tags[t] & dat$species == spp_list[sp])
+        
+        isdead = as.vector(dat[tmp2,]$note5)
+        
+        if ("D" %in% isdead) {
+          rowbreaks = which(isdead == "D", arr.in=TRUE) #find rows where * indicates a new tag
+          endrow = nrow(dat[tmp2,])
+          
+          for (r in 1:length(rowbreaks)){
+            if (r == 1) {
+              #GIVE an ID up to the first *
+              newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+              dat[tmp2,][1:rowbreaks[r], tag_col] = newtag
+              numcount = numcount + 1 
+              #print(dat[tmp2,])
+              
+              #AND an ID to everything after the first * (the loop should take care of the next set and so on)
+              newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+              startrow = rowbreaks[r] + 1
+              dat[tmp2,][(startrow:endrow),tag_col] = newtag
+              numcount = numcount + 1
+            }
+            else if (r > 1) {
+              #GIVE an ID to everything after the next * 
+              newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+              startrow = rowbreaks[r] + 1
+              dat[tmp2,][(startrow:endrow),tag_col] = newtag
+              numcount = numcount + 1
+            }
+          }
+        }
+      }}}
+  return(dat)
+}
+
+
 is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
   # check the min to max year for a given tag. 
   # If > 4, considered suspicious
@@ -147,7 +199,7 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
           #Dipodomys are long-lived. Raise the threshold for these indivs
           if(spp_list[sp] %in% list("DO", "DM", "DS")){ 
             
-            if (max(dat[tmp2,1]) - min(dat[tmp2,1]) < 4) {
+            if (max(dat[tmp2,1]) - min(dat[tmp2,1]) < 5) {  #TODO: would this be better as <5? Some DX are really long-lived!
               newtag = paste(tags[t], numcount, "d", sep = "") #make a new tag to keep separate
               dat[tmp2,tag_col] = newtag
               numcount = numcount + 1 
