@@ -5,6 +5,7 @@ library(reshape)
 library(ggplot2)
 library(calibrate)
 library(fields)
+library(stringr)
 
 #---------------------------------------------------------------------------------
 #          setup - select wd, import data, source code,  file to collect results
@@ -65,8 +66,6 @@ all6 = subsetDat(all5)
 
 #subset data for years of analysis
 all7 = subset(all6, yr > 1988)
-
-
 
 
 #---------------------------------------------------------------------------------
@@ -190,11 +189,12 @@ corecarn = OTmeters
 
 
 #TODO: fix this chunk of code so that it is not so repetitive
-#-------------------Get MARK capture histories for granivores
-#------------------------------
+#----------------------------------------------------------------------
+#             Get MARK capture histories for granivores
+#----------------------------------------------------------------------
 spplist = c("DM", "DO", "DS", "PB", "PP", "PF", "PM", 
             "RM", "RF", "PE", "BA", "PH", "RO", "PI", "PL")
-periods = c(130:380) #1989-2009
+periods = c(130:380) # all sampling periods 1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
 
@@ -273,6 +273,70 @@ for (i in 1:length(spplist)){
 }
 
 write.table(MARK, file = "mark_datafiles//carn_mark.inp", row.names = F, col.names = F, quote = F)
+
+
+#-----------------------------------------------------------------------------------
+#        Make a table of total capture/recapture and gaps in data for each species
+#-----------------------------------------------------------------------------------
+spplist = unique(MARK[,7])
+TableDat = data.frame("species"=1, "numindiv"=1, "numindivrecap"=1, "nocaps"=1, "norecaps"=1)
+
+for (i in 1:length(spplist)){
+  
+  #subset species data, for each species in turn
+  spdata = MARK[which(MARK[,7]==spplist[i]),]
+  
+  sp = spplist[i]
+  numindiv = nrow(spdata)
+  
+  #break MARK data out into a list
+  list.all = list()
+  for (row in 1:nrow(spdata)){
+    dat = spdata[row,1]
+    list.all[row] = dat
+  }
+  
+  #make a new matrix with each period as a value
+  out<-t(sapply(list.all,function(x){
+    as.numeric(as.vector(strsplit(x,"")[[1]]))
+  }))
+  
+  #For each row find the sum things that are not 0
+  recaps<-apply(out,1,function(x){
+    length(which(!x %in% 0))-1
+  })
+  
+  numinds_recaps = length(recaps[recaps>0])
+  
+  #count the num of captures per period
+  caps = apply(out,2,function(x) {
+    length(which(!x %in% 0))
+  })
+
+  #count the num of captures per period
+  recaps2 = apply(out,2,function(x) {
+    length(which(x %in% 2))
+  })
+  
+  nummos_nocaps = length(caps[caps == 0])
+  nummos_norecaps = length(recaps2[recaps2 == 0])
+  
+  results = c(sp, numindiv, numinds_recaps, nummos_nocaps, nummos_norecaps)
+  TableDat[i,] <- results
+}
+  
+  
+#   #the first species begins the new data matrix for MARK
+#   if (i == 1) {
+#     MARK = noplacelikehome(spdata, periods, exclosures, corecarn_brkpt)
+#   }
+#   
+#   #all subsequent species are appended onto the end of the existing MARK data matrix
+#   else {
+#     nextMARK = noplacelikehome(spdata, periods, exclosures, corecarn_brkpt)
+#     MARK = rbind(MARK, nextMARK)
+#   }
+# }
 
 
 
