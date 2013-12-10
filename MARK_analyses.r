@@ -15,15 +15,19 @@ library(RMark)
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
 #set working directory and import source code
-setwd("~/")
+#setwd("~/")
+wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
+setwd(wd)
 
 # Run the line below to generate new .inp files 
 #source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
 
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
-ms_data <- convert.inp("mark_datafiles//all_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
+# files are carn_mark.inp, foli_mark.inp and gran_mark.inp
+ms_data <- convert.inp("mark_datafiles//carn_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
                       covariates = c("sd_mass", "guild", "species", "status"))
+
 #convert to factor
 ms_data$guild = as.factor(ms_data$guild)
 ms_data$species = as.factor(ms_data$species)
@@ -33,7 +37,9 @@ ms_data$status = as.factor(ms_data$status)
 #          process multistrata data, includes capture at home, and dipsersal transitions 
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
-ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 261, groups = c("sex", "guild", "species", "status"))
+# begin.time == first period number
+# TODO: get rid of guild since I will probably do analysis within instead of across guilds?
+ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 130, groups = c("sex", "guild", "species", "status"))
 
 ms_ddl <- make.design.data(ms_process) #ddl = design data list
 
