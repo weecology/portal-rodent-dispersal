@@ -164,14 +164,25 @@ for (i in 1:length(spplist)){
      assign(paste0(spplist[i], 'meters'), mtrs)
 }
 
-# concatenate core granivore data - used to ask if these species behave differently from others
-corehet = c(DMmeters, DOmeters, PBmeters, PPmeters)
+#get a list of all the new distance vectors
+meterlist = ls(pattern = "meters")
+
+#---------------------------------- From this point on, the analysis will be separated by foraging guild
+#------------------------ Granivores, Folivores, and Carnivores
+
+# concatenate core guild data - used to ask if these species behave differently from others
+coregran = c(DMmeters, DOmeters, PBmeters, PPmeters)
+corefoli = NAOmeters
+corecarn = OTmeters
 
   # find breakpoints to use in MARK data structure for future analyses
   # data reasonably well fits a lognormal distribution (eyeball and J. Powell)
   # breakpoint = mean(logdata) + sd(logdata) of all the distances traveled by recaptured individuals    
   # using log1p, and back transforming using expm1 should solve the problem of lots of zeros 
-  corehet_brkpt = expm1(mean(log1p(corehet)) + sd(log1p(corehet)))
+  coregran_brkpt = expm1(mean(log1p(coregran)) + sd(log1p(coregran)))
+  corefoli_brkpt = expm1(mean(log1p(corefoli)) + sd(log1p(corefoli)))
+  corecarn_brkpt = expm1(mean(log1p(corecarn)) + sd(log1p(corecarn)))
+
 
 # Get MARK capture histories
 #------------------------------
@@ -189,12 +200,12 @@ for (i in 1:length(spplist)){
   
   #the first species begins the new data matrix for MARK
   if (i == 1) {
-  MARK = noplacelikehome(spdata, periods, exclosures, corehet_brkpt)
+  MARK = noplacelikehome(spdata, periods, exclosures, coregran_brkpt)
   }
   
   #all subsequent species are appended onto the end of the existing MARK data matrix
   else {
-  nextMARK = noplacelikehome(spdata, periods, exclosures, corehet_brkpt)
+  nextMARK = noplacelikehome(spdata, periods, exclosures, coregran_brkpt)
   MARK = rbind(MARK, nextMARK)
   }
 }
