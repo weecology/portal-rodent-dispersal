@@ -332,13 +332,12 @@ feeding_guild = function(speciesname) {
   # grab the species name and decide what feeding guild it is in, based on the lit
   
   # heteromyidae granivores == 1
-  if (speciesname %in% list("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI")) {guild = 1}
-  # cricetidae granivores == 2
-  else if (speciesname %in% list("PE", "PM", "PL", "RM", "RF", "RO", "BA")) {guild = 2}
-  # folivores == 3
+  if (speciesname %in% list("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI",
+                            "PE", "PM", "PL", "RM", "RF", "RO", "BA")) {guild = 1}
+  # folivores == 2
   else if (speciesname %in% list("SH", "SF", "SO", "NAO")) {guild = 3 }  
-  # insectivores == 4
-  else {guild = 4}
+  # insectivores == 3
+  else {guild = 3}
   
   return(guild)
 }
@@ -390,7 +389,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
   ## 1 (stayed home), and 2 (away from home). 
   ## Home is determined using the mean + 1 sd of the logged data.
-  # guild (1 = heteromyid granivore, 2 = cricetid granivore, 3 = folivore, 4 = carnivore)
+  # guild (1 = granivore, 2 = folivore, 3 = carnivore)
   # species (assigned using function enumerate_species)
   # status (1 = core, 2 = intermediate, 3 = transient)
   
