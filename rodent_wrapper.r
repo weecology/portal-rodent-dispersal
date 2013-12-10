@@ -18,6 +18,11 @@ source("movement_fxns.R")
 #import all data
 all = read.table('rawdata/all_1980-2009.txt', sep = ',', header = TRUE)
 
+#import cleaned data
+allclean = read.csv('rawdata/cleaned_1989-2009.csv', sep = ',', header = TRUE)
+  #all7 == allclean, if have allclean, can skip the datacleaning steps
+  all7=allclean
+
 #---------------------------------------------------------------------------------
 #          clean up the data
 #---------------------------------------------------------------------------------
@@ -67,10 +72,10 @@ all7 = subset(all6, yr > 1988)
 #---------------------------------------------------------------------------------
 #          calculate life-history details - temporal persistence, reproduction
 #---------------------------------------------------------------------------------
-spplist = unique(all2$species)
+spplist = unique(all7$species)
 totalyears = c(1989:2009) #will need to be adjusted based on time frame want to use
 controlplots = c(1,2,4,8,9,11,12,14,17,22)
-months = count_months(all2, totalyears)
+months = count_months(all7, totalyears)
 
 persistence = data.frame(species=NA, propyrs=NA, propmos=NA, meanabun=NA, maxabun=NA)
   outcount = 1
@@ -80,7 +85,7 @@ avg_mo_reprod = data.frame(species=NA, month=NA, proprepro=NA)
 
 for (i in 1:length(spplist)){
   #subset species data
-  spdata = subset(all2, species == spplist[i])
+  spdata = subset(all7, species == spplist[i])
   
     # proportion of years they were seen in CONTROL plots
     conspdata = subset(spdata, plot %in% controlplots)
