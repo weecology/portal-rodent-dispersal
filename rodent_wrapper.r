@@ -6,6 +6,7 @@ library(ggplot2)
 library(calibrate)
 library(fields)
 library(stringr)
+library(plyr)
 
 #---------------------------------------------------------------------------------
 #          setup - select wd, import data, source code,  file to collect results
@@ -313,7 +314,7 @@ for (i in 1:length(spplist)){
     length(which(!x %in% 0))
   })
 
-  #count the num of captures per period
+  #count the num of recaptures per period
   recaps2 = apply(out,2,function(x) {
     length(which(x %in% 2))
   })
@@ -324,21 +325,8 @@ for (i in 1:length(spplist)){
   results = c(sp, numindiv, numinds_recaps, nummos_nocaps, nummos_norecaps)
   TableDat[i,] <- results
 }
-  
-  
-#   #the first species begins the new data matrix for MARK
-#   if (i == 1) {
-#     MARK = noplacelikehome(spdata, periods, exclosures, corecarn_brkpt)
-#   }
-#   
-#   #all subsequent species are appended onto the end of the existing MARK data matrix
-#   else {
-#     nextMARK = noplacelikehome(spdata, periods, exclosures, corecarn_brkpt)
-#     MARK = rbind(MARK, nextMARK)
-#   }
-# }
 
-
+print(TableDat)
 
 #---------------------------------------------------------------------------------
 #          plot results
@@ -352,8 +340,10 @@ ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = maxabun)) + t
 
 ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun)) + theme_bw() + xlab("proportion years present") +
   ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
-  geom_vline(xintercept=0.66, linetype="dotted", col = "red") + 
-  geom_hline(yintercept=0.66, linetype="dotted", col = "red") +
+  geom_vline(xintercept=0.66, linetype="dotted", col = "red", size = 1.5) + 
+  geom_hline(yintercept=0.66, linetype="dotted", col = "red", size = 1.5) +
+  geom_vline(xintercept=0.33, linetype="dotted", col = "red", size = 1.5) + 
+  geom_hline(yintercept=0.33, linetype="dotted", col = "red", size = 1.5) +
   ggtitle("Rodents 1989 - 2009") + geom_text(aes(label = species), hjust=0, vjust=0)
 
 #------------------------- plot abundance for all species across timeseries
@@ -368,21 +358,71 @@ ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() +
 #------------------------- plot meters traveled by all species
 distances = ls(pattern = "*meters") #see all the vectors
 
+graniv_dist = list(PMmeters, DMmeters, RMmeters, RFmeters, PEmeters, DSmeters, DOmeters, PPmeters,
+                   PFmeters, BAmeters, PHmeters, ROmeters, PImeters, PLmeters, PBmeters)
+
+#make a new matrix with the breakpoint for each species
+brkpt_out<-sapply(graniv_dist,function(x){
+  expm1(mean(log1p(x)) + sd(log1p(x)))
+})
+
+mode_out <-sapply(graniv_dist,function(x){
+  as.numeric(names(sort(-table(x)))[1])
+})
+
+mean_out <-sapply(graniv_dist,function(x){
+  as.numeric(mean(x))
+})
+
+max_out <-sapply(graniv_dist,function(x){
+  as.numeric(max(x))
+})
+
+
+
+graniv_persist = persistence[which(persistence$species %in% granivores),c(1,2,3)] #grab species and proportion year data
+cat = c(2,1,2,2,2,2,1,1,2,3,3,3,3,3,1) #make a list of the persistence categories
+granivdata = cbind(graniv_persist, brkpt_out, mode_out, mean_out, max_out, cat)
+granivdata$oneval = granivdata$propyrs * granivdata$propmos
+
+#plot
+ggplot(granivdata, aes(oneval, brkpt_out)) + geom_point(aes(col=as.factor(cat), size = 3,
+                                                             pch = as.factor(cat))) + theme_bw() +
+        geom_hline(yintercept=coregran_brkpt, linetype="dashed", col = "indianred") +
+        xlab("prop yrs * prop months present") + geom_text(aes(label=species), hjust=0, vjust=0) +
+        ylab("transition distance")
+
+
+ggplot(granivdata, aes(propyrs, mode_out)) + geom_point(aes(col=as.factor(cat), size = 3, 
+                                                            pch = as.factor(cat))) + theme_bw()
+ggplot(granivdata, aes(propyrs, mean_out)) + geom_point(aes(col=as.factor(cat), size = 3, 
+                                                            pch = as.factor(cat))) + theme_bw()
+
+ggplot(granivdata, aes(oneval, mode_out)) + geom_point(aes(col=as.factor(cat), size = 3,
+                                                            pch = as.factor(cat))) + 
+      theme_bw() + xlab("prop yrs * prop months present") + geom_text(aes(label=species), hjust=0, vjust=0) +
+      ylab("modal distance movement")
+
+ggplot(granivdata, aes(oneval, mean_out)) + geom_point(aes(col=as.factor(cat), size=5,
+                                                           pch=as.factor(cat))) +
+      theme_bw() + xlab("prop yrs * prop months present")  + geom_text(aes(label=species), hjust=0, vjust=0) +
+      ylab("mean distance movement")
+
+# attempting to build up to making bean plots
 ggplot(data=data.frame(value=DOmeters)) +
   stat_density(aes(x=value)) +
   geom_segment(aes(x=value,xend=value),y=0,yend=0.0025,col='white')
 
-ggplot(data)+
+ggplot(data=data.frame(value=DOmeters))+
   geom_boxplot(aes(x="DO", y=value))
 
-ggplot(data=d2)+
+ggplot(data=data.frame(value=DOmeters))+
   geom_violin(aes(x=Distribution,y=Value),fill='grey',trim=F)+
   geom_segment(aes(
     x=match(Distribution,levels(Distribution))-0.1,
     xend=match(Distribution,levels(Distribution))+0.1,
     y=Value,yend=Value),
-               col='black'
-  )
+               col='black')
 
 #------------------------------------------ FIGURE - for ESA talk
 
