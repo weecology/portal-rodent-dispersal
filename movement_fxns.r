@@ -374,12 +374,12 @@ enumerate_species = function(speciesname) {
 
 temporal_status = function (speciesname){
   #assigns temporal status to each species based on its across year and within year presence thru span of the entire 30+ year dataset
+  #definitions based on output from corespecies, intermediatespecies and transientspecies variables in main script
   #core = 1, intermediate = 2, transient = 3 
-  #FIXME: For now, coding as Core vs. Not Core - decide if this is correct later
   
-  if (speciesname %in% list("DO", "DM", "PB", "PP", "OT")) {status = 1}
-  else if (speciesname %in% list("PE", "RM", "NAO")) {status = 2}
-  else if (speciesname %in% list("PF", "PM", "SH", "SF", "OL")) {status = 2}
+  if (speciesname %in% list("DO", "DM", "PB", "PP", "OT", "NAO")) {status = 1}
+  else if (speciesname %in% list("PM", "RM", "SH", "RF", "OL", "PE", "DS", "PF", "SF")) {status = 2}
+  else if (speciesname %in% list("BA", "PH", "RO", "SO", "PI", "PL")) {status = 3}
   
   return(status)
 }

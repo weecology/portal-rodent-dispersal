@@ -145,12 +145,17 @@ intermediatespecies = persistence[which(persistence$propyrs > 0.333 & persistenc
                                           persistence$propmos > 0.333 & persistence$propmos < 0.666),1]
 transientspecies = persistence[which(persistence$propyrs <= 0.333 & persistence$propmos <=0.333),1]
 
+#Categorize species by feeding guild
+granivores = c("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI",
+               "PE", "PM", "PL", "RM", "RF", "RO", "BA")
+folivores = c("SH", "SF", "SO", "NAO")
+carnivores = c("OT", "OL")
 
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
 
-#FIXME: Create an empty list, add each species-level vector as an element in the list
+#TODO: Create an empty list, add each species-level vector as an element in the list
 # Then don't have to worry about locating the data later
 
 for (i in 1:length(spplist)){
@@ -199,7 +204,7 @@ for (i in 1:length(spplist)){
   spdata = subset(all7, species == spplist[i])
   
   if (spplist[i] %in% list("DM", "DS", "DO")) { exclosures = krat_excl} 
-  else { exclosures = all_excl} #TOOD: OK unless good reason to only use control plots
+  else { exclosures = all_excl} 
   
   #the first species begins the new data matrix for MARK
   if (i == 1) {
