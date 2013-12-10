@@ -100,7 +100,7 @@ for (i in 1:length(spplist)){
     maxconabun = max(conabun)
   
   #record persistence and abundance data from control plots
-  persistence[outcount,] = c(spplist[i], round(conpropyrs,4), round(conavgmos,4), round(meanconabun,4), maxconabun)
+  persistence[outcount,] = c(as.character(spplist[i]), round(conpropyrs,4), round(conavgmos,4), round(meanconabun,4), maxconabun)
   yearly_control_abundance = cbind(yearly_control_abundance, conabun)
   outcount = outcount + 1
   
@@ -155,7 +155,7 @@ transientspecies = persistence[which(persistence$propyrs <= 0.333 & persistence$
 
 for (i in 1:length(spplist)){
   #subset species data
-  spdata = subset(all2, species == spplist[i])
+  spdata = subset(all7, species == spplist[i])
   
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
