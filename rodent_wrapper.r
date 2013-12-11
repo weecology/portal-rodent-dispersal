@@ -344,15 +344,11 @@ for (i in 1:length(spplist)){
 
 print(TableDat)
 
+
 #---------------------------------------------------------------------------------
 #          plot results
 #---------------------------------------------------------------------------------
 #----------------------------- plot abundance vs. years, ala core v. transient literature
-ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = maxabun)) + theme_bw() + xlab("proportion years present") +
-  ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
-  geom_vline(xintercept=0.66, linetype="dotted", col = "red") + 
-  geom_hline(yintercept=0.66, linetype="dotted", col = "red") +
-  ggtitle("Rodents 1989 - 2009")
 
 ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun)) + theme_bw() + xlab("proportion years present") +
   ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
