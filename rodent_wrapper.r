@@ -219,6 +219,35 @@ corecarn = OTmeters
   corecarn_brkpt = expm1(mean(log1p(corecarn)) + sd(log1p(corecarn)))
 
 
+distances = ls(pattern = "*meters") #see all the vectors
+
+graniv_dist = list(PMmeters, DMmeters, RMmeters, RFmeters, PEmeters, DSmeters, DOmeters, PPmeters,
+                   PFmeters, BAmeters, PHmeters, ROmeters, PImeters, PLmeters, PBmeters)
+
+#make a new matrix with the breakpoint for each species
+brkpt_out<-sapply(graniv_dist,function(x){
+  expm1(mean(log1p(x)) + sd(log1p(x)))
+})
+
+mode_out <-sapply(graniv_dist,function(x){
+  as.numeric(names(sort(-table(x)))[1])
+})
+
+mean_out <-sapply(graniv_dist,function(x){
+  as.numeric(mean(x))
+})
+
+max_out <-sapply(graniv_dist,function(x){
+  as.numeric(max(x))
+})
+
+#concatenate data for granivores only, and 
+#add in the transition, modal, mean, and max distances traveled by each species for later plotting
+graniv_persist = persistence[which(persistence$species %in% granivores),] 
+granivdata = cbind(graniv_persist, brkpt_out, mode_out, mean_out, max_out)
+granivdata$oneval = granivdata$propyrs * granivdata$propmos
+
+
 #TODO: fix this chunk of code so that it is not so repetitive
 #----------------------------------------------------------------------
 #             Get MARK capture histories for granivores
@@ -375,7 +404,6 @@ ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun, col
   ggtitle("Rodents 1989 - 2009") + geom_text(aes(label = species), hjust=0, vjust=0)
 
 #------------------------- plot abundance for all species across timeseries
-
 ggplot(yrcontrolabuns, aes(x=year, y=abun, group=species)) + 
 #  geom_point(aes(col=status, pch=guild)) + 
   geom_line(aes(col=status), size=1.5) + theme_bw()
@@ -385,59 +413,14 @@ ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() +
   geom_line() + facet_wrap(~species)
 
 #------------------------- plot meters traveled by all species
-distances = ls(pattern = "*meters") #see all the vectors
-
-graniv_dist = list(PMmeters, DMmeters, RMmeters, RFmeters, PEmeters, DSmeters, DOmeters, PPmeters,
-                   PFmeters, BAmeters, PHmeters, ROmeters, PImeters, PLmeters, PBmeters)
-
-#make a new matrix with the breakpoint for each species
-brkpt_out<-sapply(graniv_dist,function(x){
-  expm1(mean(log1p(x)) + sd(log1p(x)))
-})
-
-mode_out <-sapply(graniv_dist,function(x){
-  as.numeric(names(sort(-table(x)))[1])
-})
-
-mean_out <-sapply(graniv_dist,function(x){
-  as.numeric(mean(x))
-})
-
-max_out <-sapply(graniv_dist,function(x){
-  as.numeric(max(x))
-})
+#plot modal distance by persistence for all granivores, color code points by status
+ggplot(granivdata, aes(propyrs, mode_out)) + 
+  geom_point(aes(col=as.factor(status), size = 3, pch = as.factor(status))) + theme_bw() + 
+  xlab("proportion of years present") + ylab("Modal Distance between trap locations") +
+  geom_text(aes(label=species), hjust=0, vjust=0)
 
 
-
-graniv_persist = persistence[which(persistence$species %in% granivores),c(1,2,3)] #grab species and proportion year data
-cat = c(2,1,2,2,2,2,1,1,2,3,3,3,3,3,1) #make a list of the persistence categories
-granivdata = cbind(graniv_persist, brkpt_out, mode_out, mean_out, max_out, cat)
-granivdata$oneval = granivdata$propyrs * granivdata$propmos
-
-#plot
-ggplot(granivdata, aes(oneval, brkpt_out)) + geom_point(aes(col=as.factor(cat), size = 3,
-                                                             pch = as.factor(cat))) + theme_bw() +
-        geom_hline(yintercept=coregran_brkpt, linetype="dashed", col = "indianred") +
-        xlab("prop yrs * prop months present") + geom_text(aes(label=species), hjust=0, vjust=0) +
-        ylab("transition distance")
-
-
-ggplot(granivdata, aes(propyrs, mode_out)) + geom_point(aes(col=as.factor(cat), size = 3, 
-                                                            pch = as.factor(cat))) + theme_bw()
-ggplot(granivdata, aes(propyrs, mean_out)) + geom_point(aes(col=as.factor(cat), size = 3, 
-                                                            pch = as.factor(cat))) + theme_bw()
-
-ggplot(granivdata, aes(oneval, mode_out)) + geom_point(aes(col=as.factor(cat), size = 3,
-                                                            pch = as.factor(cat))) + 
-      theme_bw() + xlab("prop yrs * prop months present") + geom_text(aes(label=species), hjust=0, vjust=0) +
-      ylab("modal distance movement")
-
-ggplot(granivdata, aes(oneval, mean_out)) + geom_point(aes(col=as.factor(cat), size=5,
-                                                           pch=as.factor(cat))) +
-      theme_bw() + xlab("prop yrs * prop months present")  + geom_text(aes(label=species), hjust=0, vjust=0) +
-      ylab("mean distance movement")
-
-# attempting to build up to making bean plots
+#------------------------- attempting to build up to making bean plots
 ggplot(data=data.frame(value=DOmeters)) +
   stat_density(aes(x=value)) +
   geom_segment(aes(x=value,xend=value),y=0,yend=0.0025,col='white')
