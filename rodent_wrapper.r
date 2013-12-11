@@ -164,6 +164,21 @@ for (row in 1:nrow(persistence)){
   else { persistence[row,]$status = "transient" }
 }
 
+#add status and guild to yrcontrolabuns
+yrcontrolabuns$guild = rep(NA, nrow(yrcontrolabuns))
+yrcontrolabuns$status = rep(NA, nrow(yrcontrolabuns))
+
+for (row in 1:nrow(yrcontrolabuns)){
+  if (yrcontrolabuns[row,]$species %in% granivores){ yrcontrolabuns[row,]$guild = "granivore" }
+  else if (yrcontrolabuns[row,]$species %in% folivores) { yrcontrolabuns[row,]$guild = "folivore" }
+  else { yrcontrolabuns[row,]$guild = "carnivore" }
+  
+  if (yrcontrolabuns[row,]$species %in% corespecies){ yrcontrolabuns[row,]$status = "core" }
+  else if (yrcontrolabuns[row,]$species %in% intermediatespecies) { yrcontrolabuns[row,]$status = "intermediate" }
+  else { yrcontrolabuns[row,]$status = "transient" }
+}
+
+
 
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
@@ -350,18 +365,20 @@ print(TableDat)
 #---------------------------------------------------------------------------------
 #----------------------------- plot abundance vs. years, ala core v. transient literature
 
-ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun)) + theme_bw() + xlab("proportion years present") +
+ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun, col=guild)) + 
+  theme_bw() + xlab("proportion years present") +
   ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
   geom_vline(xintercept=0.66, linetype="dotted", col = "red", size = 1.5) + 
-  geom_hline(yintercept=0.66, linetype="dotted", col = "red", size = 1.5) +
+#  geom_hline(yintercept=0.66, linetype="dotted", col = "red", size = 1.5) +
   geom_vline(xintercept=0.33, linetype="dotted", col = "red", size = 1.5) + 
-  geom_hline(yintercept=0.33, linetype="dotted", col = "red", size = 1.5) +
+#  geom_hline(yintercept=0.33, linetype="dotted", col = "red", size = 1.5) +
   ggtitle("Rodents 1989 - 2009") + geom_text(aes(label = species), hjust=0, vjust=0)
 
 #------------------------- plot abundance for all species across timeseries
-guild = c(3,1,1,1,2,1,2,3,1,1,1,2,1,1,1,1,2,1,1,1,1) #TODO: Color by guild? Add guild to df?
-ggplot(yrcontrolabuns, aes(x = year, y = abun, group = species)) + 
-  geom_point() + geom_line()
+
+ggplot(yrcontrolabuns, aes(x=year, y=abun, group=species)) + 
+#  geom_point(aes(col=status, pch=guild)) + 
+  geom_line(aes(col=status), size=1.5) + theme_bw()
 
 #------------------------- plot monthly reproduction
 ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() + 
