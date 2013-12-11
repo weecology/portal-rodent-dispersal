@@ -121,7 +121,7 @@ for (i in 1:length(spplist)){
 }
 
 #add species names to the dataframe of abundance vectors
-names(yearly_control_abundance) = c("year", spplist)
+names(yearly_control_abundance) = c("year", as.character(spplist))
 #make sure cols are numeric
 persistence$propyrs = as.numeric(persistence$propyrs)
 persistence$propmos = as.numeric(persistence$propmos)
@@ -139,17 +139,31 @@ yrcontrolabuns = melt(yearly_control_abundance, id.vars=c("year"))
 names(yrcontrolabuns) = c("year", "species", "abun")
 
 
-#Identify Core species based on results   #TODO: determine best thresholds to set
-corespecies = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos >= 0.666),1]
-intermediatespecies = persistence[which(persistence$propyrs > 0.333 & persistence$propyrs < 0.666 | 
-                                          persistence$propmos > 0.333 & persistence$propmos < 0.666),1]
-transientspecies = persistence[which(persistence$propyrs <= 0.333 & persistence$propmos <=0.333),1]
+#Identify Core species based on annual persistence, following Coyle et al. 2013 (American Naturalist)
+corespecies = persistence[which(persistence$propyrs >= 0.666),1]
+intermediatespecies = persistence[which(persistence$propyrs > 0.333 & persistence$propyrs < 0.666),1]
+transientspecies = persistence[which(persistence$propyrs <= 0.333),1]
 
 #Categorize species by feeding guild
 granivores = c("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI",
                "PE", "PM", "PL", "RM", "RF", "RO", "BA")
 folivores = c("SH", "SF", "SO", "NAO")
 carnivores = c("OT", "OL")
+
+#add columns to persistence (for later plotting) for status and guild
+persistence$guild = rep(NA, nrow(persistence))
+persistence$status = rep(NA, nrow(persistence))
+
+for (row in 1:nrow(persistence)){
+  if (persistence[row,]$species %in% granivores){ persistence[row,]$guild = "granivore" }
+  else if (persistence[row,]$species %in% folivores) { persistence[row,]$guild = "folivore" }
+  else { persistence[row,]$guild = "carnivore" }
+
+  if (persistence[row,]$species %in% corespecies){ persistence[row,]$status = "core" }
+  else if (persistence[row,]$species %in% intermediatespecies) { persistence[row,]$status = "intermediate" }
+  else { persistence[row,]$status = "transient" }
+}
+
 
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
@@ -176,7 +190,8 @@ meterlist = ls(pattern = "meters")
 #------------------------ Granivores, Folivores, and Carnivores
 
 # concatenate core guild data - used to ask if these species behave differently from others
-coregran = c(DMmeters, DOmeters, PBmeters, PPmeters)
+# Check that the definition of "core" is still the same, need to change this chunk of code by hand, if necessary
+coregran = c(DMmeters, DOmeters, PBmeters, PPmeters, PFmeters, PEmeters, RMmeters)
 corefoli = NAOmeters
 corecarn = OTmeters
 
@@ -279,6 +294,7 @@ write.table(MARK, file = "mark_datafiles//carn_mark.inp", row.names = F, col.nam
 #-----------------------------------------------------------------------------------
 #        Make a table of total capture/recapture and gaps in data for each species
 #-----------------------------------------------------------------------------------
+#right now, this code only uses the most recently generated MARK data table 
 spplist = unique(MARK[,7])
 TableDat = data.frame("species"=1, "numindiv"=1, "numindivrecap"=1, "nocaps"=1, "norecaps"=1)
 
