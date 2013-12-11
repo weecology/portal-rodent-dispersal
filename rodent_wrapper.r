@@ -1,7 +1,7 @@
 # Code for working with individual-level rodent data
 # movement with stakes
 
-library(reshape)
+library(reshape2)
 library(ggplot2)
 library(calibrate)
 library(fields)
@@ -421,20 +421,24 @@ ggplot(granivdata, aes(propyrs, mode_out)) +
 
 
 #------------------------- attempting to build up to making bean plots
-ggplot(data=data.frame(value=DOmeters)) +
-  stat_density(aes(x=value)) +
-  geom_segment(aes(x=value,xend=value),y=0,yend=0.0025,col='white')
+# ggplot(data=data.frame(value=DOmeters)) +
+#   stat_density(aes(x=value)) +
+#   geom_segment(aes(x=value,xend=value),y=0,yend=0.0025,col='white')
+# 
+# ggplot(data=data.frame(value=DOmeters))+
+#   geom_boxplot(aes(x="DO", y=value))
+# 
+# ggplot(df)+
+#   geom_violin(aes(x=species,y=distance),fill='grey',trim=F)
+# +
+#   geom_segment(aes(
+#     x=match(Distribution,levels(Distribution))-0.1,
+#     xend=match(Distribution,levels(Distribution))+0.1,
+#     y=Value,yend=Value),
+#                col='black')
 
-ggplot(data=data.frame(value=DOmeters))+
-  geom_boxplot(aes(x="DO", y=value))
 
-ggplot(data=data.frame(value=DOmeters))+
-  geom_violin(aes(x=Distribution,y=Value),fill='grey',trim=F)+
-  geom_segment(aes(
-    x=match(Distribution,levels(Distribution))-0.1,
-    xend=match(Distribution,levels(Distribution))+0.1,
-    y=Value,yend=Value),
-               col='black')
+
 
 #------------------------------------------ FIGURE - for ESA talk
 
