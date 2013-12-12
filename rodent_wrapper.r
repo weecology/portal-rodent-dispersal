@@ -26,7 +26,7 @@ allclean = read.csv('rawdata/cleaned_1989-2009.csv', sep = ',', header = TRUE)
   all7=allclean
 
 #---------------------------------------------------------------------------------
-#          clean up the data
+#          clean up the data -- skip this section if allclean exists
 #---------------------------------------------------------------------------------
 
 # change some cols from factor to character class
@@ -179,13 +179,17 @@ for (row in 1:nrow(yrcontrolabuns)){
 }
 
 
-
 #---------------------------------------------------------------------------------
 #          calculate movement distances, multi-state capture histories
 #---------------------------------------------------------------------------------
 
-#TODO: Create an empty list, add each species-level vector as an element in the list
-# Then don't have to worry about locating the data later
+#set names for the distance list
+spnames = as.character(spplist)
+
+#create lists with sublist names reflecting each species
+meterlist = sapply(spnames,function(x) NULL)
+taglist = sapply(spnames,function(x) NULL)
+
 
 for (i in 1:length(spplist)){
   #subset species data
@@ -193,22 +197,24 @@ for (i in 1:length(spplist)){
   
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
-      assign(paste0(spplist[i], 'tags'), tags)
     mtrs = distance_moved(spdata, tags)
-     assign(paste0(spplist[i], 'meters'), mtrs)
+    meterlist[i] = list(mtrs)
+    taglist[i] = list(tags)
 }
 
 #get a list of all the new distance vectors
 meterlist = ls(pattern = "meters")
+
 
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
 #------------------------ Granivores, Folivores, and Carnivores
 
 # concatenate core guild data - used to ask if these species behave differently from others
 # Check that the definition of "core" is still the same, need to change this chunk of code by hand, if necessary
-coregran = c(DMmeters, DOmeters, PBmeters, PPmeters, PFmeters, PEmeters, RMmeters)
-corefoli = NAOmeters
-corecarn = OTmeters
+coremeters = meterlist[which(names(meterlist) %in% corespecies]
+coregran = coremeters[which(names(coremeters) %in% granivores]  #  c(DMmeters, DOmeters, PBmeters, PPmeters, PFmeters, PEmeters, RMmeters)
+corefoli = coremeters[which(names(coremeters) %in% folivores]
+corecarn = coremeters[which(names(coremeters) %in% carnivores]
 
   # find breakpoints to use in MARK data structure for future analyses
   # data reasonably well fits a lognormal distribution (eyeball and J. Powell)
