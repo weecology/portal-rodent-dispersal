@@ -15,8 +15,8 @@ library(RMark)
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
 #set working directory and import source code
-#setwd("~/")
-wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
+setwd("~/")
+#wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
 setwd(wd)
 
 # Run the line below to generate new .inp files 
