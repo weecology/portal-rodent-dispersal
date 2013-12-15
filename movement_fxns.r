@@ -277,7 +277,8 @@ subsetDat = function(dataset){
   
   #don't use negative period numbers and periods with only one day of trapping
   #TODO: add periods from 1980-1999 that were incompletely sampled
-  dataset = subset(dataset, period != 267 & period != 277 & period != 278 & period != 283 &
+  dataset = subset(dataset, period != 111 & period != 237 & period != 241 &
+                          period != 267 & period != 277 & period != 278 & period != 283 &
                           period != 284 & period != 300 & period != 311 & period != 313 &
                           period != 314 & period != 318 & period != 321 & period != 323 &
                           period != 337 & period != 339 & period != 344 & period != 351)

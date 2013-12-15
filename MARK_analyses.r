@@ -100,6 +100,8 @@ Sspeciesstrata <- list(formula = ~species * strata)
 #    skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
 
 # select periods that were omitted from the study - untrapped
+p237 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 237,]))
+p241 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 241,]))
 p267 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 267,])) 
 p277 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 277,]))
 p278 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 278,]))
@@ -118,6 +120,8 @@ p344 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 344,]))
 p351 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 351,]))
 
 # set those periods to p = 0, because they *can't* be anything else
+p237val = rep(0, length(p237))
+p241val = rep(0, length(p241))
 p267val = rep(0, length(p267))
 p277val = rep(0, length(p277))
 p278val = rep(0, length(p278))
@@ -140,33 +144,33 @@ p351val = rep(0, length(p351))
 # link = "logit" is the default. "cloglog" may be esp. useful when there are fewer recaptures
 
 #Null Model
-pnull <- list(formula = ~1, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+pnull <- list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                    p318, p321, p323, p337, p339, p344, p351), 
-                                         value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                         value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                    p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                    p344val, p351val), link = "cloglog"))
 # Strata effect (in A or in B)
-pstrata <- list(formula = ~stratum, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+pstrata <- list(formula = ~stratum, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                      p318, p321, p323, p337, p339, p344, p351), 
-                                             value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                             value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                        p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                        p344val, p351val), link = "cloglog"))
 # Guild effect 
-pguild <- list(formula = ~guild, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+pguild <- list(formula = ~guild, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                                    p318, p321, p323, p337, p339, p344, p351), 
-                                                         value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                         value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                                    p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                                    p344val, p351val), link = "cloglog"))
 # Species effect
-pspecies <- list(formula = ~species, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+pspecies <- list(formula = ~species, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                                        p318, p321, p323, p337, p339, p344, p351), 
-                                                             value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                             value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                                        p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                                        p344val, p351val), link = "cloglog"))
 # status effect
-pstatus <- list(formula = ~status, fixed = list(index = c(p267, p277, p278, p283, p284, p300, p311, p313, p314,
+pstatus <- list(formula = ~status, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                                        p318, p321, p323, p337, p339, p344, p351), 
-                                                             value = c(p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                                             value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                                        p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                                        p344val, p351val), link = "cloglog"))
 
@@ -198,21 +202,21 @@ setwd(wd)
 Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
                             options = "SIMANNEAL")
 
-Sstrata_pstrata_Psistrata <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
-                                  options = "SIMANNEAL")
+#Sstrata_pstrata_Psistrata <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
+#                                  options = "SIMANNEAL")
 
-Sguild_pguild_Psiguild <- mark(ms_process, ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
-                               options = "SIMANNEAL")
+#Sguild_pguild_Psiguild <- mark(ms_process, ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
+#                               options = "SIMANNEAL")
 
 Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
                                      options = "SIMANNEAL")
 
-Sstatus_pstatus_Psistatus <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstatus, p = pstatus, Psi = Psistatus), 
-                                  options = "SIMANNEAL")
+#Sstatus_pstatus_Psistatus <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstatus, p = pstatus, Psi = Psistatus), 
+#                                  options = "SIMANNEAL")
 
 
-Sspeciesstrata_pguild_Psispeciesstrata <- mark(ms_process, ms_ddl, model.parameters = list (s = Sspeciesstrata, p = pguild, Psi = Psispeciesstrata),
-                                               options = "SIMANNEAL")
+#Sspeciesstrata_pguild_Psispeciesstrata <- mark(ms_process, ms_ddl, model.parameters = list (s = Sspeciesstrata, p = pguild, Psi = Psispeciesstrata),
+#                                               options = "SIMANNEAL")
 
 #summarize results
 ms_results <- collect.models(type = "Multistrata")
