@@ -50,7 +50,7 @@ all3 = starred_tags(all2, tags, 9, 16)
 
 #check for dead individuals, give all with same tag after marked dead a new unique ID
 tags = unique(all3$tag)
-all4 = is_dead(all3, tags, 9, 16) #get warnings, but it seems to work - not sure what they are indicating?
+all4 = is_dead(all3, tags, 9, 16)
 
 # check for individuals with same tag, but captured over long timespan (may be able to separate them) 
 # necessary if using ALL data (ear and toe tags)
