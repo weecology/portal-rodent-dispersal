@@ -208,10 +208,10 @@ for (i in 1:length(spplist)){
 
 # concatenate core guild data - used to ask if these species behave differently from others
 # Check that the definition of "core" is still the same, need to change this chunk of code by hand, if necessary
-coremeters = meterlist[which(names(meterlist) %in% corespecies]
-coregran = coremeters[which(names(coremeters) %in% granivores]  #  c(DMmeters, DOmeters, PBmeters, PPmeters, PFmeters, PEmeters, RMmeters)
-corefoli = coremeters[which(names(coremeters) %in% folivores]
-corecarn = coremeters[which(names(coremeters) %in% carnivores]
+coremeters = meterlist[which(names(meterlist) %in% corespecies)]
+coregran = unlist(coremeters[which(names(coremeters) %in% granivores)], use.names=F) 
+corefoli = unlist(coremeters[which(names(coremeters) %in% folivores)], use.names=F)
+corecarn = unlist(coremeters[which(names(coremeters) %in% carnivores)], use.names=F)
 
   # find breakpoints to use in MARK data structure for future analyses
   # data reasonably well fits a lognormal distribution (eyeball and J. Powell)
