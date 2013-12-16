@@ -222,12 +222,9 @@ corecarn = unlist(coremeters[which(names(coremeters) %in% carnivores)], use.name
   corecarn_brkpt = expm1(mean(log1p(corecarn)) + sd(log1p(corecarn)))
 
 
-distances = ls(pattern = "*meters") #see all the vectors
+#make a new matrix with the breakpoint for each granivore species
+graniv_dist = meterlist[which(names(meterlist) %in% granivores)]
 
-graniv_dist = list(PMmeters, DMmeters, RMmeters, RFmeters, PEmeters, DSmeters, DOmeters, PPmeters,
-                   PFmeters, BAmeters, PHmeters, ROmeters, PImeters, PLmeters, PBmeters)
-
-#make a new matrix with the breakpoint for each species
 brkpt_out<-sapply(graniv_dist,function(x){
   expm1(mean(log1p(x)) + sd(log1p(x)))
 })
