@@ -380,16 +380,16 @@ enumerate_species = function(speciesname) {
   else if (speciesname == "PF") {speciesnum = 6}
   else if (speciesname == "PE") {speciesnum = 7}
   else if (speciesname == "PM") {speciesnum = 8}
-  else if (speciesname == "PL") {speciesnum = 9}
-  else if (speciesname == "PH") {speciesnum = 10}
-  else if (speciesname == "PI") {speciesnum = 11}
+  else if (speciesname == "PL") {speciesnum = 13} #transient G
+  else if (speciesname == "PH") {speciesnum = 13} #transient G
+  else if (speciesname == "PI") {speciesnum = 13} #transient G
   else if (speciesname == "RM") {speciesnum = 12}
-  else if (speciesname == "RF") {speciesnum = 13} 
-  else if (speciesname == "RO") {speciesnum = 14}
-  else if (speciesname == "BA") {speciesnum = 15}
+  else if (speciesname == "RF") {speciesnum = 13} #transient G
+  else if (speciesname == "RO") {speciesnum = 13} #transient G
+  else if (speciesname == "BA") {speciesnum = 13} #transient G
   else if (speciesname == "SH") {speciesnum = 16}
   else if (speciesname == "SF") {speciesnum = 17}
-  else if (speciesname == "SO") {speciesnum = 18}
+  else if (speciesname == "SO") {speciesnum = 18} #transient F
   else if (speciesname == "NAO") {speciesnum = 19}
   else if (speciesname == "OT") {speciesnum = 20}
   else if (speciesname == "OL") {speciesnum = 21}
