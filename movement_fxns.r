@@ -53,7 +53,7 @@ return(dat)
 # return(flagged_rats)
 # }
 
-starred_tags = function(dat, tags){
+starred_tags = function(dat, tags, spp_col, tag_col){
   #Automate checking the flagged data for where the individual breaks should be
   #check for *, which indicates a new tag
   #tags with multiple rows are sorted by species, then checked for *
@@ -111,7 +111,7 @@ starred_tags = function(dat, tags){
 }
 
 
-is_dead = function(dat, tags, tag_col){
+is_dead = function(dat, tags, spp_col, tag_col){
   #checks note5 for "D", which indicated a dead rat. 
   #by definition, all captures with the same tagID afterwards, must be a different individual
   #assign these captures with a new tag ID that ends with 'm' for 'mortality.
