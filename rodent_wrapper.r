@@ -202,9 +202,6 @@ for (i in 1:length(spplist)){
     taglist[i] = list(tags)
 }
 
-#get a list of all the new distance vectors
-meterlist = ls(pattern = "meters")
-
 
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
 #------------------------ Granivores, Folivores, and Carnivores
