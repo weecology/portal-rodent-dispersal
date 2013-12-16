@@ -132,29 +132,53 @@ is_dead = function(dat, tags, spp_col, tag_col){
         isdead = as.vector(dat[tmp2,]$note5)
         
         if ("D" %in% isdead) {
-          rowbreaks = which(isdead == "D", arr.in=TRUE) #find rows where * indicates a new tag
+          rowbreaks = which(isdead == "D", arr.in=TRUE) #find rows where D indicates a dead individuals
           endrow = nrow(dat[tmp2,])
+          #print (endrow)
           
           for (r in 1:length(rowbreaks)){
             if (r == 1) {
+              if (rowbreaks[r] == endrow) {
+                #GIVE an ID up to the first *
+                newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                numrows = nrow(dat[tmp2,][1:rowbreaks[r],])  
+                newtagvector = as.vector(rep(newtag, numrows))
+                dat[tmp2,][1:rowbreaks[r], tag_col] = newtag
+                numcount = numcount + 1 
+                #print(dat[tmp2,]
+              }
+              else{
               #GIVE an ID up to the first *
               newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                numrows = nrow(dat[tmp2,][1:rowbreaks[r],])  
+                newtagvector = as.vector(rep(newtag, numrows))
               dat[tmp2,][1:rowbreaks[r], tag_col] = newtag
               numcount = numcount + 1 
               #print(dat[tmp2,])
               
-              #AND an ID to everything after the first * (the loop should take care of the next set and so on)
+              #AND an ID to everything after the first "D" (the loop should take care of the next set and so on)
               newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                numrows = nrow(dat[tmp2,][(startrow:endrow),])  
+                newtagvector = as.vector(rep(newtag, numrows))
               startrow = rowbreaks[r] + 1
               dat[tmp2,][(startrow:endrow),tag_col] = newtag
               numcount = numcount + 1
             }
+            }
             else if (r > 1) {
-              #GIVE an ID to everything after the next * 
+              if (rowbreaks[r] == endrow) {
+                break
+              }
+              else{
+              #print (t)
+              #GIVE an ID to everything after the next "D"
               newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                numrows = nrow(dat[tmp2,][(startrow:endrow),])  
+                newtagvector = as.vector(rep(newtag, numrows))
               startrow = rowbreaks[r] + 1
               dat[tmp2,][(startrow:endrow),tag_col] = newtag
               numcount = numcount + 1
+            }
             }
           }
         }
