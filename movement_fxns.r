@@ -384,7 +384,7 @@ enumerate_species = function(speciesname) {
   else if (speciesname == "PH") {speciesnum = 10}
   else if (speciesname == "PI") {speciesnum = 11}
   else if (speciesname == "RM") {speciesnum = 12}
-  else if (speciesname == "RF") {speciesnum = 13}
+  else if (speciesname == "RF") {speciesnum = 13} 
   else if (speciesname == "RO") {speciesnum = 14}
   else if (speciesname == "BA") {speciesnum = 15}
   else if (speciesname == "SH") {speciesnum = 16}
@@ -400,11 +400,11 @@ enumerate_species = function(speciesname) {
 temporal_status = function (speciesname){
   #assigns temporal status to each species based on its across year and within year presence thru span of the entire 30+ year dataset
   #definitions based on output from corespecies, intermediatespecies and transientspecies variables in main script
-  #core = 1, intermediate = 2, transient = 3 
+  #core = 1, intermediate = 2, transient = 3 -- NEEDS TO BE DOUBLE CHECKED WITH DEFINITION
   
-  if (speciesname %in% list("DO", "DM", "PB", "PP", "OT", "NAO")) {status = 1}
-  else if (speciesname %in% list("PM", "RM", "SH", "RF", "OL", "PE", "DS", "PF", "SF")) {status = 2}
-  else if (speciesname %in% list("BA", "PH", "RO", "SO", "PI", "PL")) {status = 3}
+  if (speciesname %in% list( "OT","DM","RM","NAO","OL","PE","DO","PP","PF","PB")) {status = 1}
+  else if (speciesname %in% list("PM","SH","DS","SF")) {status = 2}
+  else if (speciesname %in% list("RF","BA","PH","RO","SO","PI","PL")) {status = 3}
   
   return(status)
 }
