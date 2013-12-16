@@ -252,8 +252,7 @@ granivdata$oneval = granivdata$propyrs * granivdata$propmos
 #----------------------------------------------------------------------
 #             Get MARK capture histories for granivores
 #----------------------------------------------------------------------
-spplist = c("DM", "DO", "DS", "PB", "PP", "PF", "PM", 
-            "RM", "RF", "PE", "BA", "PH", "RO", "PI", "PL")
+spplist = granivores
 periods = c(130:380) # all sampling periods 1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
@@ -283,7 +282,7 @@ write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.nam
 
 #--------------- Get MARK capture histories for folivores
 #------------------------------
-spplist = c("NAO", "SH", "SF", "SO")
+spplist = folivores
 periods = c(130:380) #1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
 
@@ -310,7 +309,7 @@ write.table(MARK, file = "mark_datafiles//foli_mark.inp", row.names = F, col.nam
 
 #-----------------Get MARK capture histories for carnivores
 #------------------------------
-spplist = c("OT", "OL")
+spplist = carnivores
 periods = c(130:380) #1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
 
