@@ -15,7 +15,7 @@ library(RMark)
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
 #set working directory and import source code
-setwd("~/")
+setwd("~/portal-rodent-dispersal/")
 #wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
 setwd(wd)
 
