@@ -15,8 +15,8 @@ library(RMark)
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
 #set working directory and import source code
-#setwd("~/")
-wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
+setwd("~/")
+#wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
 setwd(wd)
 
 # Run the line below to generate new .inp files 
@@ -25,7 +25,7 @@ setwd(wd)
 
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
 # files are carn_mark.inp, foli_mark.inp and gran_mark.inp
-ms_data <- convert.inp("mark_datafiles//carn_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
+ms_data <- convert.inp("mark_datafiles//gran_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
                       covariates = c("sd_mass", "guild", "species", "status"))
 
 #convert to factor
@@ -227,14 +227,14 @@ ms_results <- collect.models(type = "Multistrata")
 #---------------------------------------------------------------------------------
 write.csv(Snull_pnull_Psinull$results$beta, "ms_null_beta.csv")
 write.csv(Snull_pnull_Psinull$results$real, "ms_null_real.csv")
-write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_strata_beta.csv")
-write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_strata_real.csv")
-write.csv(Sguild_pguild_Psiguild$results$beta, "ms_guild_beta.csv")
-write.csv(Sguild_pguild_Psiguild$results$real, "ms_guild_real.csv")
+#write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_strata_beta.csv")
+#write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_strata_real.csv")
+#write.csv(Sguild_pguild_Psiguild$results$beta, "ms_guild_beta.csv")
+#write.csv(Sguild_pguild_Psiguild$results$real, "ms_guild_real.csv")
 write.csv(Sspecies_pspecies_Psispecies$results$beta, "ms_species_beta.csv")
 write.csv(Sspecies_pspecies_Psispecies$results$real, "ms_species_real.csv")
-write.csv(Sstatus_pstatus_Psistatus$results$beta, "ms_status_beta.csv")
-write.csv(Sstatus_pstatus_Psistatus$results$real, "ms_status_real.csv")
+#write.csv(Sstatus_pstatus_Psistatus$results$beta, "ms_status_beta.csv")
+#write.csv(Sstatus_pstatus_Psistatus$results$real, "ms_status_real.csv")
 
 
 
