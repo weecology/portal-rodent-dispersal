@@ -15,7 +15,7 @@ library(RMark)
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
 #set working directory and import source code
-setwd("~/")
+setwd("~/portal-rodent-dispersal/")
 #wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
 #setwd(wd)
 
@@ -198,9 +198,13 @@ Psispeciesstrata <- list(formulat = ~species * strata, link = "logit")
 wd = "mark_output"
 setwd(wd)
 
+print ("running the multistrata models")
+
 # #SIMANNEAL should be best for multistrata models, but may take longer to run
 Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
                             options = "SIMANNEAL")
+
+print ("Null model is finished")
 
 #Sstrata_pstrata_Psistrata <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
 #                                  options = "SIMANNEAL")
@@ -211,6 +215,7 @@ Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S = Snul
 Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
                                      options = "SIMANNEAL")
 
+print ("Species model is finished")
 #Sstatus_pstatus_Psistatus <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstatus, p = pstatus, Psi = Psistatus), 
 #                                  options = "SIMANNEAL")
 
@@ -237,7 +242,7 @@ write.csv(Sspecies_pspecies_Psispecies$results$real, "ms_species_real.csv")
 #write.csv(Sstatus_pstatus_Psistatus$results$real, "ms_status_real.csv")
 
 
-
+print ("End Code. Look for your csv files.")
 
 # #Null model
 # Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull)),
