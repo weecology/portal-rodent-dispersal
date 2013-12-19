@@ -24,6 +24,8 @@ setwd("~/portal-rodent-dispersal/")
 
 #grab all the .inp files to loop over for analysis
 files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
+files = files[4:5]
+
 
 for (f in 1:length(files)){
   
@@ -209,8 +211,9 @@ cat("Defined model structure for Psi",sep="\n",file="outfile.txt",append=TRUE)
 #          Run Models and collect results
 #---------------------------------------------------------------------------------
 #send results to new folder - change working directory
-wd = "~/portal-rodent-dispersal/mark_output/"
-setwd(wd)
+#wd = "~/portal-rodent-dispersal/mark_output/"
+  wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal/mark_output"
+  setwd(wd)
 
 cat("running the multistrata models",sep="\n",file="outfile.txt",append=TRUE)
 
@@ -262,9 +265,9 @@ write.csv(Sspecies_pspecies_Psispecies$results$real, paste("ms_species_real_",ms
 
 
 cat("End Code. Look for your csv files.",sep="\n",file="outfile.txt",append=TRUE)
-cat(paste("file", file, "is done", sep = " "),sep="\n",file="outfile.txt", append = TRUE))
+cat(paste("file", file, "is done", sep = " "),sep="\n",file="outfile.txt", append = TRUE)
 
-rm(list=ls()[!ls() %in% c("f", "files"))   # clears the computer's memory of everything except the file list
+rm(list=ls()[!ls() %in% c("f", "files")])   # clears the computer's memory of everything except the file list
 
 }
 
