@@ -15,7 +15,7 @@ rm(list=ls(all=TRUE))   # clears the computer's memory
 #---------------------------------------------------------------------------------
 #set working directory and import source code
 setwd("~/portal-rodent-dispersal/")
-#wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
+#wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal/mark_datafiles"
 #setwd(wd)
 
 
@@ -23,7 +23,7 @@ setwd("~/portal-rodent-dispersal/")
 #source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
 #grab all the .inp files to loop over for analysis
-files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
+files = list.files(getwd(), pattern = "mark.inp", full.name=T)
 files = files[4:5]
 
 
@@ -97,7 +97,7 @@ Snull <- list(formula = ~1)
 
 #Sguild <- list(formula = ~guild)  
 
-Sspecies <- list(formula = ~species) 
+#Sspecies <- list(formula = ~species) 
 
 #Sstatus <- list(formula = ~status) 
 
@@ -175,11 +175,11 @@ pnull <- list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278,
 #                                                                   p313val, p314val, p318val, p321val, p323val, p337val, p339val,
 #                                                                   p344val, p351val), link = "cloglog"))
 # Species effect
-pspecies <- list(formula = ~species, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
-                                                                       p318, p321, p323, p337, p339, p344, p351), 
-                                                             value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
-                                                                       p313val, p314val, p318val, p321val, p323val, p337val, p339val,
-                                                                       p344val, p351val), link = "cloglog"))
+#pspecies <- list(formula = ~species, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
+#                                                                       p318, p321, p323, p337, p339, p344, p351), 
+#                                                             value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+#                                                                       p313val, p314val, p318val, p321val, p323val, p337val, p339val,
+#                                                                       p344val, p351val), link = "cloglog"))
 # status effect
 #pstatus <- list(formula = ~status, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
 #                                                                       p318, p321, p323, p337, p339, p344, p351), 
@@ -199,7 +199,7 @@ Psinull <- list(formula = ~1, link = "logit")
 
 #Psiguild <- list(formula = ~guild, link = "logit")
 
-Psispecies <- list(formula = ~species, link = "logit")
+#Psispecies <- list(formula = ~species, link = "logit")
 
 #Psistatus <- list(formula = ~status, link = "logit")
 
@@ -229,10 +229,10 @@ cat("Null model is finished",sep="\n",file="outfile.txt",append=TRUE)
 #Sguild_pguild_Psiguild <- mark(ms_process, ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
 #                               options = "SIMANNEAL")
 
-Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
-                                     options = "SIMANNEAL")
+#Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
+#                                     options = "SIMANNEAL")
 
-cat("Species model is finished",sep="\n",file="outfile.txt",append=TRUE)
+#cat("Species model is finished",sep="\n",file="outfile.txt",append=TRUE)
 #Sstatus_pstatus_Psistatus <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstatus, p = pstatus, Psi = Psistatus), 
 #                                  options = "SIMANNEAL")
 
@@ -245,12 +245,12 @@ ms_results <- collect.models(type = "Multistrata")
 
 cat("Summarized results.",sep="\n",file="outfile.txt",append=TRUE)
 
-cat(ms_results,sep="\n",file="outfile.txt",append=TRUE)
+  print(ms_results)
+  print (Snull_pnull_Psinull$results$beta[1:3,])
 
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
-filename<-paste("ms_null_beta_",ms_data[1,6],".csv",sep="")
 
 write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_",ms_data[1,6],".csv",sep=""))
 write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,6],".csv",sep=""))
@@ -258,8 +258,8 @@ write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,6],"
 #write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_strata_real.csv")
 #write.csv(Sguild_pguild_Psiguild$results$beta, "ms_guild_beta.csv")
 #write.csv(Sguild_pguild_Psiguild$results$real, "ms_guild_real.csv")
-write.csv(Sspecies_pspecies_Psispecies$results$beta, paste("ms_species_beta_",ms_data[1,6],".csv",sep=""))
-write.csv(Sspecies_pspecies_Psispecies$results$real, paste("ms_species_real_",ms_data[1,6],".csv",sep=""))
+#write.csv(Sspecies_pspecies_Psispecies$results$beta, paste("ms_species_beta_",ms_data[1,6],".csv",sep=""))
+#write.csv(Sspecies_pspecies_Psispecies$results$real, paste("ms_species_real_",ms_data[1,6],".csv",sep=""))
 #write.csv(Sstatus_pstatus_Psistatus$results$beta, "ms_status_beta.csv")
 #write.csv(Sstatus_pstatus_Psistatus$results$real, "ms_status_real.csv")
 
