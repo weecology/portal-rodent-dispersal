@@ -277,7 +277,29 @@ for (i in 1:length(spplist)){
   }
 }
 
+domark = MARK[which(MARK[,7]==1),]
+dmmark = MARK[which(MARK[,7]==2),]
+dsmark = MARK[which(MARK[,7]==3),]
+pbmark = MARK[which(MARK[,7]==4),]
+ppmark = MARK[which(MARK[,7]==5),]
+pfmark = MARK[which(MARK[,7]==6),]
+pemark = MARK[which(MARK[,7]==7),]
+pmmark = MARK[which(MARK[,7]==8),]
+rmmark = MARK[which(MARK[,7]==9),]
+transmark = MARK[which(MARK[,7]==10),]
+
 write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
+
+write.table(domark, file = "mark_datafiles//do_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(dmmark, file = "mark_datafiles//dm_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(dsmark, file = "mark_datafiles//ds_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(pbmark, file = "mark_datafiles//pb_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(ppmark, file = "mark_datafiles//pp_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(pfmark, file = "mark_datafiles//pf_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(pemark, file = "mark_datafiles//pe_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(pmmark, file = "mark_datafiles//pm_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(rmmark, file = "mark_datafiles//rm_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(transmark, file = "mark_datafiles//trans_mark.inp", row.names = F, col.names = F, quote = F)
 
 
 #--------------- Get MARK capture histories for folivores
@@ -303,6 +325,16 @@ for (i in 1:length(spplist)){
     MARK = rbind(MARK, nextMARK)
   }
 }
+
+naomark = MARK[which(MARK[,7]==11),]
+shmark = MARK[which(MARK[,7]==12),]
+sfmark = MARK[which(MARK[,7]==13),]
+somark = MARK[which(MARK[,7]==14),]
+
+write.table(naomark, file = "mark_datafiles//nao_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(shmark, file = "mark_datafiles//sh_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(sfmark, file = "mark_datafiles//sf_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(somark, file = "mark_datafiles//so_mark.inp", row.names = F, col.names = F, quote = F)
 
 write.table(MARK, file = "mark_datafiles//foli_mark.inp", row.names = F, col.names = F, quote = F)
 
@@ -330,6 +362,12 @@ for (i in 1:length(spplist)){
     MARK = rbind(MARK, nextMARK)
   }
 }
+
+otmark = MARK[which(MARK[,7]==15),]
+olmark = MARK[which(MARK[,7]==16),]
+
+write.table(otmark, file = "mark_datafiles//ot_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(olmark, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F, quote = F)
 
 write.table(MARK, file = "mark_datafiles//carn_mark.inp", row.names = F, col.names = F, quote = F)
 
