@@ -23,10 +23,14 @@ setwd("~/portal-rodent-dispersal/")
 # Run the line below to generate new .inp files 
 #source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
+#grab all the .inp files to loop over for analysis
+files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
 
+for (f in 1:length(files)){
+  
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
 # files are carn_mark.inp, foli_mark.inp and gran_mark.inp
-ms_data <- convert.inp("mark_datafiles/gran_mark.inp", group.df=data.frame(sex = c("male","female","unidsex")),  
+ms_data <- convert.inp(files[f], group.df=data.frame(sex = c("male","female","unidsex")),  
                       covariates = c("sd_mass", "guild", "species", "status"))
 
 #convert to factor
@@ -143,7 +147,7 @@ p344val = rep(0, length(p344))
 p351val = rep(0, length(p351))
 
 
-cat("Fixed omitted periods to zero.",file="outfile.txt",append=TRUE)
+cat("Fixed omitted periods to zero.",sep="\n",file="outfile.txt",append=TRUE)
 
 
 # look for effects on recapture probability, given that some p are fixed to 0 (listed below)
@@ -181,7 +185,7 @@ pspecies <- list(formula = ~species, fixed = list(index = c(p237, p241, p267, p2
 #                                                                       p344val, p351val), link = "cloglog"))
 
 
-cat("Searched for period effect on recapture probability.", file="outfile.txt",append=TRUE)
+cat("Searched for period effect on recapture probability.",sep="\n", file="outfile.txt",append=TRUE)
 
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
@@ -198,7 +202,7 @@ Psispecies <- list(formula = ~species, link = "logit")
 
 #Psispeciesstrata <- list(formulat = ~species * strata, link = "logit")
 
-cat("Defined model structure for Psi",file="outfile.txt",append=TRUE)
+cat("Defined model structure for Psi",sep="\n",file="outfile.txt",append=TRUE)
 
 #---------------------------------------------------------------------------------
 #          Run Models and collect results
@@ -207,13 +211,13 @@ cat("Defined model structure for Psi",file="outfile.txt",append=TRUE)
 wd = "~/portal-rodent-dispersal/mark_output/"
 setwd(wd)
 
-cat("running the multistrata models",file="outfile.txt",append=TRUE)
+cat("running the multistrata models",sep="\n",file="outfile.txt",append=TRUE)
 
 # #SIMANNEAL should be best for multistrata models, but may take longer to run
 Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
                             options = "SIMANNEAL")
 
-cat("Null model is finished",file="outfile.txt",append=TRUE)
+cat("Null model is finished",sep="\n",file="outfile.txt",append=TRUE)
 
 #Sstrata_pstrata_Psistrata <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
 #                                  options = "SIMANNEAL")
@@ -224,7 +228,7 @@ cat("Null model is finished",file="outfile.txt",append=TRUE)
 Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
                                      options = "SIMANNEAL")
 
-cat("Species model is finished",file="outfile.txt",append=TRUE)
+cat("Species model is finished",sep="\n",file="outfile.txt",append=TRUE)
 #Sstatus_pstatus_Psistatus <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstatus, p = pstatus, Psi = Psistatus), 
 #                                  options = "SIMANNEAL")
 
@@ -235,26 +239,31 @@ cat("Species model is finished",file="outfile.txt",append=TRUE)
 #summarize results
 ms_results <- collect.models(type = "Multistrata")
 
-cat("Summarized results.",file="outfile.txt",append=TRUE)
+cat("Summarized results.",sep="\n",file="outfile.txt",append=TRUE)
 
-cat(ms_results,file="outfile.txt",append=TRUE)
+cat(ms_results,sep="\n",file="outfile.txt",append=TRUE)
 
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
-write.csv(Snull_pnull_Psinull$results$beta, "ms_null_beta.csv")
-write.csv(Snull_pnull_Psinull$results$real, "ms_null_real.csv")
+filename<-paste("ms_null_beta_",ms_data[1,6],".csv",sep="")
+
+write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_",ms_data[1,6],".csv",sep=""))
+write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,6],".csv",sep=""))
 #write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_strata_beta.csv")
 #write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_strata_real.csv")
 #write.csv(Sguild_pguild_Psiguild$results$beta, "ms_guild_beta.csv")
 #write.csv(Sguild_pguild_Psiguild$results$real, "ms_guild_real.csv")
-write.csv(Sspecies_pspecies_Psispecies$results$beta, "ms_species_beta.csv")
-write.csv(Sspecies_pspecies_Psispecies$results$real, "ms_species_real.csv")
+write.csv(Sspecies_pspecies_Psispecies$results$beta, paste("ms_species_beta_",ms_data[1,6],".csv",sep=""))
+write.csv(Sspecies_pspecies_Psispecies$results$real, paste("ms_species_real_",ms_data[1,6],".csv",sep=""))
 #write.csv(Sstatus_pstatus_Psistatus$results$beta, "ms_status_beta.csv")
 #write.csv(Sstatus_pstatus_Psistatus$results$real, "ms_status_real.csv")
 
 
-cat("End Code. Look for your csv files.",file="outfile.txt",append=TRUE)
+cat("End Code. Look for your csv files.",sep="\n",file="outfile.txt",append=TRUE)
+cat(paste("file", file, "is done", sep = " "),sep="\n",file="outfile.txt", append = TRUE))
+
+}
 
 # #Null model
 # Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull)),
