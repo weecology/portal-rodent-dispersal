@@ -9,7 +9,6 @@
 # Within a species/guild, do covariates (sex, body mass) influence psi and S?
 
 rm(list=ls(all=TRUE))   # clears the computer's memory
-library(RMark) 
 
 #---------------------------------------------------------------------------------
 #          bring in the data and source files
@@ -27,6 +26,8 @@ setwd("~/portal-rodent-dispersal/")
 files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
 
 for (f in 1:length(files)){
+  
+  require(RMark)
   
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
 # files are carn_mark.inp, foli_mark.inp and gran_mark.inp
@@ -262,6 +263,8 @@ write.csv(Sspecies_pspecies_Psispecies$results$real, paste("ms_species_real_",ms
 
 cat("End Code. Look for your csv files.",sep="\n",file="outfile.txt",append=TRUE)
 cat(paste("file", file, "is done", sep = " "),sep="\n",file="outfile.txt", append = TRUE))
+
+rm(list=ls()[!ls() %in% c("f", "files"))   # clears the computer's memory of everything except the file list
 
 }
 
