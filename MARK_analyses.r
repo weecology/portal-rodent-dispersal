@@ -192,7 +192,7 @@ cat("Searched for period effect on recapture probability.",sep="\n", file="outfi
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-Psinull <- list(formula = ~1, link = "logit")
+Psinull <- list(formula = ~1, link = "mlogit")
 
 #Psistrata <- list(formula = ~stratum, link = "logit")
 
