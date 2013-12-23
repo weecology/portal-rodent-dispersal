@@ -92,15 +92,6 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 #---------------------------------------------------------------------------------
 Snull <- list(formula = ~1)          
 
-#Sstrata <- list(formula = ~stratum)   
-
-#Sguild <- list(formula = ~guild)  
-
-#Sspecies <- list(formula = ~species) 
-
-#Sstatus <- list(formula = ~status) 
-
-#Sspeciesstrata <- list(formula = ~species * strata) 
 
 #---------------------------------------------------------------------------------
 #          Define model structures for p (capture probability)
@@ -161,31 +152,6 @@ pnull <- list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278,
                                          value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                    p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                    p344val, p351val), link = "cloglog"))
-# Strata effect (in A or in B)
-#pstrata <- list(formula = ~stratum, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
-#                                                     p318, p321, p323, p337, p339, p344, p351), 
-#                                             value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
-#                                                       p313val, p314val, p318val, p321val, p323val, p337val, p339val,
-#                                                       p344val, p351val), link = "cloglog"))
-# Guild effect 
-#pguild <- list(formula = ~guild, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
-#                                                                   p318, p321, p323, p337, p339, p344, p351), 
-#                                                         value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
-#                                                                   p313val, p314val, p318val, p321val, p323val, p337val, p339val,
-#                                                                   p344val, p351val), link = "cloglog"))
-# Species effect
-#pspecies <- list(formula = ~species, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
-#                                                                       p318, p321, p323, p337, p339, p344, p351), 
-#                                                             value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
-#                                                                       p313val, p314val, p318val, p321val, p323val, p337val, p339val,
-#                                                                       p344val, p351val), link = "cloglog"))
-# status effect
-#pstatus <- list(formula = ~status, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
-#                                                                       p318, p321, p323, p337, p339, p344, p351), 
-#                                                             value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
-#                                                                       p313val, p314val, p318val, p321val, p323val, p337val, p339val,
-#                                                                       p344val, p351val), link = "cloglog"))
-
 
 cat("Searched for period effect on recapture probability.",sep="\n", file="outfile.txt",append=TRUE)
 
@@ -194,24 +160,15 @@ cat("Searched for period effect on recapture probability.",sep="\n", file="outfi
 #---------------------------------------------------------------------------------
 Psinull <- list(formula = ~1, link = "mlogit")
 
-#Psistrata <- list(formula = ~stratum, link = "logit")
-
-#Psiguild <- list(formula = ~guild, link = "logit")
-
-#Psispecies <- list(formula = ~species, link = "logit")
-
-#Psistatus <- list(formula = ~status, link = "logit")
-
-#Psispeciesstrata <- list(formulat = ~species * strata, link = "logit")
-
 cat("Defined model structure for Psi",sep="\n",file="outfile.txt",append=TRUE)
 
+  
 #---------------------------------------------------------------------------------
 #          Run Models and collect results
 #---------------------------------------------------------------------------------
 #send results to new folder - change working directory
-#wd = "~/portal-rodent-dispersal/mark_output/"
-  wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal/mark_output"
+wd = "~/portal-rodent-dispersal/mark_output/"
+ # wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal/mark_output"
   setwd(wd)
 
 cat("running the multistrata models",sep="\n",file="outfile.txt",append=TRUE)
@@ -222,24 +179,10 @@ Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S=Snull,
 
 cat("Null model is finished",sep="\n",file="outfile.txt",append=TRUE)
 
-#Sstrata_pstrata_Psistrata <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
-#                                  options = "SIMANNEAL")
 
-#Sguild_pguild_Psiguild <- mark(ms_process, ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
-#                               options = "SIMANNEAL")
-
-#Sspecies_pspecies_Psispecies <- mark(ms_process, ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Psispecies),
-#                                     options = "SIMANNEAL")
-
-#cat("Species model is finished",sep="\n",file="outfile.txt",append=TRUE)
-#Sstatus_pstatus_Psistatus <- mark(ms_process, ms_ddl, model.parameters = list(S = Sstatus, p = pstatus, Psi = Psistatus), 
-#                                  options = "SIMANNEAL")
-
-
-#Sspeciesstrata_pguild_Psispeciesstrata <- mark(ms_process, ms_ddl, model.parameters = list (s = Sspeciesstrata, p = pguild, Psi = Psispeciesstrata),
-#                                               options = "SIMANNEAL")
-
-#summarize results
+#-----------------------------------------------------
+#             summarize results
+#-----------------------------------------------------
 ms_results <- collect.models(type = "Multistrata")
 
 cat("Summarized results.",sep="\n",file="outfile.txt",append=TRUE)
@@ -253,15 +196,6 @@ cat("Summarized results.",sep="\n",file="outfile.txt",append=TRUE)
 
 write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_",ms_data[1,6],".csv",sep=""))
 write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,6],".csv",sep=""))
-#write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_strata_beta.csv")
-#write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_strata_real.csv")
-#write.csv(Sguild_pguild_Psiguild$results$beta, "ms_guild_beta.csv")
-#write.csv(Sguild_pguild_Psiguild$results$real, "ms_guild_real.csv")
-#write.csv(Sspecies_pspecies_Psispecies$results$beta, paste("ms_species_beta_",ms_data[1,6],".csv",sep=""))
-#write.csv(Sspecies_pspecies_Psispecies$results$real, paste("ms_species_real_",ms_data[1,6],".csv",sep=""))
-#write.csv(Sstatus_pstatus_Psistatus$results$beta, "ms_status_beta.csv")
-#write.csv(Sstatus_pstatus_Psistatus$results$real, "ms_status_real.csv")
-
 
 cat("End Code. Look for your csv files.",sep="\n",file="outfile.txt",append=TRUE)
 print( paste("file", files[f] " is done.", sep = ""))
@@ -269,39 +203,3 @@ print( paste("file", files[f] " is done.", sep = ""))
 rm(list=ls()[!ls() %in% c("f", "files")])   # clears the computer's memory of everything except the file list
 
 }
-
-# #Null model
-# Snull_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull)),
-#                             options = "SIMANNEAL")
-# #S on guild
-# Sguild_pnull_Psinull <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pnull, Psi = Psinull),
-#                              options = "SIMANNEAL")
-# #S and Psi on guild
-# Sguild_pnull_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pnull, Psi = Psiguild),
-#                               options = "SIMANNEAL")
-# #S, p and Psi on guild
-# Sguild_pguild_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pguild, Psi = Psiguild),
-#                                options = "SIMANNEAL")
-# #Psi on guild
-# Snull_pnull_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psiguild),
-#                                  options = "SIMANNEAL")
-# 
-# #S, p and Psi on strata
-# Sstrata_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psistrata),
-#                                   options = "SIMANNEAL")
-# #s on guild, p and Psi on strata
-# Sguild_pstrata_Psistrata <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psiguild),
-#                                  options = "SIMANNEAL")
-# #Psi on guild, S and p on strata
-# Sstrata_pstrata_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sstrata,  p = pstrata, Psi = Psiguild),
-#                                  options = "SIMANNEAL")
-# #S and Psi on guld, p on strata
-# Sguild_pstrata_Psiguild <- mark(ms_process,ms_ddl, model.parameters = list(S = Sguild,  p = pstrata, Psi = Psiguild),
-#                                  options = "SIMANNEAL")
-# 
-# #S, p and Psi on species
-# Sspecies_pspecies_Pspecies <- mark(ms_process,ms_ddl, model.parameters = list(S = Sspecies,  p = pspecies, Psi = Pspecies),
-#                                    options = "SIMANNEAL")
-# #S and Psi on species
-# Sspecies_pnull_Pspecies <- mark(ms_process,ms_ddl, model.parameters = list(S = Sspecies,  p = pnull, Psi = Pspecies),
-#                                    options = "SIMANNEAL")
