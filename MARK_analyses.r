@@ -198,7 +198,7 @@ write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_",ms_data[1,6],"
 write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,6],".csv",sep=""))
 
 cat("End Code. Look for your csv files.",sep="\n",file="outfile.txt",append=TRUE)
-print( paste("file", files[f] " is done.", sep = ""))
+print( paste("file", files[f], " is done.", sep = ""))
   
 rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list
 
