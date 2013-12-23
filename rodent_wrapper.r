@@ -46,11 +46,11 @@ all2 = id_unknowns(all2, 16)
 # necessary if using ALL data (ear and toe tags)
 # returns the dataset with new IDs for checking for duplicate tags that occur over a suspiciously long time period
 tags = unique(all2$tag)
-all3 = starred_tags(all2, tags)
+all3 = starred_tags(all2, tags, 9, 16)
 
 #check for dead individuals, give all with same tag after marked dead a new unique ID
 tags = unique(all3$tag)
-all4 = is_dead(all3, tags, 16) #get warnings, but it seems to work - not sure what they are indicating?
+all4 = is_dead(all3, tags, 9, 16)
 
 # check for individuals with same tag, but captured over long timespan (may be able to separate them) 
 # necessary if using ALL data (ear and toe tags)
@@ -202,19 +202,16 @@ for (i in 1:length(spplist)){
     taglist[i] = list(tags)
 }
 
-#get a list of all the new distance vectors
-meterlist = ls(pattern = "meters")
-
 
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
 #------------------------ Granivores, Folivores, and Carnivores
 
 # concatenate core guild data - used to ask if these species behave differently from others
 # Check that the definition of "core" is still the same, need to change this chunk of code by hand, if necessary
-coremeters = meterlist[which(names(meterlist) %in% corespecies]
-coregran = coremeters[which(names(coremeters) %in% granivores]  #  c(DMmeters, DOmeters, PBmeters, PPmeters, PFmeters, PEmeters, RMmeters)
-corefoli = coremeters[which(names(coremeters) %in% folivores]
-corecarn = coremeters[which(names(coremeters) %in% carnivores]
+coremeters = meterlist[which(names(meterlist) %in% corespecies)]
+coregran = unlist(coremeters[which(names(coremeters) %in% granivores)], use.names=F) 
+corefoli = unlist(coremeters[which(names(coremeters) %in% folivores)], use.names=F)
+corecarn = unlist(coremeters[which(names(coremeters) %in% carnivores)], use.names=F)
 
   # find breakpoints to use in MARK data structure for future analyses
   # data reasonably well fits a lognormal distribution (eyeball and J. Powell)
@@ -225,12 +222,9 @@ corecarn = coremeters[which(names(coremeters) %in% carnivores]
   corecarn_brkpt = expm1(mean(log1p(corecarn)) + sd(log1p(corecarn)))
 
 
-distances = ls(pattern = "*meters") #see all the vectors
+#make a new matrix with the breakpoint for each granivore species
+graniv_dist = meterlist[which(names(meterlist) %in% granivores)]
 
-graniv_dist = list(PMmeters, DMmeters, RMmeters, RFmeters, PEmeters, DSmeters, DOmeters, PPmeters,
-                   PFmeters, BAmeters, PHmeters, ROmeters, PImeters, PLmeters, PBmeters)
-
-#make a new matrix with the breakpoint for each species
 brkpt_out<-sapply(graniv_dist,function(x){
   expm1(mean(log1p(x)) + sd(log1p(x)))
 })
@@ -258,8 +252,7 @@ granivdata$oneval = granivdata$propyrs * granivdata$propmos
 #----------------------------------------------------------------------
 #             Get MARK capture histories for granivores
 #----------------------------------------------------------------------
-spplist = c("DM", "DO", "DS", "PB", "PP", "PF", "PM", 
-            "RM", "RF", "PE", "BA", "PH", "RO", "PI", "PL")
+spplist = granivores
 periods = c(130:380) # all sampling periods 1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
@@ -284,12 +277,34 @@ for (i in 1:length(spplist)){
   }
 }
 
+domark = MARK[which(MARK[,7]==1),]
+dmmark = MARK[which(MARK[,7]==2),]
+dsmark = MARK[which(MARK[,7]==3),]
+pbmark = MARK[which(MARK[,7]==4),]
+ppmark = MARK[which(MARK[,7]==5),]
+pfmark = MARK[which(MARK[,7]==6),]
+pemark = MARK[which(MARK[,7]==7),]
+pmmark = MARK[which(MARK[,7]==8),]
+rmmark = MARK[which(MARK[,7]==9),]
+transmark = MARK[which(MARK[,7]==10),]
+
 write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
+
+write.table(domark, file = "mark_datafiles//do_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(dmmark, file = "mark_datafiles//dm_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(dsmark, file = "mark_datafiles//ds_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(pbmark, file = "mark_datafiles//pb_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(ppmark, file = "mark_datafiles//pp_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(pfmark, file = "mark_datafiles//pf_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(pemark, file = "mark_datafiles//pe_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(pmmark, file = "mark_datafiles//pm_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(rmmark, file = "mark_datafiles//rm_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(transmark, file = "mark_datafiles//trans_mark.inp", row.names = F, col.names = F, quote = F)
 
 
 #--------------- Get MARK capture histories for folivores
 #------------------------------
-spplist = c("NAO", "SH", "SF", "SO")
+spplist = folivores
 periods = c(130:380) #1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
 
@@ -311,12 +326,22 @@ for (i in 1:length(spplist)){
   }
 }
 
+naomark = MARK[which(MARK[,7]==11),]
+shmark = MARK[which(MARK[,7]==12),]
+sfmark = MARK[which(MARK[,7]==13),]
+somark = MARK[which(MARK[,7]==14),]
+
+write.table(naomark, file = "mark_datafiles//nao_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(shmark, file = "mark_datafiles//sh_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(sfmark, file = "mark_datafiles//sf_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(somark, file = "mark_datafiles//so_mark.inp", row.names = F, col.names = F, quote = F)
+
 write.table(MARK, file = "mark_datafiles//foli_mark.inp", row.names = F, col.names = F, quote = F)
 
 
 #-----------------Get MARK capture histories for carnivores
 #------------------------------
-spplist = c("OT", "OL")
+spplist = carnivores
 periods = c(130:380) #1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
 
@@ -337,6 +362,12 @@ for (i in 1:length(spplist)){
     MARK = rbind(MARK, nextMARK)
   }
 }
+
+otmark = MARK[which(MARK[,7]==15),]
+olmark = MARK[which(MARK[,7]==16),]
+
+write.table(otmark, file = "mark_datafiles//ot_mark.inp", row.names = F, col.names = F, quote = F)
+write.table(olmark, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F, quote = F)
 
 write.table(MARK, file = "mark_datafiles//carn_mark.inp", row.names = F, col.names = F, quote = F)
 

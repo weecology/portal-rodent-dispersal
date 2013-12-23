@@ -53,7 +53,7 @@ return(dat)
 # return(flagged_rats)
 # }
 
-starred_tags = function(dat, tags){
+starred_tags = function(dat, tags, spp_col, tag_col){
   #Automate checking the flagged data for where the individual breaks should be
   #check for *, which indicates a new tag
   #tags with multiple rows are sorted by species, then checked for *
@@ -111,7 +111,7 @@ starred_tags = function(dat, tags){
 }
 
 
-is_dead = function(dat, tags, tag_col){
+is_dead = function(dat, tags, spp_col, tag_col){
   #checks note5 for "D", which indicated a dead rat. 
   #by definition, all captures with the same tagID afterwards, must be a different individual
   #assign these captures with a new tag ID that ends with 'm' for 'mortality.
@@ -132,29 +132,53 @@ is_dead = function(dat, tags, tag_col){
         isdead = as.vector(dat[tmp2,]$note5)
         
         if ("D" %in% isdead) {
-          rowbreaks = which(isdead == "D", arr.in=TRUE) #find rows where * indicates a new tag
+          rowbreaks = which(isdead == "D", arr.in=TRUE) #find rows where D indicates a dead individuals
           endrow = nrow(dat[tmp2,])
+          #print (endrow)
           
           for (r in 1:length(rowbreaks)){
             if (r == 1) {
+              if (rowbreaks[r] == endrow) {
+                #GIVE an ID up to the first *
+                newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                numrows = nrow(dat[tmp2,][1:rowbreaks[r],])  
+                newtagvector = as.vector(rep(newtag, numrows))
+                dat[tmp2,][1:rowbreaks[r], tag_col] = newtag
+                numcount = numcount + 1 
+                #print(dat[tmp2,]
+              }
+              else{
               #GIVE an ID up to the first *
               newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                numrows = nrow(dat[tmp2,][1:rowbreaks[r],])  
+                newtagvector = as.vector(rep(newtag, numrows))
               dat[tmp2,][1:rowbreaks[r], tag_col] = newtag
               numcount = numcount + 1 
               #print(dat[tmp2,])
               
-              #AND an ID to everything after the first * (the loop should take care of the next set and so on)
+              #AND an ID to everything after the first "D" (the loop should take care of the next set and so on)
               newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                numrows = nrow(dat[tmp2,][(startrow:endrow),])  
+                newtagvector = as.vector(rep(newtag, numrows))
               startrow = rowbreaks[r] + 1
               dat[tmp2,][(startrow:endrow),tag_col] = newtag
               numcount = numcount + 1
             }
+            }
             else if (r > 1) {
-              #GIVE an ID to everything after the next * 
+              if (rowbreaks[r] == endrow) {
+                break
+              }
+              else{
+              #print (t)
+              #GIVE an ID to everything after the next "D"
               newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                numrows = nrow(dat[tmp2,][(startrow:endrow),])  
+                newtagvector = as.vector(rep(newtag, numrows))
               startrow = rowbreaks[r] + 1
               dat[tmp2,][(startrow:endrow),tag_col] = newtag
               numcount = numcount + 1
+            }
             }
           }
         }
@@ -356,19 +380,19 @@ enumerate_species = function(speciesname) {
   else if (speciesname == "PF") {speciesnum = 6}
   else if (speciesname == "PE") {speciesnum = 7}
   else if (speciesname == "PM") {speciesnum = 8}
-  else if (speciesname == "PL") {speciesnum = 9}
-  else if (speciesname == "PH") {speciesnum = 10}
-  else if (speciesname == "PI") {speciesnum = 11}
-  else if (speciesname == "RM") {speciesnum = 12}
-  else if (speciesname == "RF") {speciesnum = 13}
-  else if (speciesname == "RO") {speciesnum = 14}
-  else if (speciesname == "BA") {speciesnum = 15}
-  else if (speciesname == "SH") {speciesnum = 16}
-  else if (speciesname == "SF") {speciesnum = 17}
-  else if (speciesname == "SO") {speciesnum = 18}
-  else if (speciesname == "NAO") {speciesnum = 19}
-  else if (speciesname == "OT") {speciesnum = 20}
-  else if (speciesname == "OL") {speciesnum = 21}
+  else if (speciesname == "PL") {speciesnum = 10} #transient G
+  else if (speciesname == "PH") {speciesnum = 10} #transient G
+  else if (speciesname == "PI") {speciesnum = 10} #transient G
+  else if (speciesname == "RM") {speciesnum = 9}
+  else if (speciesname == "RF") {speciesnum = 10} #transient G
+  else if (speciesname == "RO") {speciesnum = 10} #transient G
+  else if (speciesname == "BA") {speciesnum = 10} #transient G
+  else if (speciesname == "SH") {speciesnum = 12}
+  else if (speciesname == "SF") {speciesnum = 13}
+  else if (speciesname == "SO") {speciesnum = 14} #transient F
+  else if (speciesname == "NAO") {speciesnum = 11}
+  else if (speciesname == "OT") {speciesnum = 15}
+  else if (speciesname == "OL") {speciesnum = 16}
   
   return(speciesnum)
 }
@@ -376,11 +400,11 @@ enumerate_species = function(speciesname) {
 temporal_status = function (speciesname){
   #assigns temporal status to each species based on its across year and within year presence thru span of the entire 30+ year dataset
   #definitions based on output from corespecies, intermediatespecies and transientspecies variables in main script
-  #core = 1, intermediate = 2, transient = 3 
+  #core = 1, intermediate = 2, transient = 3 -- NEEDS TO BE DOUBLE CHECKED WITH DEFINITION
   
-  if (speciesname %in% list("DO", "DM", "PB", "PP", "OT", "NAO")) {status = 1}
-  else if (speciesname %in% list("PM", "RM", "SH", "RF", "OL", "PE", "DS", "PF", "SF")) {status = 2}
-  else if (speciesname %in% list("BA", "PH", "RO", "SO", "PI", "PL")) {status = 3}
+  if (speciesname %in% list( "OT","DM","RM","NAO","OL","PE","DO","PP","PF","PB")) {status = 1}
+  else if (speciesname %in% list("PM","SH","DS","SF")) {status = 2}
+  else if (speciesname %in% list("RF","BA","PH","RO","SO","PI","PL")) {status = 3}
   
   return(status)
 }
