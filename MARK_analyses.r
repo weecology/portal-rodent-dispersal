@@ -22,7 +22,7 @@ setwd("~/portal-rodent-dispersal/")
 #source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
 #grab all the .inp files to loop over for analysis
-files = list.files(getwd(), pattern = "mark.inp", full.name=T)
+files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
 files = files[4:5]
 
 
@@ -217,8 +217,8 @@ cat("Defined model structure for Psi",sep="\n",file="outfile.txt",append=TRUE)
 cat("running the multistrata models",sep="\n",file="outfile.txt",append=TRUE)
 
 # #SIMANNEAL should be best for multistrata models, but may take longer to run
-Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S = Snull,  p = pnull, Psi = Psinull),
-                            options = "SIMANNEAL")
+Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psinull),
+                            options="SIMANNEAL", external=TRUE)
 
 cat("Null model is finished",sep="\n",file="outfile.txt",append=TRUE)
 
