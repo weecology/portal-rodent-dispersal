@@ -8,7 +8,7 @@
 
 # Within a species/guild, do covariates (sex, body mass) influence psi and S?
 
-rm(list=ls(all=TRUE))   # clears the computer's memory
+rm(list=ls(all=TRUE))   # clears the memory
 
 #---------------------------------------------------------------------------------
 #          bring in the data and source files
@@ -200,6 +200,6 @@ write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,6],"
 cat("End Code. Look for your csv files.",sep="\n",file="outfile.txt",append=TRUE)
 print( paste("file", files[f] " is done.", sep = ""))
   
-rm(list=ls()[!ls() %in% c("f", "files")])   # clears the computer's memory of everything except the file list
+rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list
 
 }
