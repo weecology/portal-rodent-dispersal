@@ -23,7 +23,7 @@ setwd("~/portal-rodent-dispersal/")
 
 #grab all the .inp files to loop over for analysis
 files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
-files = files[4:5]
+files = files[5]
 
 
 for (f in 1:length(files)){
@@ -32,13 +32,13 @@ for (f in 1:length(files)){
   
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
 # files are carn_mark.inp, foli_mark.inp and gran_mark.inp
-ms_data <- convert.inp(files[f],  
-                      covariates = "species")
+ms_data <- convert.inp(files[f], group.df = data.frame(sex=c("male", "female", "unidentified")),
+                      covariates = c("species"))
 
 #convert to factor
-ms_data$guild = as.factor(ms_data$guild)
+#ms_data$guild = as.factor(ms_data$guild)
 ms_data$species = as.factor(ms_data$species)
-ms_data$status = as.factor(ms_data$status)
+#ms_data$status = as.factor(ms_data$status)
 
 cat("Imported data.", file="outfile.txt", sep="\n")
 
@@ -48,7 +48,7 @@ cat("Imported data.", file="outfile.txt", sep="\n")
 # Build up the model. Looking at sex effects on dispersal/survival
 # begin.time == first period number
 ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 130, 
-                           groups = c("sex", "guild", "species", "status"))
+                           groups = c("sex", "species"))
 
 ms_ddl <- make.design.data(ms_process) #ddl = design data list
 
