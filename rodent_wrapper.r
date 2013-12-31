@@ -276,17 +276,17 @@ for (i in 1:length(spplist)){
   MARK = rbind(MARK, nextMARK)
   }
 }
-
-domark = MARK[which(MARK[,7]==1),]
-dmmark = MARK[which(MARK[,7]==2),]
-dsmark = MARK[which(MARK[,7]==3),]
-pbmark = MARK[which(MARK[,7]==4),]
-ppmark = MARK[which(MARK[,7]==5),]
-pfmark = MARK[which(MARK[,7]==6),]
-pemark = MARK[which(MARK[,7]==7),]
-pmmark = MARK[which(MARK[,7]==8),]
-rmmark = MARK[which(MARK[,7]==9),]
-transmark = MARK[which(MARK[,7]==10),]
+    #TODO: change the column back to 7, altered for troubleshooting purposes
+domark = MARK[which(MARK[,2]==1),]
+dmmark = MARK[which(MARK[,2]==2),]
+dsmark = MARK[which(MARK[,2]==3),]
+pbmark = MARK[which(MARK[,2]==4),]
+ppmark = MARK[which(MARK[,2]==5),]
+pfmark = MARK[which(MARK[,2]==6),]
+pemark = MARK[which(MARK[,2]==7),]
+pmmark = MARK[which(MARK[,2]==8),]
+rmmark = MARK[which(MARK[,2]==9),]
+transmark = MARK[which(MARK[,2]==10),]
 
 write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
 
@@ -326,10 +326,11 @@ for (i in 1:length(spplist)){
   }
 }
 
-naomark = MARK[which(MARK[,7]==11),]
-shmark = MARK[which(MARK[,7]==12),]
-sfmark = MARK[which(MARK[,7]==13),]
-somark = MARK[which(MARK[,7]==14),]
+#TODO: change the column back to 7, altered for troubleshooting purposes
+naomark = MARK[which(MARK[,2]==11),]
+shmark = MARK[which(MARK[,2]==12),]
+sfmark = MARK[which(MARK[,2]==13),]
+somark = MARK[which(MARK[,2]==14),]
 
 write.table(naomark, file = "mark_datafiles//nao_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(shmark, file = "mark_datafiles//sh_mark.inp", row.names = F, col.names = F, quote = F)

@@ -40,15 +40,15 @@ ms_data$guild = as.factor(ms_data$guild)
 ms_data$species = as.factor(ms_data$species)
 ms_data$status = as.factor(ms_data$status)
 
-cat("Imported data.", file="outfile.txt",sep="\n")
+cat("Imported data.", file="outfile.txt", sep="\n")
 
 #---------------------------------------------------------------------------------
 #          process multistrata data, includes capture at home, and dipsersal transitions 
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
 # begin.time == first period number
-# TODO: get rid of guild since I will probably do analysis within instead of across guilds?
-ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 130, groups = c("sex", "guild", "species", "status"))
+ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 130, 
+                           groups = c("sex", "guild", "species", "status"))
 
 ms_ddl <- make.design.data(ms_process) #ddl = design data list
 
@@ -97,7 +97,7 @@ Snull <- list(formula = ~1)
 #          Define model structures for p (capture probability)
 #---------------------------------------------------------------------------------
 # fix recapture probabilities for unsampled or omitted months
-#    skipped_periods = c(267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
+#    skipped_periods = c(237, 241, 267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
 
 # select periods that were omitted from the study - untrapped
 p237 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 237,]))
@@ -139,8 +139,7 @@ p339val = rep(0, length(p339))
 p344val = rep(0, length(p344))
 p351val = rep(0, length(p351))
 
-
-cat("Fixed omitted periods to zero.",sep="\n",file="outfile.txt",append=TRUE)
+cat("Fixed omitted periods to zero.", sep="\n", file="outfile.txt", append=TRUE)
 
 
 # look for effects on recapture probability, given that some p are fixed to 0 (listed below)
@@ -153,14 +152,14 @@ pnull <- list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278,
                                                    p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                    p344val, p351val), link = "cloglog"))
 
-cat("Searched for period effect on recapture probability.",sep="\n", file="outfile.txt",append=TRUE)
+cat("Searched for period effect on recapture probability.", sep="\n", file="outfile.txt", append=TRUE)
 
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
 Psinull <- list(formula = ~1, link = "mlogit")
 
-cat("Defined model structure for Psi",sep="\n",file="outfile.txt",append=TRUE)
+cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
 
   
 #---------------------------------------------------------------------------------
@@ -171,13 +170,13 @@ wd = "~/portal-rodent-dispersal/mark_output/"
  # wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal/mark_output"
   setwd(wd)
 
-cat("running the multistrata models",sep="\n",file="outfile.txt",append=TRUE)
+cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
 
 # #SIMANNEAL should be best for multistrata models, but may take longer to run
 Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psinull),
                             options="SIMANNEAL", external=TRUE)
 
-cat("Null model is finished",sep="\n",file="outfile.txt",append=TRUE)
+cat("Null model is finished", sep="\n", file="outfile.txt", append=TRUE)
 
 
 #-----------------------------------------------------
@@ -185,7 +184,7 @@ cat("Null model is finished",sep="\n",file="outfile.txt",append=TRUE)
 #-----------------------------------------------------
 ms_results <- collect.models(type = "Multistrata")
 
-cat("Summarized results.",sep="\n",file="outfile.txt",append=TRUE)
+cat("Summarized results.", sep="\n", file="outfile.txt", append=TRUE)
 
   print(ms_results)
   print (Snull_pnull_Psinull$results$beta[1:3,])
@@ -197,7 +196,7 @@ cat("Summarized results.",sep="\n",file="outfile.txt",append=TRUE)
 write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_",ms_data[1,6],".csv",sep=""))
 write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,6],".csv",sep=""))
 
-cat("End Code. Look for your csv files.",sep="\n",file="outfile.txt",append=TRUE)
+cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=TRUE)
 print( paste("file", files[f], " is done.", sep = ""))
   
 rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list
