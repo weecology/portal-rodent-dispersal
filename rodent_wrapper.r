@@ -277,16 +277,16 @@ for (i in 1:length(spplist)){
   }
 }
     #TODO: change the column back to 7, altered for troubleshooting purposes
-domark = MARK[which(MARK[,2]==1),]
-dmmark = MARK[which(MARK[,2]==2),]
-dsmark = MARK[which(MARK[,2]==3),]
-pbmark = MARK[which(MARK[,2]==4),]
-ppmark = MARK[which(MARK[,2]==5),]
-pfmark = MARK[which(MARK[,2]==6),]
-pemark = MARK[which(MARK[,2]==7),]
-pmmark = MARK[which(MARK[,2]==8),]
-rmmark = MARK[which(MARK[,2]==9),]
-transmark = MARK[which(MARK[,2]==10),]
+domark = MARK[which(MARK[,5]==1),]
+dmmark = MARK[which(MARK[,5]==2),]
+dsmark = MARK[which(MARK[,5]==3),]
+pbmark = MARK[which(MARK[,5]==4),]
+ppmark = MARK[which(MARK[,5]==5),]
+pfmark = MARK[which(MARK[,5]==6),]
+pemark = MARK[which(MARK[,5]==7),]
+pmmark = MARK[which(MARK[,5]==8),]
+rmmark = MARK[which(MARK[,5]==9),]
+transmark = MARK[which(MARK[,5]==10),]
 
 write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
 
