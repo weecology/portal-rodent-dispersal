@@ -32,8 +32,8 @@ for (f in 1:length(files)){
   
 # bring in the inp file and convert it to RMark format - This file includes all the data from all the species 
 # files are carn_mark.inp, foli_mark.inp and gran_mark.inp
-ms_data <- convert.inp(files[f], group.df=data.frame(sex = c("male","female","unidsex")),  
-                      covariates = c("sd_mass", "guild", "species", "status"))
+ms_data <- convert.inp(files[f],  
+                      covariates = "species")
 
 #convert to factor
 ms_data$guild = as.factor(ms_data$guild)
