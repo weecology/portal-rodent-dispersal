@@ -23,7 +23,7 @@ setwd("~/portal-rodent-dispersal/")
 
 #grab all the .inp files to loop over for analysis
 files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
-#files = files[5]
+files = files[5:10]
 
 
 for (f in 1:length(files)){
