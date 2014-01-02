@@ -23,7 +23,7 @@ setwd("~/portal-rodent-dispersal/")
 
 #grab all the .inp files to loop over for analysis
 files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
-files = files[5:7]
+#files = files[5]
 
 
 for (f in 1:length(files)){
@@ -39,6 +39,8 @@ ms_data <- convert.inp(files[f], group.df=data.frame(sex = c("male","female","un
 #ms_data$guild = as.factor(ms_data$guild)
 ms_data$species = as.factor(ms_data$species)
 #ms_data$status = as.factor(ms_data$status)
+
+spname = ms_data$species[1]
 
 cat("Imported data.", file="outfile.txt", sep="\n")
 
@@ -252,8 +254,8 @@ cat("Summarized results.", sep="\n", file="outfile.txt", append=TRUE)
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
 
-write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_",ms_data[1,5],".csv",sep=""))
-write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,5],".csv",sep=""))
+write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_", spname, ".csv", sep=""))
+write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_", spname, ".csv", sep=""))
 #write.csv(Sstrata_pstrata_Psistrata$results$beta, "ms_strata_beta.csv")
 #write.csv(Sstrata_pstrata_Psistrata$results$real, "ms_strata_real.csv")
 #write.csv(Sguild_pguild_Psiguild$results$beta, "ms_guild_beta.csv")
