@@ -197,6 +197,8 @@ for (i in 1:length(spplist)){
   
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
+    #print (paste(spplist[i], length(tags), sep = " "))
+    #print (paste(spplist[i], mean(spdata$wgt, na.rm=T, sep = " ")))
     mtrs = distance_moved(spdata, tags)
     meterlist[i] = list(mtrs)
     taglist[i] = list(tags)
@@ -453,7 +455,7 @@ ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() +
 #------------------------- plot meters traveled by all species
 #plot modal distance by persistence for all granivores, color code points by status
 ggplot(granivdata, aes(propyrs, mode_out)) + 
-  geom_point(aes(col=as.factor(status), size = 3, pch = as.factor(status))) + theme_bw() + 
+  geom_point(aes(col=as.factor(status), pch = as.factor(status)), size=3) + theme_bw() + 
   xlab("proportion of years present") + ylab("Modal Distance between trap locations") +
   geom_text(aes(label=species), hjust=0, vjust=0)
 
