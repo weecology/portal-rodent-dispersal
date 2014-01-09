@@ -471,7 +471,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
 
         #was it captured on an exclosure? If yes, remove from study at this point.
         if (ind_dat[i+1,]$plot %in% exclosures) {
-          covariates[t,group] = covariates[t,group] * -1 }
+          covariates[t,6] = covariates[t,6] * -1 }
         
         index = match(pnext, prd)
         capture_history[t,index] = dist #mark subsequent captures 
