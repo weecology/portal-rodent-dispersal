@@ -4,6 +4,7 @@
 
 library(picante)
 library(PhyloOrchard)
+#if PhyloOrchard not already installed, for mac use the terminal: svn checkout svn://scm.r-forge.r-project.org/svnroot/phyloorchard/
 
 data(BinindaEmondsEtAl2007)
 plot(BinindaEmondsEtAl2007[[1]], show.node.label = TRUE)
