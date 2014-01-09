@@ -433,6 +433,7 @@ temporal_status = function (speciesname){
   return(status)
 }
 
+
 noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ### Create a set of MARK capture histories by home vs away from home
   # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
@@ -494,6 +495,10 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
 
         #was it captured on an exclosure? If yes, remove from study at this point.
         if (ind_dat[i+1,]$plot %in% exclosures) {
+          covariates[t,6] = covariates[t,6] * -1 }
+        
+        #was it found dead or was it removed from the plot? If yes, remove from study at this point.
+        if (ind_dat[i+1,]$note5 %in% list("D", "R")) {
           covariates[t,6] = covariates[t,6] * -1 }
         
         index = match(pnext, prd)
