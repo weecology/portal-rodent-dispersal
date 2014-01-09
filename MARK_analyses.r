@@ -1,12 +1,11 @@
 # for manipulating  rodent movement data in MARK
-## analyze survival and dispseral probabilities for species and guilds
+## analyze survival and dispseral probabilities for species
 # Use multistrata models that give S(survival), p(capture probability) and Psi(transition probability)
-# Will compare data among species and guilds. 
-# Major covariates include sex, guild, and average body mass
+# Will compare data among species and guilds in post-hoc analyses. 
+# Input files (.inp) generated using rodent_wrapper.r and movement_fxns.r
 
 # Do psi and S significantly differ among species/guilds?
 
-# Within a species/guild, do covariates (sex, body mass) influence psi and S?
 
 rm(list=ls(all=TRUE))   # clears the memory
 
@@ -14,12 +13,7 @@ rm(list=ls(all=TRUE))   # clears the memory
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
 #set working directory and import source code
-#setwd("~/")
 setwd("~/portal-rodent-dispersal/")
-
-
-# Run the line below to generate new .inp files 
-#source("stake_movement.r") #makes a mark data structure using species-level data from Portal Project
 
 #grab all the .inp files to loop over for analysis
 files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
@@ -36,17 +30,19 @@ ms_data = convert.inp(files[f], covariates = c("species"))
 #convert to factor
 ms_data$species = as.factor(ms_data$species)
 
+spname = ms_data$species[1]
+
 cat("Imported data.", file="outfile.txt", sep="\n")
 
 #---------------------------------------------------------------------------------
 #          process multistrata data, includes capture at home, and dipsersal transitions 
 #---------------------------------------------------------------------------------
-# Build up the model. Looking at sex effects on dispersal/survival
+# Build up the model. 
 # begin.time == first period number
-ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, 
-                           groups = c("species"))
+ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, groups = c("species"))
 
-ms_ddl = make.design.data(ms_process) #ddl = design data list
+#ddl = design data list
+ms_ddl = make.design.data(ms_process) 
 
 #---------------------------------------------------------------------------------
 #          make dummy variables and covariates
@@ -153,7 +149,7 @@ cat("Model for period effect on recapture probability.", sep="\n", file="outfile
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-Psinull = list(formula = ~1, link = "mlogit")
+Psinull = list(formula = ~1, link = "logit")
 
 cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
 
@@ -168,7 +164,7 @@ wd = "~/portal-rodent-dispersal/mark_output/"
 cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
 
 # #SIMANNEAL should be best for multistrata models, but may take longer to run
-Snull_pnull_Psinull <- mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psinull),
+Snull_pnull_Psinull = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psinull),
                             options="SIMANNEAL", external=TRUE)
 
 cat("Null model is finished", sep="\n", file="outfile.txt", append=TRUE)
@@ -188,8 +184,8 @@ cat("Summarized results.", sep="\n", file="outfile.txt", append=TRUE)
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
 
-write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_",ms_data[1,6],".csv",sep=""))
-write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_",ms_data[1,6],".csv",sep=""))
+write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_", spname, ".csv", sep=""))
+write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_", spname, ".csv", sep=""))
 
 cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=TRUE)
 print( paste("file", files[f], " is done.", sep = ""))
