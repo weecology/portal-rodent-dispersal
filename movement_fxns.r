@@ -255,6 +255,30 @@ is_duplicate_tag = function(dat, tags, sex_col, spp_col, tag_col){
 }
 
 
+same_period = function(dat, tags){
+  # multiple individuals with same tag captured in same period? Questionable daata
+  flagged_rats = data.frame("tag"=1, "reason"=1, "occurrences"=1)
+  outcount = 0
+  
+  for (t in 1:length(tags)){
+      tmp <- which(dat$tag == tags[t])
+      
+      if (nrow(dat[tmp,]) > 1){
+        periods = unique(dat[tmp,]$period)
+        for (p in 1:length(periods)){
+          ptmp <- which(dat$tag == tags[t] & dat$period == periods[p])
+          if (nrow(dat[ptmp,]) > 1){
+            outcount = outcount + 1
+            flagged_rats[outcount,] <- c(tags[t], "sameprd", nrow(dat[ptmp,]))
+            break
+          }
+        }
+      }
+  }
+  return (flagged_rats)
+}
+  
+
 find_bad_data2 = function(dat, tags, sex_col, spp_col){
   # check for consistent sex and species, outputs flagged tags to check, or to remove from study
   
