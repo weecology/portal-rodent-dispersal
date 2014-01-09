@@ -13,7 +13,7 @@ library(plyr)
 #---------------------------------------------------------------------------------
 #set working directory
 wd = "/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
-wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
+#wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
 setwd(wd)
 source("movement_fxns.R")
 
@@ -62,11 +62,18 @@ dups = is_duplicate_tag(all4, tags, 10, 9, 16) #check to see if can separate tag
 duptags = unique(dups$bad$tag)
 all5 = dups$data[-which(dups$data$tag %in% duptags),] #delete rows flagged as duplicates without clear resolution
 
+tags = unique(all5$tag)
+same = same_period(all5, tags)
+
+#eliminate tags that appear more than once in the same period - questionable data
+sametags = unique(same$tag)
+all6 = all5[-which(all5$tag %in% sametags),]
+
 # get rid of 'bad data'; deletes data where species is inconsistent. 
-all6 = subsetDat(all5)
+all7 = subsetDat(all6)
 
 #subset data for years of analysis
-all7 = subset(all6, yr > 1988)
+all7 = subset(all7, yr > 1988)
 
 
 #---------------------------------------------------------------------------------
@@ -278,17 +285,21 @@ for (i in 1:length(spplist)){
   MARK = rbind(MARK, nextMARK)
   }
 }
-    #TODO: change the column back to 7, altered for troubleshooting purposes
-domark = MARK[which(MARK[,5]==1),]
-dmmark = MARK[which(MARK[,5]==2),]
-dsmark = MARK[which(MARK[,5]==3),]
-pbmark = MARK[which(MARK[,5]==4),]
-ppmark = MARK[which(MARK[,5]==5),]
-pfmark = MARK[which(MARK[,5]==6),]
-pemark = MARK[which(MARK[,5]==7),]
-pmmark = MARK[which(MARK[,5]==8),]
-rmmark = MARK[which(MARK[,5]==9),]
-transmark = MARK[which(MARK[,5]==10),]
+
+#delete extra columns, since we're not using them in the Mark analysis
+MARK = MARK[,c(1,7,9)]
+
+#separate into files based on species
+domark = MARK[which(MARK[,2]==1),]
+dmmark = MARK[which(MARK[,2]==2),]
+dsmark = MARK[which(MARK[,2]==3),]
+pbmark = MARK[which(MARK[,2]==4),]
+ppmark = MARK[which(MARK[,2]==5),]
+pfmark = MARK[which(MARK[,2]==6),]
+pemark = MARK[which(MARK[,2]==7),]
+pmmark = MARK[which(MARK[,2]==8),]
+rmmark = MARK[which(MARK[,2]==9),]
+transmark = MARK[which(MARK[,2]==10),]
 
 write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
 
@@ -379,13 +390,13 @@ write.table(MARK, file = "mark_datafiles//carn_mark.inp", row.names = F, col.nam
 #        Make a table of total capture/recapture and gaps in data for each species
 #-----------------------------------------------------------------------------------
 #right now, this code only uses the most recently generated MARK data table 
-spplist = unique(MARK[,7])
+spplist = unique(MARK[,2])
 TableDat = data.frame("species"=1, "numindiv"=1, "numindivrecap"=1, "nocaps"=1, "norecaps"=1)
 
 for (i in 1:length(spplist)){
   
   #subset species data, for each species in turn
-  spdata = MARK[which(MARK[,7]==spplist[i]),]
+  spdata = MARK[which(MARK[,2]==spplist[i]),]
   
   sp = spplist[i]
   numindiv = nrow(spdata)
