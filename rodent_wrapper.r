@@ -300,8 +300,6 @@ pmmark = MARK[which(MARK[,2]==8),]
 rmmark = MARK[which(MARK[,2]==9),]
 transmark = MARK[which(MARK[,2]==10),]
 
-write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
-
 write.table(domark, file = "mark_datafiles//do_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(dmmark, file = "mark_datafiles//dm_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(dsmark, file = "mark_datafiles//ds_mark.inp", row.names = F, col.names = F, quote = F)
@@ -312,6 +310,8 @@ write.table(pemark, file = "mark_datafiles//pe_mark.inp", row.names = F, col.nam
 write.table(pmmark, file = "mark_datafiles//pm_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(rmmark, file = "mark_datafiles//rm_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(transmark, file = "mark_datafiles//trans_mark.inp", row.names = F, col.names = F, quote = F)
+
+#write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
 
 
 #--------------- Get MARK capture histories for folivores
@@ -352,7 +352,7 @@ write.table(shmark, file = "mark_datafiles//sh_mark.inp", row.names = F, col.nam
 write.table(sfmark, file = "mark_datafiles//sf_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(somark, file = "mark_datafiles//so_mark.inp", row.names = F, col.names = F, quote = F)
 
-write.table(MARK, file = "mark_datafiles//foli_mark.inp", row.names = F, col.names = F, quote = F)
+#write.table(MARK, file = "mark_datafiles//foli_mark.inp", row.names = F, col.names = F, quote = F)
 
 
 #-----------------Get MARK capture histories for carnivores
@@ -389,7 +389,7 @@ olmark = MARK[which(MARK[,2]==16),]
 write.table(otmark, file = "mark_datafiles//ot_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(olmark, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F, quote = F)
 
-write.table(MARK, file = "mark_datafiles//carn_mark.inp", row.names = F, col.names = F, quote = F)
+#write.table(MARK, file = "mark_datafiles//carn_mark.inp", row.names = F, col.names = F, quote = F)
 
 
 #-----------------------------------------------------------------------------------
