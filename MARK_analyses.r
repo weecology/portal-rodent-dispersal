@@ -23,7 +23,7 @@ setwd("~/portal-rodent-dispersal/")
 
 #grab all the .inp files to loop over for analysis
 files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
-files = files[c(5,6,10)]
+files = files[8]
 
 
 for (f in 1:length(files)){
@@ -31,12 +31,10 @@ for (f in 1:length(files)){
   require(RMark)
   
 # bring in the inp files and conver to tRMark format 
-ms_data <- convert.inp(files[f], ], covariates = c("species"))
+ms_data = convert.inp(files[f], covariates = c("species"))
 
 #convert to factor
-#ms_data$guild = as.factor(ms_data$guild)
 ms_data$species = as.factor(ms_data$species)
-#ms_data$status = as.factor(ms_data$status)
 
 cat("Imported data.", file="outfile.txt", sep="\n")
 
@@ -45,10 +43,10 @@ cat("Imported data.", file="outfile.txt", sep="\n")
 #---------------------------------------------------------------------------------
 # Build up the model. Looking at sex effects on dispersal/survival
 # begin.time == first period number
-ms_process <- process.data(ms_data, model = "Multistrata", begin.time = 130, 
-                           groups = c("sex", "species"))
+ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, 
+                           groups = c("species"))
 
-ms_ddl <- make.design.data(ms_process) #ddl = design data list
+ms_ddl = make.design.data(ms_process) #ddl = design data list
 
 #---------------------------------------------------------------------------------
 #          make dummy variables and covariates
@@ -66,11 +64,11 @@ ms_ddl$S$inA[ms_ddl$S$stratum == "1"] = 1
 ms_ddl$S$inB = 0
 ms_ddl$S$inB[ms_ddl$S$stratum == "2"] = 1
 
-# Transition probability given that the individual  A ---> B
+# Transition probability given that the individual  B ---> A
 ms_ddl$Psi$toA = 0
 ms_ddl$Psi$toA[ms_ddl$Psi$stratum == "2" & ms_ddl$Psi$tostratum == "1"] = 1
 
-# Transition probability given that the individual  B ---> A
+# Transition probability given that the individual  A ---> B
 ms_ddl$Psi$toB = 0
 ms_ddl$Psi$toB[ms_ddl$Psi$stratum == "1" & ms_ddl$Psi$tostratum == "2"] = 1 
 
@@ -88,7 +86,7 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 #---------------------------------------------------------------------------------
 #          Define model structures for S (survival probability)
 #---------------------------------------------------------------------------------
-Snull <- list(formula = ~1)          
+Snull = list(formula = ~1)          
 
 
 #---------------------------------------------------------------------------------
@@ -144,18 +142,18 @@ cat("Fixed omitted periods to zero.", sep="\n", file="outfile.txt", append=TRUE)
 # link = "logit" is the default. "cloglog" may be esp. useful when there are fewer recaptures
 
 #Null Model
-pnull <- list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
+pnull = list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                    p318, p321, p323, p337, p339, p344, p351), 
                                          value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                    p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                    p344val, p351val), link = "cloglog"))
 
-cat("Searched for period effect on recapture probability.", sep="\n", file="outfile.txt", append=TRUE)
+cat("Model for period effect on recapture probability.", sep="\n", file="outfile.txt", append=TRUE)
 
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-Psinull <- list(formula = ~1, link = "mlogit")
+Psinull = list(formula = ~1, link = "mlogit")
 
 cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
 
@@ -165,7 +163,6 @@ cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE
 #---------------------------------------------------------------------------------
 #send results to new folder - change working directory
 wd = "~/portal-rodent-dispersal/mark_output/"
- # wd = "C:/Users/sarah/Documents/GitHub/portal-rodent-dispersal/mark_output"
   setwd(wd)
 
 cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
