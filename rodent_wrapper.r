@@ -339,7 +339,10 @@ for (i in 1:length(spplist)){
   }
 }
 
-#TODO: change the column back to 7, altered for troubleshooting purposes
+#delete extra columns, since we're not using them in the Mark analysis
+MARK = MARK[,c(1,7,9)]
+
+#separate into files based on species
 naomark = MARK[which(MARK[,2]==11),]
 shmark = MARK[which(MARK[,2]==12),]
 sfmark = MARK[which(MARK[,2]==13),]
@@ -377,8 +380,12 @@ for (i in 1:length(spplist)){
   }
 }
 
-otmark = MARK[which(MARK[,7]==15),]
-olmark = MARK[which(MARK[,7]==16),]
+#delete extra columns, since we're not using them in the Mark analysis
+MARK = MARK[,c(1,7,9)]
+
+#separate into files based on species
+otmark = MARK[which(MARK[,2]==15),]
+olmark = MARK[which(MARK[,2]==16),]
 
 write.table(otmark, file = "mark_datafiles//ot_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(olmark, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F, quote = F)
