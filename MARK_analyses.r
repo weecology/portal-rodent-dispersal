@@ -149,10 +149,11 @@ pnull = list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278, 
 
 cat("Model for period effect on recapture probability.", sep="\n", file="outfile.txt", append=TRUE)
 
+
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-# consider using mlogit here?
+# consider using mlogit here? Set Psi 1-->1 == Psi 2-->1 and vice versa?
 Psinull = list(formula = ~1, link = "logit")
 
 cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
@@ -184,6 +185,7 @@ cat("Summarized results.", sep="\n", file="outfile.txt", append=TRUE)
   print(ms_results)
   print (Snull_pnull_Psinull$results$beta[1:3,])
 
+
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
@@ -195,5 +197,4 @@ cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=T
 print( paste("file", files[f], " is done.", sep = ""))
   
 rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list
-
 }
