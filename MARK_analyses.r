@@ -68,6 +68,9 @@ ms_ddl$Psi$toA[ms_ddl$Psi$stratum == "2" & ms_ddl$Psi$tostratum == "1"] = 1
 ms_ddl$Psi$toB = 0
 ms_ddl$Psi$toB[ms_ddl$Psi$stratum == "1" & ms_ddl$Psi$tostratum == "2"] = 1 
 
+#TODO: Fix Psi 1 --> 2 == 2 --> 2
+#      Fix Psi 2 --> 1 == 1 --> 1
+
 # recapture probability given that the individual is in A
 ms_ddl$p$strataA = 0
 ms_ddl$p$strataA[ms_ddl$p$stratum == "1"] = 1
@@ -149,6 +152,7 @@ cat("Model for period effect on recapture probability.", sep="\n", file="outfile
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
+# consider using mlogit here?
 Psinull = list(formula = ~1, link = "logit")
 
 cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
