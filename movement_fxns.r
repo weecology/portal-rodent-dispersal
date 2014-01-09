@@ -157,10 +157,10 @@ is_dead = function(dat, tags, spp_col, tag_col){
               #print(dat[tmp2,])
               
               #AND an ID to everything after the first "D" (the loop should take care of the next set and so on)
+             startrow = rowbreaks[r] + 1
               newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
                 numrows = nrow(dat[tmp2,][(startrow:endrow),])  
                 newtagvector = as.vector(rep(newtag, numrows))
-              startrow = rowbreaks[r] + 1
               dat[tmp2,][(startrow:endrow),tag_col] = newtag
               numcount = numcount + 1
             }
@@ -172,13 +172,13 @@ is_dead = function(dat, tags, spp_col, tag_col){
               else{
               #print (t)
               #GIVE an ID to everything after the next "D"
-              newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
+                startrow = rowbreaks[r] + 1
+                newtag = paste(tags[t], numcount, "m", sep = "") #make a new tag to keep separate
                 numrows = nrow(dat[tmp2,][(startrow:endrow),])  
                 newtagvector = as.vector(rep(newtag, numrows))
-              startrow = rowbreaks[r] + 1
-              dat[tmp2,][(startrow:endrow),tag_col] = newtag
-              numcount = numcount + 1
-            }
+                dat[tmp2,][(startrow:endrow),tag_col] = newtag
+                numcount = numcount + 1
+              }
             }
           }
         }
@@ -447,10 +447,9 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     
     #mark sex in Male, Female, or Unidentified columns of Covariates
     sex = ind_dat[1,]$sex 
-    if (sex == "M") {covariates[t,1] = 1 } 
-    else if (sex == "F") {covariates[t,2] = 1 }
-    else {
-      covariates[t,3] = 1 }
+    if (sex == "M") { covariates[t,1] = 1 } 
+    else if (sex == "F") { covariates[t,2] = 1 }
+    else { covariates[t,3] = 1 }
     
     # record standard deviations away from species average mass as another Covariate
     covariates[t,4] = sd_avg_mass(ind_dat, mean_mass, sd_mass) 
