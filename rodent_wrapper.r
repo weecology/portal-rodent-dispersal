@@ -257,7 +257,6 @@ granivdata = cbind(graniv_persist, brkpt_out, mode_out, mean_out, max_out)
 granivdata$oneval = granivdata$propyrs * granivdata$propmos
 
 
-#TODO: fix this chunk of code so that it is not so repetitive
 #----------------------------------------------------------------------
 #             Get MARK capture histories for granivores
 #----------------------------------------------------------------------
