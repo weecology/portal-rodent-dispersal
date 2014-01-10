@@ -25,11 +25,10 @@ for (f in 1:length(files)){
   require(RMark)
   
 # bring in the inp files and conver to tRMark format 
-ms_data = convert.inp(files[f], covariates = c("species"))
+ms_data = convert.inp(files[f], group = c("freq"), covariates = c("species"))
 
 #convert to factor
 ms_data$species = as.factor(ms_data$species)
-
 spname = ms_data$species[1]
 
 cat("Imported data.", file="outfile.txt", sep="\n")
@@ -39,7 +38,7 @@ cat("Imported data.", file="outfile.txt", sep="\n")
 #---------------------------------------------------------------------------------
 # Build up the model. 
 # begin.time == first period number
-ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, groups = c("species"))
+ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, groups = c("freq","species"))
 
 #ddl = design data list
 ms_ddl = make.design.data(ms_process) 
@@ -52,23 +51,23 @@ ms_ddl = make.design.data(ms_process)
 # A to B and B to B, is risky
 # A to A and B to A, is less risky (within home, "normal" movements)
 
-# Surival probability given that the individual is in A
+# SURVIVAL probability given that the individual is in A
 ms_ddl$S$inA = 0
 ms_ddl$S$inA[ms_ddl$S$stratum == "1"] = 1
 
-# Surival probability given that the individual is in B
+# SURVIVAL probability given that the individual is in B
 ms_ddl$S$inB = 0
 ms_ddl$S$inB[ms_ddl$S$stratum == "2"] = 1
 
-# recapture probability given that the individual is in A
+# RECAPTURE probability given that the individual is in A
 ms_ddl$p$strataA = 0
 ms_ddl$p$strataA[ms_ddl$p$stratum == "1"] = 1
 
-# recapture probability given that the individual is in B
+# RECAPTURE probability given that the individual is in B
 ms_ddl$p$strataB = 0
 ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 
-# Transition probability given that the individual  A ---> B or B ---> B
+# TRANSITION probability given that the individual  A ---> B or B ---> B
 # This fixes movement to B (probability of making a long-distance movement) to be the same, regardless of where the starting point was
 # The complement of ‘movement’ will be in the intercept. The intercept thus represents ‘non-movement’ (A ---> A or B ---> A)
 ms_ddl$Psi$movement = 0
