@@ -24,13 +24,14 @@ for (f in 1:length(files)){
   require(RMark)
   
 # bring in the inp files and convert to RMark format 
-ms_data = import.chdata(files[f], , field.names=c("ch","freq","species"), field.types=c("n","f"))
+ms_data = import.chdata(files[f], field.types=c("n","f"))
 #ms_data = convert.inp(files[f], group = c("freq"), covariates = c("species"))
 
 #convert to factor
 ms_data$species = as.factor(ms_data$species)
 spname = ms_data$species[1]
 
+print(spname)
 cat("Imported data.", file="outfile.txt", sep="\n")
 
 #---------------------------------------------------------------------------------
@@ -71,7 +72,7 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 # This fixes movement to B (probability of making a long-distance movement) to be the same, regardless of where the starting point was
 # The complement of ‘movement’ will be in the intercept. The intercept thus represents ‘non-movement’ (A ---> A or B ---> A)
 ms_ddl$Psi$movement = 0
-ms_ddl$Psi$movement[ms_ddl$Psi$stratum%in%c(1,2)&ddl$Psi$tostratum==2]=1
+ms_ddl$Psi$movement[ms_ddl$Psi$stratum%in%c(1,2) & ms_ddl$Psi$tostratum==2]=1
 
 
 #--------------------------------------------------------------------------------
@@ -163,8 +164,8 @@ wd = "~/portal-rodent-dispersal/mark_output/"
 
 cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
 
-# #SIMANNEAL should be best for multistrata models, but may take longer to run
-Snull_pnull_Psimovement = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psimovement),
+# SIMANNEAL should be best for multistrata models, but may take longer to run
+movemodel = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psimovement),
                             options="SIMANNEAL", external=TRUE)
 
 cat("Null model is finished", sep="\n", file="outfile.txt", append=TRUE)
@@ -174,22 +175,23 @@ cat("Null model is finished", sep="\n", file="outfile.txt", append=TRUE)
 #             summarize results
 #-----------------------------------------------------
 ms_results <- collect.models(type = "Multistrata")
+print(ms_results)
 
 cat("Summarized results.", sep="\n", file="outfile.txt", append=TRUE)
 
-  print(ms_results)
-  print (Snull_pnull_Psimovement$results$beta[1:3,])
+summary(movemodel, se=TRUE)
+#  print (Snull_pnull_Psimovement$results$beta[1:3,])
 
 
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
 
-write.csv(Snull_pnull_Psimovement$results$beta, paste("ms_null_beta_", spname, ".csv", sep=""))
-write.csv(Snull_pnull_Psimovement$results$real, paste("ms_null_real_", spname, ".csv", sep=""))
+write.csv(movemodel$results, paste("ms_movemodel_", spname, ".csv", sep=""))
+#write.csv(Snull_pnull_Psimovement$results$real, paste("ms_null_real_", spname, ".csv", sep=""))
 
 cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=TRUE)
-print( paste("file", files[f], " is done.", sep = ""))
+#print( paste("file", files[f], " is done.", sep = ""))
   
 rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list
 }
