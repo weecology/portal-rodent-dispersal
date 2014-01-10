@@ -417,7 +417,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   covariates[,1] = 1
   
   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in 
-  covariates[,2] = as.factor(dat[1,]$species)
+  covariates[,2] = as.character(dat[1,]$species)
   
   #loop through each tag to get individual-level data
   for (t in 1:length(tags)) {
@@ -440,7 +440,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
         
         #was it captured on an exclosure? If yes, remove from study at this point.
         if (ind_dat[i+1,]$plot %in% exclosures) {
-          covariates[t,6] = covariates[t,6] * -1 }
+          covariates[t,1] = covariates[t,1] * -1 }
         
         #was it found dead or was it removed from the plot? If yes, remove from study at this point.
         if (ind_dat[i+1,]$note5 %in% list("D", "R")) {
@@ -454,83 +454,6 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   mark_df = concat_ch(capture_history, covariates)
   return(mark_df)
 }
-
-
-# noplacelikehome = function (dat, prd, exclosures, breakpoint){
-#   ### Create a set of MARK capture histories by home vs away from home
-#   # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
-#   ## 1 (stayed home), and 2 (away from home). 
-#   ## Home is determined using the mean + 1 sd of the logged data.
-#   # guild (1 = granivore, 2 = folivore, 3 = carnivore)
-#   # species (assigned using function enumerate_species)
-#   # status (1 = core, 2 = intermediate, 3 = transient)
-#   
-#   tags = unique(dat$tag)
-#   capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
-#   covariates = matrix(0, nrow = length(tags), ncol = 7)
-#     colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "guild", "species", "status")
-#     group = c(1,2,3) #represent the "group" (core, transient, intermediate)
-# 
-#   # finds the average of all the masses for all non-pregnant adults in the species, as a baseline. 
-#   # remove juveniles and pregnant females for adult mass estimation
-#   adult_dat = dat[which(dat$reprod != "J" & dat$pregnant != "P"),] 
-#   mean_mass = mean(adult_dat$wgt, na.rm = TRUE) 
-#   sd_mass = sd(adult_dat$wgt, na.rm = TRUE)
-#   
-#   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
-#   # record guild in col 5 of covariates
-#   covariates[,5] = feeding_guild(dat[1,]$species)
-#  
-#   # record species in col 6 of covariates    
-#   covariates[,6] = enumerate_species(dat[1,]$species)
-#  
-#   # record hypothesized status in col 7 of covariates   
-#   covariates[,7] = temporal_status(dat[1,]$species)
-# 
-#   #loop through each tag to get individual-level data
-#   for (t in 1:length(tags)) {
-#     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
-#     ind_dat = ind_dat[order(ind_dat$period),] #order chronologically
-#     
-#     #mark sex in Male, Female, or Unidentified columns of Covariates
-#     sex = ind_dat[1,]$sex 
-#     if (sex == "M") { covariates[t,1] = 1 } 
-#     else if (sex == "F") { covariates[t,2] = 1 }
-#     else { covariates[t,3] = 1 }
-#     
-#     # record standard deviations away from species average mass as another Covariate
-#     covariates[t,4] = sd_avg_mass(ind_dat, mean_mass, sd_mass) 
-#     
-#     p1 = min(ind_dat$period) # record first capture period for the individual
-#     index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
-#     capture_history[t,index] = 1  #mark first capture with 1 ("home")      
-#     
-#     for (i in 1:nrow(ind_dat)){ #record capture history data
-#       
-#       if (i+1 <= nrow(ind_dat)){
-#         meters = sqrt((ind_dat[i,8]-ind_dat[i+1,8])**2 + (ind_dat[i,7]-ind_dat[i+1,7])**2)
-#         pnext = ind_dat[i+1,]$period #next capture period, where the distance will be recorded in the matrix (first capture period is always marked as "home")
-#         
-#         if (meters <= breakpoint) {dist = 1} #captured close to "home"
-#         
-#         else if (meters > breakpoint) {dist = 2} #captured far from "home"
-# 
-#         #was it captured on an exclosure? If yes, remove from study at this point.
-#         if (ind_dat[i+1,]$plot %in% exclosures) {
-#           covariates[t,6] = covariates[t,6] * -1 }
-#         
-#         #was it found dead or was it removed from the plot? If yes, remove from study at this point.
-#         if (ind_dat[i+1,]$note5 %in% list("D", "R")) {
-#           covariates[t,6] = covariates[t,6] * -1 }
-#         
-#         index = match(pnext, prd)
-#         capture_history[t,index] = dist #mark subsequent captures 
-#       }
-#     }  
-#   }
-#   mark_df = concat_ch(capture_history, covariates)
-#   return(mark_df)
-# }
 
 
 concat_ch = function (ch_matrix, cov_matrix){
@@ -663,7 +586,6 @@ mo_repro = function (femaledata){
 count_repro = function(reprodata){
   #input a df of reproductive data. Outputs the number of times that the individual was "uniquely" reproductive.
   # unique reproduction is defined by having a break between reproductive status in the trapping record.
- 
   rh = 1   #reproductive history counter. Starts at one. Increment when the difference between reproductive events is > 1
   
   if (nrow(reprodata) > 1) { 
@@ -721,7 +643,6 @@ indiv_repro = function (femaledata){
 allyrs_abun = function(spdata, years){
   #function to find abundance for a species across the timeseries. 
   # input the species dataframe, calculates total number of unique individuals. Returns a vector.
- 
   abun = c()
   
   for (y in 1:length(years)){
@@ -734,3 +655,82 @@ allyrs_abun = function(spdata, years){
   }
   return (abun)
 }
+
+#-----------------------------------------------OLD CODE
+
+# noplacelikehome = function (dat, prd, exclosures, breakpoint){
+#   ### Create a set of MARK capture histories by home vs away from home
+#   # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
+#   ## 1 (stayed home), and 2 (away from home). 
+#   ## Home is determined using the mean + 1 sd of the logged data.
+#   # guild (1 = granivore, 2 = folivore, 3 = carnivore)
+#   # species (assigned using function enumerate_species)
+#   # status (1 = core, 2 = intermediate, 3 = transient)
+#   
+#   tags = unique(dat$tag)
+#   capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
+#   covariates = matrix(0, nrow = length(tags), ncol = 7)
+#     colnames(covariates) = c("male", "female", "unidsex", "sd_mass", "guild", "species", "status")
+#     group = c(1,2,3) #represent the "group" (core, transient, intermediate)
+# 
+#   # finds the average of all the masses for all non-pregnant adults in the species, as a baseline. 
+#   # remove juveniles and pregnant females for adult mass estimation
+#   adult_dat = dat[which(dat$reprod != "J" & dat$pregnant != "P"),] 
+#   mean_mass = mean(adult_dat$wgt, na.rm = TRUE) 
+#   sd_mass = sd(adult_dat$wgt, na.rm = TRUE)
+#   
+#   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in
+#   # record guild in col 5 of covariates
+#   covariates[,5] = feeding_guild(dat[1,]$species)
+#  
+#   # record species in col 6 of covariates    
+#   covariates[,6] = enumerate_species(dat[1,]$species)
+#  
+#   # record hypothesized status in col 7 of covariates   
+#   covariates[,7] = temporal_status(dat[1,]$species)
+# 
+#   #loop through each tag to get individual-level data
+#   for (t in 1:length(tags)) {
+#     ind_dat = dat[which(dat$tag == tags[t]),] #get data for indiv with tag t
+#     ind_dat = ind_dat[order(ind_dat$period),] #order chronologically
+#     
+#     #mark sex in Male, Female, or Unidentified columns of Covariates
+#     sex = ind_dat[1,]$sex 
+#     if (sex == "M") { covariates[t,1] = 1 } 
+#     else if (sex == "F") { covariates[t,2] = 1 }
+#     else { covariates[t,3] = 1 }
+#     
+#     # record standard deviations away from species average mass as another Covariate
+#     covariates[t,4] = sd_avg_mass(ind_dat, mean_mass, sd_mass) 
+#     
+#     p1 = min(ind_dat$period) # record first capture period for the individual
+#     index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
+#     capture_history[t,index] = 1  #mark first capture with 1 ("home")      
+#     
+#     for (i in 1:nrow(ind_dat)){ #record capture history data
+#       
+#       if (i+1 <= nrow(ind_dat)){
+#         meters = sqrt((ind_dat[i,8]-ind_dat[i+1,8])**2 + (ind_dat[i,7]-ind_dat[i+1,7])**2)
+#         pnext = ind_dat[i+1,]$period #next capture period, where the distance will be recorded in the matrix (first capture period is always marked as "home")
+#         
+#         if (meters <= breakpoint) {dist = 1} #captured close to "home"
+#         
+#         else if (meters > breakpoint) {dist = 2} #captured far from "home"
+# 
+#         #was it captured on an exclosure? If yes, remove from study at this point.
+#         if (ind_dat[i+1,]$plot %in% exclosures) {
+#           covariates[t,6] = covariates[t,6] * -1 }
+#         
+#         #was it found dead or was it removed from the plot? If yes, remove from study at this point.
+#         if (ind_dat[i+1,]$note5 %in% list("D", "R")) {
+#           covariates[t,6] = covariates[t,6] * -1 }
+#         
+#         index = match(pnext, prd)
+#         capture_history[t,index] = dist #mark subsequent captures 
+#       }
+#     }  
+#   }
+#   mark_df = concat_ch(capture_history, covariates)
+#   return(mark_df)
+# }
+
