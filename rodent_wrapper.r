@@ -285,20 +285,18 @@ for (i in 1:length(spplist)){
   }
 }
 
-#delete extra columns, since we're not using them in the Mark analysis
-MARK = MARK[,c(1,7,9)]
 
 #separate into files based on species
-domark = MARK[which(MARK[,2]==1),]
-dmmark = MARK[which(MARK[,2]==2),]
-dsmark = MARK[which(MARK[,2]==3),]
-pbmark = MARK[which(MARK[,2]==4),]
-ppmark = MARK[which(MARK[,2]==5),]
-pfmark = MARK[which(MARK[,2]==6),]
-pemark = MARK[which(MARK[,2]==7),]
-pmmark = MARK[which(MARK[,2]==8),]
-rmmark = MARK[which(MARK[,2]==9),]
-transmark = MARK[which(MARK[,2]==10),]
+domark = MARK[which(MARK[,3]=="DO"),]
+dmmark = MARK[which(MARK[,3]=="DM"),]
+dsmark = MARK[which(MARK[,3]=="DS"),]
+pbmark = MARK[which(MARK[,3]=="PB"),]
+ppmark = MARK[which(MARK[,3]=="PP"),]
+pfmark = MARK[which(MARK[,3]=="PF"),]
+pemark = MARK[which(MARK[,3]=="PE"),]
+pmmark = MARK[which(MARK[,3]=="PM"),]
+rmmark = MARK[which(MARK[,3]=="RM"),]
+transmark = MARK[which(MARK[,3] %in% transientspecies),]
 
 write.table(domark, file = "mark_datafiles//do_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(dmmark, file = "mark_datafiles//dm_mark.inp", row.names = F, col.names = F, quote = F)
@@ -338,14 +336,11 @@ for (i in 1:length(spplist)){
   }
 }
 
-#delete extra columns, since we're not using them in the Mark analysis
-MARK = MARK[,c(1,7,9)]
-
 #separate into files based on species
-naomark = MARK[which(MARK[,2]==11),]
-shmark = MARK[which(MARK[,2]==12),]
-sfmark = MARK[which(MARK[,2]==13),]
-somark = MARK[which(MARK[,2]==14),]
+naomark = MARK[which(MARK[,3]=="NAO"),]
+shmark = MARK[which(MARK[,3]=="SH"),]
+sfmark = MARK[which(MARK[,3]=="SF"),]
+somark = MARK[which(MARK[,3]=="SO"),]
 
 write.table(naomark, file = "mark_datafiles//nao_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(shmark, file = "mark_datafiles//sh_mark.inp", row.names = F, col.names = F, quote = F)
@@ -379,12 +374,9 @@ for (i in 1:length(spplist)){
   }
 }
 
-#delete extra columns, since we're not using them in the Mark analysis
-MARK = MARK[,c(1,7,9)]
-
 #separate into files based on species
-otmark = MARK[which(MARK[,2]==15),]
-olmark = MARK[which(MARK[,2]==16),]
+otmark = MARK[which(MARK[,3]=="OT"),]
+olmark = MARK[which(MARK[,3]=="OL"),]
 
 write.table(otmark, file = "mark_datafiles//ot_mark.inp", row.names = F, col.names = F, quote = F)
 write.table(olmark, file = "mark_datafiles//ol_mark.inp", row.names = F, col.names = F, quote = F)

@@ -414,7 +414,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   colnames(covariates) = c("freq", "species")
   
   # fill freq in with 1. 1 indicates a normal capture history, -1 indicates a right-censored capture history
-  covariates[,1] = 1
+  covariates[,1] = as.numeric(1)
   
   # since data is imported by species, we only need to check the first row of data to grab the species name and decide what guild it is in 
   covariates[,2] = as.character(dat[1,]$species)
@@ -440,11 +440,11 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
         
         #was it captured on an exclosure? If yes, remove from study at this point.
         if (ind_dat[i+1,]$plot %in% exclosures) {
-          covariates[t,1] = covariates[t,1] * -1 }
+          covariates[t,1] = as.numeric(covariates[t,1]) * -1 }
         
         #was it found dead or was it removed from the plot? If yes, remove from study at this point.
         if (ind_dat[i+1,]$note5 %in% list("D", "R")) {
-          covariates[t,1] = covariates[t,1] * -1 }
+          covariates[t,1] = as.numeric(covariates[t,1]) * -1 }
         
         index = match(pnext, prd)
         capture_history[t,index] = dist #mark subsequent captures 
