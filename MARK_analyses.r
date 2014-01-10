@@ -24,7 +24,7 @@ for (f in 1:length(files)){
   require(RMark)
   
 # bring in the inp files and convert to RMark format 
-ms_data = import.chdata(files[f], field.types=c("n","f"))
+ms_data = import.chdata(files[f], , field.names=c("ch","freq","species"), field.types=c("n","f"))
 #ms_data = convert.inp(files[f], group = c("freq"), covariates = c("species"))
 
 #convert to factor
