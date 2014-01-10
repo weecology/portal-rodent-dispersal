@@ -16,8 +16,7 @@ rm(list=ls(all=TRUE))   # clears the memory
 setwd("~/portal-rodent-dispersal/")
 
 #grab all the .inp files to loop over for analysis
-files = list.files(getwd(), pattern = "mark.inp", full.name=T, recursive=T)
-files = files[8]
+files = list.files(getwd(), pattern = "test.inp", full.name=T, recursive=T)
 
 
 for (f in 1:length(files)){
