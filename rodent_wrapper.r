@@ -285,7 +285,6 @@ for (i in 1:length(spplist)){
   }
 }
 
-
 #separate into files based on species
 domark = MARK[which(MARK[,3]=="DO"),]
 dmmark = MARK[which(MARK[,3]=="DM"),]
