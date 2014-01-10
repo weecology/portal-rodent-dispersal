@@ -20,39 +20,6 @@ return(dat)
 }
 
 
-# find_bad_data = function(dat, tags, sex_col, spp_col){
-#   # check for consistent sex and species, outputs flagged tags to check
-#   
-# flagged_rats = data.frame("tag"=1, "reason"=1, "occurrences"=1)
-# outcount = 0
-# 
-# for (t in 1:length(tags)){
-#   tmp <- which(dat$tag == tags[t])
-#     if (nchar(tags[t]) < 6) {    # is it a pit tag or was it given an unknown tag
-#       outcount = outcount + 1
-#     flagged_rats[outcount,] <- c(tags[t], 'not_a_PIT', nrow(dat[tmp,]))
-#   }
-#     if (nrow(dat[tmp,]) > 1) {    # if indiv was captured multiple times
-#     sex_list = dat[tmp,sex_col]
-#     sex = sex_list[1]
-#     for (i in 2:length(sex_list)){  # check for consistent sex
-#       if (sex_list[i] != sex) {
-#       outcount = outcount + 1
-#       flagged_rats[outcount,] <- c(tags[t], "sex", nrow(dat[tmp,]))
-#       break
-#       }}
-#     spp_list = dat[tmp,spp_col]
-#     spp = spp_list[1]
-#     for (s in 2:length(spp_list)){  # check for consistent species
-#       if (spp_list[s] != spp){
-#       outcount = outcount + 1
-#       flagged_rats[outcount,] <- c(tags[t], "spp", nrow(dat[tmp,]))
-#       break
-#       }}
-#     }}
-# return(flagged_rats)
-# }
-
 starred_tags = function(dat, tags, spp_col, tag_col){
   #Automate checking the flagged data for where the individual breaks should be
   #check for *, which indicates a new tag
