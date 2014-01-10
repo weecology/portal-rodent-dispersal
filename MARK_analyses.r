@@ -16,15 +16,16 @@ rm(list=ls(all=TRUE))   # clears the memory
 setwd("~/portal-rodent-dispersal/")
 
 #grab all the .inp files to loop over for analysis
-files = list.files(getwd(), pattern = "test.inp", full.name=T, recursive=T)
+files = list.files(getwd(), pattern = "test.txt", full.name=T, recursive=T)
 
 
 for (f in 1:length(files)){
   
   require(RMark)
   
-# bring in the inp files and conver to tRMark format 
-ms_data = convert.inp(files[f], group = c("freq"), covariates = c("species"))
+# bring in the inp files and convert to RMark format 
+ms_data = import.chdata(files[f], field.types=c("n","f"))
+#ms_data = convert.inp(files[f], group = c("freq"), covariates = c("species"))
 
 #convert to factor
 ms_data$species = as.factor(ms_data$species)
@@ -37,7 +38,7 @@ cat("Imported data.", file="outfile.txt", sep="\n")
 #---------------------------------------------------------------------------------
 # Build up the model. 
 # begin.time == first period number
-ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, groups = c("freq","species"))
+ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, group = c("species"))
 
 #ddl = design data list
 ms_ddl = make.design.data(ms_process) 
