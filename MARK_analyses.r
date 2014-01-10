@@ -148,8 +148,9 @@ cat("Model for period effect on recapture probability.", sep="\n", file="outfile
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-# consider using mlogit here? Set Psi 1-->1 == Psi 2-->1 and vice versa?
-Psinull = list(formula = ~1, link = "logit")
+# consider using mlogit here?
+#Psinull = list(formula = ~1, link = "logit")
+Psimovement = list(formula = ~movement, link = "logit") 
 
 cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
 
@@ -164,7 +165,7 @@ wd = "~/portal-rodent-dispersal/mark_output/"
 cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
 
 # #SIMANNEAL should be best for multistrata models, but may take longer to run
-Snull_pnull_Psinull = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psinull),
+Snull_pnull_Psimovement = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psimovement),
                             options="SIMANNEAL", external=TRUE)
 
 cat("Null model is finished", sep="\n", file="outfile.txt", append=TRUE)
@@ -178,15 +179,15 @@ ms_results <- collect.models(type = "Multistrata")
 cat("Summarized results.", sep="\n", file="outfile.txt", append=TRUE)
 
   print(ms_results)
-  print (Snull_pnull_Psinull$results$beta[1:3,])
+  print (Snull_pnull_Psimovement$results$beta[1:3,])
 
 
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
 
-write.csv(Snull_pnull_Psinull$results$beta, paste("ms_null_beta_", spname, ".csv", sep=""))
-write.csv(Snull_pnull_Psinull$results$real, paste("ms_null_real_", spname, ".csv", sep=""))
+write.csv(Snull_pnull_Psimovement$results$beta, paste("ms_null_beta_", spname, ".csv", sep=""))
+write.csv(Snull_pnull_Psimovement$results$real, paste("ms_null_real_", spname, ".csv", sep=""))
 
 cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=TRUE)
 print( paste("file", files[f], " is done.", sep = ""))
