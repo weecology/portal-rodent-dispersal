@@ -60,17 +60,6 @@ ms_ddl$S$inA[ms_ddl$S$stratum == "1"] = 1
 ms_ddl$S$inB = 0
 ms_ddl$S$inB[ms_ddl$S$stratum == "2"] = 1
 
-# Transition probability given that the individual  B ---> A
-ms_ddl$Psi$toA = 0
-ms_ddl$Psi$toA[ms_ddl$Psi$stratum == "2" & ms_ddl$Psi$tostratum == "1"] = 1
-
-# Transition probability given that the individual  A ---> B
-ms_ddl$Psi$toB = 0
-ms_ddl$Psi$toB[ms_ddl$Psi$stratum == "1" & ms_ddl$Psi$tostratum == "2"] = 1 
-
-#TODO: Fix Psi 1 --> 2 == 2 --> 2
-#      Fix Psi 2 --> 1 == 1 --> 1
-
 # recapture probability given that the individual is in A
 ms_ddl$p$strataA = 0
 ms_ddl$p$strataA[ms_ddl$p$stratum == "1"] = 1
@@ -78,6 +67,12 @@ ms_ddl$p$strataA[ms_ddl$p$stratum == "1"] = 1
 # recapture probability given that the individual is in B
 ms_ddl$p$strataB = 0
 ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
+
+# Transition probability given that the individual  A ---> B or B ---> B
+# This fixes movement to B (probability of making a long-distance movement) to be the same, regardless of where the starting point was
+# The complement of ‘movement’ will be in the intercept. The intercept thus represents ‘non-movement’ (A ---> A or B ---> A)
+ms_ddl$Psi$movement = 0
+ms_ddl$Psi$movement[ms_ddl$Psi$stratum%in%c(1,2)&ddl$Psi$tostratum==2]=1
 
 
 #--------------------------------------------------------------------------------
