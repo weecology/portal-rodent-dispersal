@@ -72,7 +72,7 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 # This fixes movement to B (probability of making a long-distance movement) to be the same, regardless of where the starting point was
 # The complement of ‘movement’ will be in the intercept. The intercept thus represents ‘non-movement’ (A ---> A or B ---> A)
 ms_ddl$Psi$movement = 0
-ms_ddl$Psi$movement[ms_ddl$Psi$stratum%in%c(1,2) & ms_ddl$Psi$tostratum==2]=1
+ms_ddl$Psi$movement[ms_ddl$Psi$stratum %in% c(1,2) & ms_ddl$Psi$tostratum == 2] = 1
 
 
 #--------------------------------------------------------------------------------
@@ -179,7 +179,11 @@ print(ms_results)
 
 cat("Summarized results.", sep="\n", file="outfile.txt", append=TRUE)
 
-summary(movemodel, se=TRUE)
+print(class(movemodel))
+print(names(movemodel))
+print(str(movemodel))
+head(movemodel)
+#summary(movemodel, se=TRUE)
 #  print (Snull_pnull_Psimovement$results$beta[1:3,])
 
 
@@ -187,7 +191,7 @@ summary(movemodel, se=TRUE)
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
 
-write.csv(movemodel$results, paste("ms_movemodel_", spname, ".csv", sep=""))
+#write.csv(movemodel$results, paste("ms_movemodel_", spname, ".csv", sep=""))
 #write.csv(Snull_pnull_Psimovement$results$real, paste("ms_null_real_", spname, ".csv", sep=""))
 
 cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=TRUE)
