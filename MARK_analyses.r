@@ -138,7 +138,7 @@ cat("Fixed omitted periods to zero.", sep="\n", file="outfile.txt", append=TRUE)
 #Null Model
 pnull = list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278, p283, p284, p300, p311, p313, p314,
                                                    p318, p321, p323, p337, p339, p344, p351), 
-                                         value = c(p237, p241, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
+                                         value = c(p237val, p241val, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                    p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                    p344val, p351val), link = "cloglog"))
 
