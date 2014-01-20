@@ -478,50 +478,24 @@ modal_dist = ggplot(granivdata, aes(propyrs, mode_out)) + theme_bw() +
 
 #------------------------ plot histograms of each of the species movements
 
-DMplot = ggplot(data.frame(meterlist$DM), aes(meterlist.DM)) + geom_histogram(fill="cadetblue") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
-
-DOplot = ggplot(data.frame(meterlist$DO), aes(meterlist.DO)) + geom_histogram(fill="cadetblue") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
-
-DSplot = ggplot(data.frame(meterlist$DS), aes(meterlist.DS)) + geom_histogram(fill="goldenrod") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
-
-PBplot = ggplot(data.frame(meterlist$PB), aes(meterlist.PB)) + geom_histogram(fill="cadetblue") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
-
-PPplot = ggplot(data.frame(meterlist$PP), aes(meterlist.PP)) + geom_histogram(fill="cadetblue") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
-
-PFplot = ggplot(data.frame(meterlist$PF), aes(meterlist.PF)) + geom_histogram(fill="cadetblue") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
-
-PEplot = ggplot(data.frame(meterlist$PE), aes(meterlist.PE)) + geom_histogram(fill="cadetblue") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
-
-PMplot = ggplot(data.frame(meterlist$PM), aes(meterlist.PM)) + geom_histogram(fill="goldenrod") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
-
-RMplot = ggplot(data.frame(meterlist$RM), aes(meterlist.RM)) + geom_histogram(fill="cadetblue") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
 core = data.frame(core = c(meterlist$DO, meterlist$DM, meterlist$RM, meterlist$PE, meterlist$PP, meterlist$PB, meterlist$PF))
 interm = data.frame(inter = c(meterlist$PM, meterlist$DS))
 trans = data.frame(trans=c(meterlist$RF, meterlist$BA, meterlist$PH, meterlist$PI, meterlist$PL, meterlist$RO))
+
+COREplot = ggplot(core, aes(core)) + geom_histogram(fill="cadetblue") + theme_bw() + 
+  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
+  xlim(0,550)
+
+INTERplot = ggplot(interm, aes(inter)) + geom_histogram(fill="goldenrod") + theme_bw() + 
+  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
+  xlim(0,550)
+
 TRANSplot = ggplot(trans, aes(trans)) + geom_histogram(fill="indianred") + theme_bw() + 
   theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
-  xlim(0,500)
+  xlim(0,550)
 
 
-grid.arrange(DOplot, DMplot, DSplot, PBplot, PPplot, PFplot, PEplot, PMplot, RMplot, TRANSplot, nrow=3)
+grid.arrange(COREplot, INTERplot, TRANSplot, nrow=3)
 
 
 #------------------------- attempting to build up to making bean plots
