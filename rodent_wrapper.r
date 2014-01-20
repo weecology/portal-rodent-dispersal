@@ -494,7 +494,6 @@ TRANSplot = ggplot(trans, aes(trans)) + geom_histogram(fill="indianred") + theme
   theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
   xlim(0,550)
 
-
 grid.arrange(COREplot, INTERplot, TRANSplot, nrow=3)
 
 
