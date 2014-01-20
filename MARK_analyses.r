@@ -214,8 +214,27 @@ for (f in 1:length(rfiles)){
   outcount = outcount + 1
 }
 
-SbyPsi = ggplot(estimates, aes(Psito2, S)) + geom_point(size = 3) + theme_bw() + 
+#check that this is in correct order, if redoing the analysis #FIXME/TODO
+estimates$status = as.factor(c("core", "core", "intermediate", "core", "core", "core", "core", "core", "core",
+                     "intermediate", "core", "core", "intermediate", "transient", "transient", "transient"))
+
+
+SbyPsi = ggplot(estimates, aes(Psito2, S, col=status)) + geom_point(size = 3) + theme_bw() + 
           theme(text = element_text(size=20)) + 
           xlab("Long-distance movement probability") + ylab("Survival probability") + 
           geom_errorbar(aes(x = Psito2, ymin = S - S_se, ymax = S + S_se), width=0.01) +
-          geom_smooth(method = "lm", formula = y ~ x)
+          geom_errorbarh(aes(xmin = Psito2 - Psi2_se, xmax = Psito2 + Psi2_se))
+
+Sbyp = ggplot(estimates, aes(p, S, col=status)) + geom_point(size = 3) + theme_bw() + 
+         theme(text = element_text(size=20)) + 
+         xlab("recapture probability") + ylab("Survival probability") + 
+         geom_errorbar(aes(x = p, ymin = S - S_se, ymax = S + S_se), width=0.01) +
+         geom_errorbarh(aes(xmin = p - p_se, xmax = p + p_se))
+
+Psibyp =  ggplot(estimates, aes(Psito2, p, col=status)) + geom_point(size = 3) + theme_bw() + 
+  theme(text = element_text(size=20)) + 
+  xlab("long-distance movement probability") + ylab("recapture probability") + 
+  geom_errorbar(aes(x = Psito2, ymin = p - p_se, ymax = p + p_se), width=0.01) +
+  geom_errorbarh(aes(xmin = Psito2 - Psi2_se, xmax = Psito2 + Psi2_se))
+
+
