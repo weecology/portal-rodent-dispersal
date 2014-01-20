@@ -13,10 +13,11 @@ rm(list=ls(all=TRUE))   # clears the memory
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
 #set working directory and import source code
-setwd("~/portal-rodent-dispersal/")
+setwd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_datafiles//"
+#setwd("~/portal-rodent-dispersal/")
 
 #grab all the .inp files to loop over for analysis
-files = list.files(getwd(), pattern = "test.txt", full.name=T, recursive=T)
+files = list.files(getwd(), pattern = "mark.txt", full.name=T, recursive=T)
 
 
 for (f in 1:length(files)){
@@ -70,7 +71,7 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 
 # TRANSITION probability given that the individual  A ---> B or B ---> B
 # This fixes movement to B (probability of making a long-distance movement) to be the same, regardless of where the starting point was
-# The complement of â€˜movementâ€™ will be in the intercept. The intercept thus represents â€˜non-movementâ€™ (A ---> A or B ---> A)
+# The complement of movement€™ will be in the intercept. The intercept represents€™ (A ---> A or B ---> A)
 ms_ddl$Psi$movement = 0
 ms_ddl$Psi$movement[ms_ddl$Psi$stratum %in% c(1,2) & ms_ddl$Psi$tostratum == 2] = 1
 
@@ -148,7 +149,6 @@ cat("Model for period effect on recapture probability.", sep="\n", file="outfile
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-# consider using mlogit here?
 #Psinull = list(formula = ~1, link = "logit")
 Psimovement = list(formula = ~movement, link = "logit") 
 
@@ -159,14 +159,15 @@ cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE
 #          Run Models and collect results
 #---------------------------------------------------------------------------------
 #send results to new folder - change working directory
-wd = "~/portal-rodent-dispersal/mark_output/"
+#wd = "~/portal-rodent-dispersal/mark_output/"
+wd = "C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_output//"
   setwd(wd)
 
 cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
 
 # SIMANNEAL should be best for multistrata models, but may take longer to run
 movemodel = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psimovement),
-                            options="SIMANNEAL", external=TRUE)
+                            options="SIMANNEAL", external=FALSE)
 
 cat("Null model is finished", sep="\n", file="outfile.txt", append=TRUE)
 
@@ -174,28 +175,22 @@ cat("Null model is finished", sep="\n", file="outfile.txt", append=TRUE)
 #-----------------------------------------------------
 #             summarize results
 #-----------------------------------------------------
-ms_results <- collect.models(type = "Multistrata")
-print(ms_results)
-
+#ms_results <- collect.models(type = "Multistrata")
+#print(ms_results)
 cat("Summarized results.", sep="\n", file="outfile.txt", append=TRUE)
 
-print(class(movemodel))
-print(names(movemodel))
-print(str(movemodel))
-head(movemodel)
-#summary(movemodel, se=TRUE)
-#  print (Snull_pnull_Psimovement$results$beta[1:3,])
+print (movemodel$results$beta[1:3,])
+print (movemodel$results$real[1:3,])
 
 
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
-
-#write.csv(movemodel$results, paste("ms_movemodel_", spname, ".csv", sep=""))
-#write.csv(Snull_pnull_Psimovement$results$real, paste("ms_null_real_", spname, ".csv", sep=""))
+write.csv(movemodel$results$beta, paste("movemodel_beta_", spname, ".csv", sep=""))
+write.csv(movemodel$results$real, paste("movemodel_real_", spname, ".csv", sep=""))
 
 cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=TRUE)
-#print( paste("file", files[f], " is done.", sep = ""))
+print( paste(spname, " is done.", sep = ""))
   
 rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list
 }
