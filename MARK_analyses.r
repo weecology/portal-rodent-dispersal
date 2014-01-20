@@ -192,3 +192,30 @@ print( paste(spname, " is done.", sep = ""))
   
 rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list
 }
+
+
+
+#---------- concatenate results
+library(stringr)
+
+#grab all the .inp files to loop over for analysis
+files = list.files(getwd(), pattern = "real", full.name=T, recursive=T)
+
+#make a new dataframe with the results
+estimates = data.frame(species=NA, S=1, S_se=1, p=1, p_se=1, Psito2=1, Psi2_se = 1, Psito1=1, Psi1_se=1)
+outcount = 1
+
+for (f in 1:length(rfiles)){
+  dat = read.csv(rfiles[f], header=T, sep=",")
+  spname = str_sub(rfiles[f],-6,-5)
+  estimates[outcount,1] = spname
+  estimates[outcount,2:9] = c(dat[1,2], dat[1,3], dat[2,2], dat[2,3], dat[3,2], dat[3,3], 
+                              dat[4,2], dat[4,3])
+  outcount = outcount + 1
+}
+
+SbyPsi = ggplot(estimates, aes(Psito2, S)) + geom_point(size = 3) + theme_bw() + 
+          theme(text = element_text(size=20)) + 
+          xlab("Long-distance movement probability") + ylab("Survival probability") + 
+          geom_errorbar(aes(x = Psito2, ymin = S - S_se, ymax = S + S_se), width=0.01) +
+          geom_smooth(method = "lm", formula = y ~ x)

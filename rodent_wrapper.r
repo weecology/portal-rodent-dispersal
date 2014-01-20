@@ -300,8 +300,8 @@ pemark = MARK[which(MARK[,3]=="PE"),]
 pmmark = MARK[which(MARK[,3]=="PM"),]
 rmmark = MARK[which(MARK[,3]=="RM"),]
 transmark = MARK[which(MARK[,3] %in% transientspecies),]
-  transmark[,3] = "TRANS"
-  levels(transmark[,3]) = "TRANS"
+  transmark[,3] = "TR"
+  levels(transmark[,3]) = "TR"
 
 write.table(domark, file = "mark_datafiles//do_mark.txt", sep=" ", row.names = F)
 write.table(dmmark, file = "mark_datafiles//dm_mark.txt", sep=" ", row.names = F)
