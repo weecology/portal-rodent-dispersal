@@ -149,7 +149,7 @@ cat("Model for period effect on recapture probability.", sep="\n", file="outfile
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
 #Psinull = list(formula = ~1, link = "logit")
-Psimovement = list(formula = ~movement, link = "mlogit") 
+Psimovement = list(formula = ~movement, link = "logit") 
 
 cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
 
