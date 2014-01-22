@@ -42,7 +42,7 @@ cat("Imported data.", file="outfile.txt", sep="\n")
 ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, group = c("species"))
 
 #ddl = design data list
-ms_ddl = make.design.data(ms_process, parameters=list(Psi=list(subtract.stratum=c("1","1")))) 
+ms_ddl = make.design.data(ms_process, parameters= list(Psi=list(subtract.stratum=c("1","1")))) 
 
 #---------------------------------------------------------------------------------
 #          make dummy variables and covariates
@@ -71,9 +71,8 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 # TRANSITION probability given that the individual  A ---> B or B ---> B
 # This fixes movement to B (probability of making a long-distance movement) to be the same, regardless of where the starting point was
 # The complement of movement€™ will be in the intercept. The intercept represents€™ (A ---> A or B ---> A)
-# ms_ddl$Psi$movement = 0
-# ms_ddl$Psi$movement[ms_ddl$Psi$stratum %in% c(1,2) & ms_ddl$Psi$tostratum == 2] = 1
-
+ms_ddl$Psi$movement = 0
+ms_ddl$Psi$movement[ms_ddl$Psi$stratum %in% c("1","2") & ms_ddl$Psi$tostratum == "2"] = 1
 
   
 #--------------------------------------------------------------------------------
