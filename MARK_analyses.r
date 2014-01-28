@@ -166,7 +166,6 @@ for (f in 1:length(files)){
   cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
   
   # SIMANNEAL should be best for multistrata models, but may take longer to run
-  #TODO: make sure to refer to the correct Psi model here
   movemodel = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psinull),
                    options="SIMANNEAL", external=FALSE)
   
