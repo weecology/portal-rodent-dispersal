@@ -49,9 +49,8 @@ ms_ddl = make.design.data(ms_process, parameters=list(S=list(pim.type="time"),
 #          make dummy variables and covariates
 #---------------------------------------------------------------------------------
 # Add dummy variables for operating on specific states(strata) or transitions
-# A = 1 (home), B = 2 (away)
-# A to B and B to B, is risky
-# A to A and B to A, is less risky (within home, "normal" movements)
+# Species start in 1, movement between 1 and 2 (or vice versa) indicates a relatively long distance movement
+# Switching states indicates making a transition
 
 # SURVIVAL probability given that the individual is in A
 ms_ddl$S$inA = 0
@@ -69,11 +68,10 @@ ms_ddl$p$strataA[ms_ddl$p$stratum == "1"] = 1
 ms_ddl$p$strataB = 0
 ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 
-# TRANSITION probability given that the individual  A ---> B or B ---> B
-# This fixes movement to B (probability of making a long-distance movement) to be the same, regardless of where the starting point was
+# TRANSITION probability given that the individual switches states
 # TODO: Change this to fix 1-->2 = 2-->1, since we are now interested in "switching"
-ms_ddl$Psi$movement = 0
-ms_ddl$Psi$movement[ms_ddl$Psi$stratum %in% c("1","2") & ms_ddl$Psi$tostratum == "2"] = 1
+#ms_ddl$Psi$movement = 0
+#ms_ddl$Psi$movement[ms_ddl$Psi$stratum %in% c("1","2") & ms_ddl$Psi$tostratum == "2"] = 1
 
   
 #--------------------------------------------------------------------------------
@@ -89,7 +87,11 @@ Snull = list(formula = ~1)
 #---------------------------------------------------------------------------------
 # fix recapture probabilities for unsampled or omitted months
 #    skipped_periods = c(237, 241, 267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
-# TODO: this may need to be redefined, since using the parameters, pim.type arguments
+
+  ## KTS: I removed these for now- eventually we need to deal with untrapped periods though.
+  ###   can we just remove these periods from the CH and set the time interval between bouts appropriately?
+  # select periods that were omitted from the study - untrapped
+  # TODO: this may need to be redefined, since using the parameters, pim.type arguments
 # select periods that were omitted from the study - untrapped
 p237 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 237,]))
 p241 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 241,]))
@@ -143,6 +145,8 @@ pnull = list(formula = ~1, fixed = list(index = c(p237, p241, p267, p277, p278, 
                                                    p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                    p344val, p351val), link = "cloglog"))
 
+  pnull = list(formula = ~1)
+  
 cat("Model for period effect on recapture probability.", sep="\n", file="outfile.txt", append=TRUE)
 
 
@@ -150,8 +154,9 @@ cat("Model for period effect on recapture probability.", sep="\n", file="outfile
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
 # TODO: change Psi model to new version
-#Psinull = list(formula = ~1, link = "logit")
-Psimovement = list(formula = ~movement, link = "logit") 
+  Psinull = list(formula = ~1, link = "logit")   # KTS: Psinull is correct if we want psi 1 >> 2 == psi 2 >> 1
+  
+ # Psimovement = list(formula = ~movement, link = "logit") 
 
 cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
 
@@ -167,7 +172,7 @@ cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
 
 # SIMANNEAL should be best for multistrata models, but may take longer to run
 #TODO: make sure to refer to the correct Psi model here
-movemodel = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psimovement),
+movemodel = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psinull),
                             options="SIMANNEAL", external=FALSE)
 
 cat("Null model is finished", sep="\n", file="outfile.txt", append=TRUE)
