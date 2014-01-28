@@ -201,20 +201,21 @@ for (f in 1:length(files)){
 #---------------------------------------------------------------------------------
 #---------- concatenate results
 library(stringr)
+library(ggplot2)
+library(gridExtra)
 
 #grab all the .inp files to loop over for analysis
-files = list.files(getwd(), pattern = "real", full.name=T, recursive=T)
+rfiles = list.files(getwd(), pattern = "real", full.name=T, recursive=T)
 
 #make a new dataframe with the results
-estimates = data.frame(species=NA, S=1, S_se=1, p=1, p_se=1, Psito2=1, Psi2_se = 1, Psito1=1, Psi1_se=1)
+estimates = data.frame(species=NA, S=1, S_se=1, p=1, p_se=1, Psi=1, Psi_se = 1)
 outcount = 1
 
 for (f in 1:length(rfiles)){
   dat = read.csv(rfiles[f], header=T, sep=",")
   spname = str_sub(rfiles[f],-6,-5)
   estimates[outcount,1] = spname
-  estimates[outcount,2:9] = c(dat[1,2], dat[1,3], dat[2,2], dat[2,3], dat[3,2], dat[3,3], 
-                              dat[4,2], dat[4,3])
+  estimates[outcount,2:7] = c(dat[1,2], dat[1,3], dat[2,2], dat[2,3], dat[3,2], dat[3,3])
   outcount = outcount + 1
 }
 
@@ -222,12 +223,21 @@ for (f in 1:length(rfiles)){
 estimates$status = as.factor(c("core", "core", "intermediate", "core", "core", "core", "core", "core", "core",
                      "intermediate", "core", "core", "intermediate", "transient", "transient", "transient"))
 
+#Categorize species by feeding guild
+granivores = c("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI",
+               "PE", "PM", "PL", "RM", "RF", "RO", "BA")
+folivores = c("SH", "SF", "SO", "AO")
+carnivores = c("OT", "OL")
 
-SbyPsi = ggplot(estimates, aes(Psito2, S, col=status)) + geom_point(size = 3) + theme_bw() + 
+estimates = estimates[which(estimates$species %in% granivores | estimates$species == "TR"),]
+#estimates = estimates[which(estimates$species %in% folivores),] 
+#estimates = estimates[which(estimates$species %in% carnivores),] 
+
+SbyPsi = ggplot(estimates, aes(Psi, S, col=status)) + geom_point(size = 3) + theme_bw() + 
           theme(text = element_text(size=20)) + 
           xlab("Long-distance movement probability") + ylab("Survival probability") + 
-          geom_errorbar(aes(x = Psito2, ymin = S - S_se, ymax = S + S_se), width=0.01) +
-          geom_errorbarh(aes(xmin = Psito2 - Psi2_se, xmax = Psito2 + Psi2_se))
+          geom_errorbar(aes(x = Psi, ymin = S - S_se, ymax = S + S_se), width=0.01) +
+          geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
 
 Sbyp = ggplot(estimates, aes(p, S, col=status)) + geom_point(size = 3) + theme_bw() + 
          theme(text = element_text(size=20)) + 
@@ -235,10 +245,11 @@ Sbyp = ggplot(estimates, aes(p, S, col=status)) + geom_point(size = 3) + theme_b
          geom_errorbar(aes(x = p, ymin = S - S_se, ymax = S + S_se), width=0.01) +
          geom_errorbarh(aes(xmin = p - p_se, xmax = p + p_se))
 
-Psibyp =  ggplot(estimates, aes(Psito2, p, col=status)) + geom_point(size = 3) + theme_bw() + 
+Psibyp =  ggplot(estimates, aes(Psi, p, col=status)) + geom_point(size = 3) + theme_bw() + 
   theme(text = element_text(size=20)) + 
   xlab("long-distance movement probability") + ylab("recapture probability") + 
-  geom_errorbar(aes(x = Psito2, ymin = p - p_se, ymax = p + p_se), width=0.01) +
-  geom_errorbarh(aes(xmin = Psito2 - Psi2_se, xmax = Psito2 + Psi2_se))
+  geom_errorbar(aes(x = Psi, ymin = p - p_se, ymax = p + p_se), width=0.01) +
+  geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
 
+grid.arrange(SbyPsi, Sbyp, Psibyp, nrow=2)
 
