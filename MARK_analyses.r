@@ -67,10 +67,8 @@ for (f in 1:length(files)){
   ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
   
   # TRANSITION probability given that the individual switches states
-  # TODO: Change this to fix 1-->2 = 2-->1, since we are now interested in "switching"
-  #ms_ddl$Psi$movement = 0
-  #ms_ddl$Psi$movement[ms_ddl$Psi$stratum %in% c("1","2") & ms_ddl$Psi$tostratum == "2"] = 1
-  
+  # fix 1-->2 = 2-->1, since we are now interested in "switching"
+  #TODO: Are the dummy variables below needed?
   # Transition probability given that the individual  A ---> B
   ms_ddl$Psi$toA = 0
   ms_ddl$Psi$toA[ms_ddl$Psi$stratum == "2" & ms_ddl$Psi$tostratum == "1"] = 1
@@ -94,10 +92,6 @@ for (f in 1:length(files)){
 # fix recapture probabilities for unsampled or omitted months
 #    skipped_periods = c(237, 241, 267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
 
-  ## KTS: I removed these for now- eventually we need to deal with untrapped periods though.
-  ###   can we just remove these periods from the CH and set the time interval between bouts appropriately?
-  # select periods that were omitted from the study - untrapped
-  # TODO: this may need to be redefined, since using the parameters, pim.type arguments
   # select periods that were omitted from the study - untrapped
   p237 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 237,]))
   p241 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 241,]))
@@ -150,8 +144,6 @@ for (f in 1:length(files)){
                                            value = c(p237val, p241val, p267val, p277val, p278val, p283val, p284val, p300val, p311val,
                                                      p313val, p314val, p318val, p321val, p323val, p337val, p339val,
                                                      p344val, p351val), link = "cloglog"))
-
-  #pnull = list(formula = ~1)
   
   cat("Model for period effect on recapture probability.", sep="\n", file="outfile.txt", append=TRUE)
 
@@ -159,10 +151,7 @@ for (f in 1:length(files)){
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
-  # TODO: change Psi model to new version
   Psinull = list(formula = ~1, link = "logit")   # KTS: Psinull is correct if we want psi 1 >> 2 == psi 2 >> 1
-  
-  # Psimovement = list(formula = ~movement, link = "logit") 
 
   cat("Defined model structure for Psi", sep="\n", file="outfile.txt", append=TRUE)
 
