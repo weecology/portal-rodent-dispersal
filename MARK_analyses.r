@@ -25,7 +25,6 @@ for (f in 1:length(files)){
   
 # bring in the inp files and convert to RMark format 
 ms_data = import.chdata(files[f], field.types=c("n","f"))
-#ms_data = convert.inp(files[f], group = c("freq"), covariates = c("species"))
 
 #convert to factor
 ms_data$species = as.factor(ms_data$species)
@@ -42,7 +41,9 @@ cat("Imported data.", file="outfile.txt", sep="\n")
 ms_process = process.data(ms_data, model = "Multistrata", begin.time = 130, group = c("species"))
 
 #ddl = design data list
-ms_ddl = make.design.data(ms_process, parameters= list(Psi=list(subtract.stratum=c("1","1")))) 
+ms_ddl = make.design.data(ms_process, parameters=list(S=list(pim.type="time"), 
+                                                      p=list(pim.type="time"), 
+                                                      Psi=list(pim.type="time"))) 
 
 #---------------------------------------------------------------------------------
 #          make dummy variables and covariates
@@ -70,7 +71,7 @@ ms_ddl$p$strataB[ms_ddl$p$stratum == "2"] = 1
 
 # TRANSITION probability given that the individual  A ---> B or B ---> B
 # This fixes movement to B (probability of making a long-distance movement) to be the same, regardless of where the starting point was
-# The complement of movement€™ will be in the intercept. The intercept represents€™ (A ---> A or B ---> A)
+# TODO: Change this to fix 1-->2 = 2-->1, since we are now interested in "switching"
 ms_ddl$Psi$movement = 0
 ms_ddl$Psi$movement[ms_ddl$Psi$stratum %in% c("1","2") & ms_ddl$Psi$tostratum == "2"] = 1
 
@@ -88,7 +89,7 @@ Snull = list(formula = ~1)
 #---------------------------------------------------------------------------------
 # fix recapture probabilities for unsampled or omitted months
 #    skipped_periods = c(237, 241, 267, 277, 278, 283, 284, 300, 311, 313, 314, 318, 321, 323, 337, 339, 344, 351): p = 0
-
+# TODO: this may need to be redefined, since using the parameters, pim.type arguments
 # select periods that were omitted from the study - untrapped
 p237 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 237,]))
 p241 = as.numeric(row.names(ms_ddl$p[ms_ddl$p$time == 241,]))
@@ -148,6 +149,7 @@ cat("Model for period effect on recapture probability.", sep="\n", file="outfile
 #---------------------------------------------------------------------------------
 #          Define model structures for Psi (transition probability)
 #---------------------------------------------------------------------------------
+# TODO: change Psi model to new version
 #Psinull = list(formula = ~1, link = "logit")
 Psimovement = list(formula = ~movement, link = "logit") 
 
@@ -164,6 +166,7 @@ setwd("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_output
 cat("running the multistrata models", sep="\n", file="outfile.txt", append=TRUE)
 
 # SIMANNEAL should be best for multistrata models, but may take longer to run
+#TODO: make sure to refer to the correct Psi model here
 movemodel = mark(ms_process, ms_ddl, model.parameters = list(S=Snull,  p=pnull, Psi=Psimovement),
                             options="SIMANNEAL", external=FALSE)
 
