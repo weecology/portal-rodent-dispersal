@@ -415,7 +415,6 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
   covariates = matrix(0, nrow = length(tags), ncol = 2)
   colnames(covariates) = c("freq", "species")
-  state = 1
   
   # fill freq in with 1. 1 indicates a normal capture history, -1 indicates a right-censored capture history
   covariates[,1] = as.numeric(1)
@@ -430,7 +429,8 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
     
     p1 = min(ind_dat$period) # record first capture period for the individual
     index = match(p1, prd) # match the period with the index number for the list of periods (will correspond to col num in matrix)
-    capture_history[t,index] = 1  #mark first capture with 1 ("home")      
+    state = 1
+    capture_history[t,index] = state  #mark first capture with 1 ("home")   
     
     for (i in 1:nrow(ind_dat)){ #record capture history data
       
