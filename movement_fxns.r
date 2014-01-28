@@ -404,7 +404,10 @@ temporal_status = function (speciesname){
 noplacelikehome = function (dat, prd, exclosures, breakpoint){
   ### Create a set of MARK capture histories by home vs away from home
   # Creates a movement history to be used in Mark. Matrix is filled in with zeroes (not captured) and later filled in 
-  ## 1 (stayed home), and 2 (away from home). 
+  # An individual always starts in 1, and is moved to state 2 only if it moves a distance larger than the threshold
+  # set by the core species movement distribution. If it is again recaptured at a distance larger than the threshold,
+  # is is moved from state 2 back to state 1. This will be used to calculate "transition" (or long distance movement)
+  # probability in Rmark.
   ## Home is determined using the mean + 1 sd of the logged data.
   # species - alpha code
   
@@ -412,6 +415,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
   capture_history = matrix(0, nrow = length(tags), ncol = length(prd))
   covariates = matrix(0, nrow = length(tags), ncol = 2)
   colnames(covariates) = c("freq", "species")
+  state = 1
   
   # fill freq in with 1. 1 indicates a normal capture history, -1 indicates a right-censored capture history
   covariates[,1] = as.numeric(1)
@@ -434,10 +438,16 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
         meters = sqrt((ind_dat[i,8]-ind_dat[i+1,8])**2 + (ind_dat[i,7]-ind_dat[i+1,7])**2)
         pnext = ind_dat[i+1,]$period #next capture period, where the distance will be recorded in the matrix (first capture period is always marked as "home")
         
-        if (meters <= breakpoint) {dist = 1} #captured close to "home"
+        if (meters <= breakpoint) {dist = state} #captured close to "home"
         
-        else if (meters > breakpoint) {dist = 2} #captured far from "home"
-        
+        else if (meters > breakpoint) {
+          if (state == 1) {
+            dist = 2
+            }
+          else if (state == 2) {
+            dist = 1
+            }
+        }
         #was it captured on an exclosure? If yes, remove from study at this point.
         if (ind_dat[i+1,]$plot %in% exclosures) {
           covariates[t,1] = as.numeric(covariates[t,1]) * -1 }
@@ -448,6 +458,7 @@ noplacelikehome = function (dat, prd, exclosures, breakpoint){
         
         index = match(pnext, prd)
         capture_history[t,index] = dist #mark subsequent captures 
+        state = dist
       }
     }  
   }
