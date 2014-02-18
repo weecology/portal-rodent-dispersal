@@ -86,7 +86,7 @@ totalyears = c(1989:2009) #will need to be adjusted based on time frame want to 
 controlplots = c(1,2,4,8,9,11,12,14,17,22)
 months = count_months(all7, totalyears)
 
-persistence = data.frame(species=NA, propyrs=NA, propmos=NA, meanabun=NA, maxabun=NA)
+persistence = data.frame(species=NA, propyrs=NA, propmos=NA, meanabun=NA, maxabun=NA, reprod=NA, bodysize=NA)
   outcount = 1
 yearly_control_abundance = data.frame(year = totalyears)
 reprod_mo_yr = data.frame(year=NA, month=NA, proprepro=NA, numfemales=NA, species=NA)
@@ -109,7 +109,8 @@ for (i in 1:length(spplist)){
     maxconabun = max(conabun)
   
   #record persistence and abundance data from control plots
-  persistence[outcount,] = c(as.character(spplist[i]), round(conpropyrs,4), round(conavgmos,4), round(meanconabun,4), maxconabun)
+  persistence[outcount,1] = as.character(spplist[i])
+  persistence[outcount,2:5] = c(round(conpropyrs,4), round(conavgmos,4), round(meanconabun,4), maxconabun)
   yearly_control_abundance = cbind(yearly_control_abundance, conabun)
   outcount = outcount + 1
   
@@ -127,6 +128,11 @@ for (i in 1:length(spplist)){
     # track the number of times individual females uniquely reproduce within each year
     irep = indiv_repro(spdataF) #matix with cols "tag", "year" and "num_reprod"
       assign(paste0(spplist[i], 'irep'), irep)
+      persistence[outcount,6] = round(mean(irep$num_reprod),2)
+  
+  # record mean body size for individuals captured for the species (excluding juveniles and pregnant individuals)
+  massdata = spdata[which(spdata$pregnant != "P" & spdata$reprod != "J"),]
+  persistence[outcount,7] = round(mean(massdata$wgt, na.rm=TRUE),2)
 }
 
 #add species names to the dataframe of abundance vectors
@@ -206,12 +212,18 @@ for (i in 1:length(spplist)){
   
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
-    #print (paste(spplist[i], length(tags), sep = " "))
-    #print (paste(spplist[i], mean(spdata$wgt, na.rm=T, sep = " ")))
+    print (paste(spplist[i], length(tags), sep = " "))
+    print (paste(spplist[i], mean(spdata$wgt, na.rm=T, sep = " ")))
     mtrs = distance_moved(spdata, tags)
     meterlist[i] = list(mtrs)
     taglist[i] = list(tags)
 }
+
+#Identify breakpoint for all species in meterlist
+brkpt_out_all<-sapply(meterlist,function(x){
+  expm1(mean(log1p(x)) + sd(log1p(x)))
+})
+brkpt_out_all
 
 
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
