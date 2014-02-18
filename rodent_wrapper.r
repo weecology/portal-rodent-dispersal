@@ -8,6 +8,7 @@ library(fields)
 library(stringr)
 library(plyr)
 library(gridExtra)
+library(ggbiplot)
 
 #---------------------------------------------------------------------------------
 #          setup - select wd, import data, source code,  file to collect results
@@ -503,6 +504,42 @@ grid.arrange(COREplot, INTERplot, TRANSplot, nrow=1)
 #------------------------ plot histograms of each of the species movements
 
 
+#------------------------ PCA biplot of species traits and estimates
+#MAKE SURE YOU HAVE RUN THE MARK_analyses.R code first! **
+#assign all transient species the same MARK estimates (for now)
+estimates2 = estimates[16,]
+transgran = granivores[which(granivores %in% transientspecies)]
+for (i in 1:length(transgran)){
+  estimates2$species = transgran[i]
+  estimates=rbind(estimates, estimates2)
+}
+
+m = merge(granivdata, estimates)
+
+pcagraniv = m[,c(1, 3, 6, 8, 9, 13, 15, 17)]
+catgraniv = m[,c(1,2)]
+
+rownames(pcagraniv) = pcagraniv$species
+pcagraniv = pcagraniv[,-1]
+
+# Standard the matrix to correct for different units by subtracting the
+# means and dividing by sd
+zscore <- apply(pcagraniv, 2, function(x) {
+  y <- (x - mean(x))/sd(x)
+  return(y)
+})
+rownames(zscore) <- rownames(pcagraniv)
+
+#run pca analysis
+trait_pc<-prcomp(zscore)
+
+#Use dev libary to ggplot PCA, color by clades
+#Try the ggplot biplot to color by clades (or later, behavioral roles)
+toCol<-catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status"]
+
+#Label species names and clades, circles cover normal distribuiton of groups TODO: Ellipse doesn't work here - why?
+ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 4, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
 
 #------------------------- attempting to build up to making bean plots
 # ggplot(data=data.frame(value=DOmeters)) +
