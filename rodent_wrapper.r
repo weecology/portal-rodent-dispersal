@@ -22,6 +22,9 @@ source("movement_fxns.R")
 #import all data
 all = read.table('rawdata/all_1980-2009.txt', sep = ',', header = TRUE)
 
+#import species information
+species_table = read.csv('rawdata/species.csv', sep = ',', header = TRUE)
+
 #import cleaned data, if next step (clean up the data) has previously been run
 allclean = read.csv('rawdata/cleaned_1989-2009.csv', sep = ',', header = TRUE)
   #all7 == allclean, if have allclean, can skip the datacleaning steps
@@ -566,8 +569,10 @@ ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 3, va
 m2 = merge(persistence, estimates, by = c("species", "species"))
 m2=m2[,-18]
 
+m2 = merge(m2, species_table)
+
 pcadat = m2[,c(1, 2, 5, 6, 7, 10, 11, 12, 14, 16)]
-catdat = m2[,c(1, 8, 9)]
+catdat = m2[,c(1, 8, 9, 18)]
 
 rownames(pcadat) = pcadat$species
 pcadat = pcadat[,-1]
@@ -587,6 +592,7 @@ trait_pc<-prcomp(zscore)
 #Try the ggplot biplot to color by clades (or later, behavioral roles)
 toCol = catdat[catdat$species %in% rownames(trait_pc$x),"status.x"]
 toColGuild = catdat[catdat$species %in% rownames(trait_pc$x),"guild"]
+toColFam = catdat[catdat$species %in% rownames(trait_pc$x),"family"]
 
 #Label species names and clades, ellipses cover normal distribuiton of temporal groups
 ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
@@ -596,6 +602,9 @@ ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), ellipse=TRUE, labe
 ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
   theme(text = element_text(size=20))
 
+#Label species names and clades, circles cover normal distribuiton of families
+ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
 
 #-------------------------- Comparing the CMR analysis estimates
 ggplot(m2, aes(Psi, S)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
