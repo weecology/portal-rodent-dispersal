@@ -224,32 +224,33 @@ estimates$status = as.factor(c("core", "core", "intermediate", "core", "core", "
                      "intermediate", "core", "core", "intermediate", "transient", "transient", "transient"))
 
 #Categorize species by feeding guild
-granivores = c("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI",
-               "PE", "PM", "PL", "RM", "RF", "RO", "BA")
-folivores = c("SH", "SF", "SO", "AO")
-carnivores = c("OT", "OL")
+granivores2 = c("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI",
+               "PE", "PM", "PL", "RM", "RF", "RO", "BA", "TR")
+folivores2 = c("SH", "SF", "SO", "AO")
+carnivores2 = c("OT", "OL")
 
-estimates = estimates[which(estimates$species %in% granivores | estimates$species == "TR"),]
-#estimates = estimates[which(estimates$species %in% folivores),] 
-#estimates = estimates[which(estimates$species %in% carnivores),] 
+est_gran = estimates[which(estimates$species %in% granivores2),]
+est_foli = estimates[which(estimates$species %in% folivores2),] 
+est_carn = estimates[which(estimates$species %in% carnivores2),] 
 
-SbyPsi = ggplot(estimates, aes(Psi, S, col=status)) + geom_point(size = 3) + theme_bw() + 
-          theme(text = element_text(size=20)) + 
+#------------ plot the results for the granivores
+SbyPsi = ggplot(est_gran, aes(Psi, S, col=status)) + geom_point(size = 3) + theme_bw() + 
+          theme(text = element_text(size=20)) + scale_colour_hue(guide = "none") +
           xlab("Long-distance movement probability") + ylab("Survival probability") + 
           geom_errorbar(aes(x = Psi, ymin = S - S_se, ymax = S + S_se), width=0.01) +
           geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
 
-Sbyp = ggplot(estimates, aes(p, S, col=status)) + geom_point(size = 3) + theme_bw() + 
-         theme(text = element_text(size=20)) + 
+Sbyp = ggplot(est_gran, aes(p, S, col=status)) + geom_point(size = 3) + theme_bw() + 
+         theme(text = element_text(size=20)) + scale_colour_hue(guide = "none") +
          xlab("recapture probability") + ylab("Survival probability") + 
          geom_errorbar(aes(x = p, ymin = S - S_se, ymax = S + S_se), width=0.01) +
          geom_errorbarh(aes(xmin = p - p_se, xmax = p + p_se))
 
-Psibyp =  ggplot(estimates, aes(Psi, p, col=status)) + geom_point(size = 3) + theme_bw() + 
-  theme(text = element_text(size=20)) + 
-  xlab("long-distance movement probability") + ylab("recapture probability") + 
-  geom_errorbar(aes(x = Psi, ymin = p - p_se, ymax = p + p_se), width=0.01) +
-  geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
+Psibyp =  ggplot(est_gran, aes(Psi, p, col=status)) + geom_point(size = 3) + theme_bw() + 
+        theme(text = element_text(size=20)) + 
+        xlab("long-distance movement probability") + ylab("recapture probability") + 
+        geom_errorbar(aes(x = Psi, ymin = p - p_se, ymax = p + p_se), width=0.01) +
+        geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
 
-grid.arrange(SbyPsi, Sbyp, Psibyp, nrow=2)
+grid.arrange(SbyPsi, Sbyp, Psibyp, nrow=1)
 
