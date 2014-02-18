@@ -652,7 +652,9 @@ ggplot(m2, aes(propyrs, reprod)) + geom_point() + stat_smooth(method = "lm") + t
 
 
 
-#------------------------------------------ FIGURE - for ESA talk
+#------------------------------------------ Reproduction Figures
+pdf("reproductive_events_per_year.pdf")
+par(mfrow=c(3,3))
 
 #plot the relative abundance of females who represent each number of reproductive events per year
 plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
@@ -661,21 +663,52 @@ plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive even
 points(c(0:3), table(DOirep$num_reprod)/sum(table(DOirep$num_reprod)), type = "b", pch = 19, col = "black")
 points(c(0:4), table(DMirep$num_reprod)/sum(table(DMirep$num_reprod)), type = "b", pch = 19, col = "black")
 points(c(0:4), table(PBirep$num_reprod)/sum(table(PBirep$num_reprod)), type = "b", pch = 19, col = "black")
-points(c(0:4), table(PPirep$num_reprod)/sum(table(PPirep$num_reprod)), type = "b", pch = 29, col = "black")
+points(c(0:4), table(PPirep$num_reprod)/sum(table(PPirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:3), table(RMirep$num_reprod)/sum(table(RMirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:2), table(PEirep$num_reprod)/sum(table(PEirep$num_reprod)), type = "b", pch = 19, col = "black")
+points(c(0:4), table(PFirep$num_reprod)/sum(table(PFirep$num_reprod)), type = "b", pch = 19, col = "black")
+
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
+     main = "intermediate granivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:2), table(PMirep$num_reprod)/sum(table(PMirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0,1,3), table(DSirep$num_reprod)/sum(table(DSirep$num_reprod)), type = "b", pch = 15, col = "black")
 
 plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
      ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
      main = "transient granivores", cex.axis = 1.5, cex.lab = 1.5)
-points(c(0:2), table(PMirep$num_reprod)/sum(table(PMirep$num_reprod)), type = "b", pch = 15, col = "black")
-points(c(0:2), table(PEirep$num_reprod)/sum(table(PEirep$num_reprod)), type = "b", pch = 15, col = "black")
 points(c(0:1), table(PLirep$num_reprod)/sum(table(PLirep$num_reprod)), type = "b", pch = 15, col = "black")
-points(c(0:2), table(PFirep$num_reprod)/sum(table(PFirep$num_reprod)), type = "b", pch = 15, col = "black")
-points(c(0:1), table(RMirep$num_reprod)/sum(table(RMirep$num_reprod)), type = "b", pch = 15, col = "black")
 points(c(0:1), table(ROirep$num_reprod)/sum(table(ROirep$num_reprod)), type = "b", pch = 15, col = "black")
 points(0, table(RFirep$num_reprod)/sum(table(RFirep$num_reprod)), type = "b", pch = 15, col = "black")
-points(0, table(DSirep$num_reprod)/sum(table(DSirep$num_reprod)), type = "b", pch = 15, col = "black")
 points(c(0:1), table(PIirep$num_reprod)/sum(table(PIirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:1), table(PHirep$num_reprod)/sum(table(PHirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:2), table(BAirep$num_reprod)/sum(table(BAirep$num_reprod)), type = "b", pch = 15, col = "black")
 
+# For Folivores:
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
+     main = "core folivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:3), table(NAOirep$num_reprod)/sum(table(NAOirep$num_reprod)), type = "b", pch = 15, col = "black")
+
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
+     main = "intermediate folivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:1), table(SHirep$num_reprod)/sum(table(SHirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:1), table(SFirep$num_reprod)/sum(table(SFirep$num_reprod)), type = "b", pch = 15, col = "black")
+
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
+     main = "transient folivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:2), table(SOirep$num_reprod)/sum(table(SOirep$num_reprod)), type = "b", pch = 15, col = "black")
+
+#For Carnivores
+plot(NA, NA, xlim = c(0, 4), xaxp = c(0, 4, 4), xlab = "number reproductive events per year", 
+     ylab = "proportion females", type = "b", pch = 19, ylim = c(0, 1), yaxp = c(0, 1, 4), bty = "n", 
+     main = "core carnivores", cex.axis = 1.5, cex.lab = 1.5)
+points(c(0:3), table(OTirep$num_reprod)/sum(table(OTirep$num_reprod)), type = "b", pch = 15, col = "black")
+points(c(0:2), table(OLirep$num_reprod)/sum(table(OLirep$num_reprod)), type = "b", pch = 15, col = "black")
+
+dev.off()
 
 #------------------------------------------ FIGURE - for ESA talk 
 #                                 REQUIRES DATA FROM MARK ANALYSES!
