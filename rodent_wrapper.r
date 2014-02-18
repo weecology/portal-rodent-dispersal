@@ -21,7 +21,7 @@ source("movement_fxns.R")
 #import all data
 all = read.table('rawdata/all_1980-2009.txt', sep = ',', header = TRUE)
 
-#import cleaned data
+#import cleaned data, if next step (clean up the data) has previously been run
 allclean = read.csv('rawdata/cleaned_1989-2009.csv', sep = ',', header = TRUE)
   #all7 == allclean, if have allclean, can skip the datacleaning steps
   all7=allclean
@@ -398,7 +398,8 @@ write.table(olmark, file = "mark_datafiles//ol_mark.txt", sep=" ", row.names = F
 #-----------------------------------------------------------------------------------
 #        Make a table of total capture/recapture and gaps in data for each species
 #-----------------------------------------------------------------------------------
-#right now, this code only uses the most recently generated MARK data table 
+# right now, this code only uses the most recently generated MARK data table, 
+# so would need to run separately for granivores, folivores, and carnivores 
 spplist = unique(MARK[,2])
 TableDat = data.frame("species"=1, "numindiv"=1, "numindivrecap"=1, "nocaps"=1, "norecaps"=1)
 
@@ -464,17 +465,17 @@ status_plot = ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size =
 
 #------------------------- plot abundance for all species across timeseries
 ggplot(yrcontrolabuns, aes(x=year, y=abun, group=species)) + 
-#  geom_point(aes(col=status, pch=guild)) + 
-  geom_line(aes(col=status), size=1.5) + theme_bw()
+  geom_line(aes(col=status), size=1.5) + theme_bw() +
+  theme(text = element_text(size=20))
 
 #------------------------- plot monthly reproduction
-ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() + 
+ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() + theme_bw() +
   geom_line() + facet_wrap(~species)
 
 #------------------------- plot meters traveled by all species
 #plot modal distance by persistence for all granivores, color code points by status
 modal_dist = ggplot(granivdata, aes(propyrs, mode_out)) + theme_bw() +
-  geom_point(aes(col=as.factor(status), shape = as.factor(status)), size=3)  + 
+  geom_point(aes(col=as.factor(status), shape = as.factor(status)), size=5)  + 
   xlab("proportion of years present") + ylab("Modal Distance between trap locations") +
   geom_text(aes(label=species), hjust=0, vjust=0) +
   theme(text = element_text(size=20))
@@ -482,22 +483,22 @@ modal_dist = ggplot(granivdata, aes(propyrs, mode_out)) + theme_bw() +
 #------------------------ plot histograms of each of the species movements
 
 core = data.frame(core = c(meterlist$DO, meterlist$DM, meterlist$RM, meterlist$PE, meterlist$PP, meterlist$PB, meterlist$PF))
-interm = data.frame(inter = c(meterlist$PM, meterlist$DS))
+interm = data.frame(interm = c(meterlist$PM, meterlist$DS))
 trans = data.frame(trans=c(meterlist$RF, meterlist$BA, meterlist$PH, meterlist$PI, meterlist$PL, meterlist$RO))
 
-COREplot = ggplot(core, aes(core)) + geom_histogram(fill="cadetblue") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
+COREplot = ggplot(core, aes(core)) + geom_histogram() + theme_bw() + 
+  theme(text = element_text(size=20)) + xlab("distance (m) between recaptures") + ggtitle("Core") +
   xlim(0,550)
 
-INTERplot = ggplot(interm, aes(inter)) + geom_histogram(fill="goldenrod") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
+INTERplot = ggplot(interm, aes(interm)) + geom_histogram() + theme_bw() + 
+  theme(text = element_text(size=20)) + xlab("distance (m) between recaptures") + ggtitle("Intermediate") +
   xlim(0,550)
 
-TRANSplot = ggplot(trans, aes(trans)) + geom_histogram(fill="indianred") + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("number of meters between recaptures") + 
+TRANSplot = ggplot(trans, aes(trans)) + geom_histogram() + theme_bw() + 
+  theme(text = element_text(size=20)) + xlab("distance (m) between recaptures") + ggtitle("Transient") +
   xlim(0,550)
 
-grid.arrange(COREplot, INTERplot, TRANSplot, nrow=3)
+grid.arrange(COREplot, INTERplot, TRANSplot, nrow=1)
 
 
 #------------------------- attempting to build up to making bean plots
