@@ -480,7 +480,7 @@ modal_dist = ggplot(granivdata, aes(propyrs, mode_out)) + theme_bw() +
   geom_text(aes(label=species), hjust=0, vjust=0) +
   theme(text = element_text(size=20))
 
-#------------------------ plot histograms of each of the species movements
+#------------------------ plot histograms of each of the groups (by status) movements
 
 core = data.frame(core = c(meterlist$DO, meterlist$DM, meterlist$RM, meterlist$PE, meterlist$PP, meterlist$PB, meterlist$PF))
 interm = data.frame(interm = c(meterlist$PM, meterlist$DS))
@@ -499,6 +499,9 @@ TRANSplot = ggplot(trans, aes(trans)) + geom_histogram() + theme_bw() +
   xlim(0,550)
 
 grid.arrange(COREplot, INTERplot, TRANSplot, nrow=1)
+
+#------------------------ plot histograms of each of the species movements
+
 
 
 #------------------------- attempting to build up to making bean plots
