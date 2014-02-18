@@ -112,7 +112,6 @@ for (i in 1:length(spplist)){
   persistence[outcount,1] = as.character(spplist[i])
   persistence[outcount,2:5] = c(round(conpropyrs,4), round(conavgmos,4), round(meanconabun,4), maxconabun)
   yearly_control_abundance = cbind(yearly_control_abundance, conabun)
-  outcount = outcount + 1
   
   #subset females for each species
   spdataF = subset(spdata, sex == "F")
@@ -133,6 +132,8 @@ for (i in 1:length(spplist)){
   # record mean body size for individuals captured for the species (excluding juveniles and pregnant individuals)
   massdata = spdata[which(spdata$pregnant != "P" & spdata$reprod != "J"),]
   persistence[outcount,7] = round(mean(massdata$wgt, na.rm=TRUE),2)
+  
+  outcount = outcount + 1
 }
 
 #add species names to the dataframe of abundance vectors
@@ -219,11 +220,16 @@ for (i in 1:length(spplist)){
     taglist[i] = list(tags)
 }
 
-#Identify breakpoint for all species in meterlist
-brkpt_out_all<-sapply(meterlist,function(x){
+#Identify breakpoint and modal distance for all species in meterlist
+breakpoint = sapply(meterlist,function(x){
   expm1(mean(log1p(x)) + sd(log1p(x)))
 })
-brkpt_out_all
+
+modal_distance = sapply(meterlist,function(x){
+  as.numeric(names(sort(-table(x)))[1])
+})
+
+persistence = cbind(persistence, breakpoint, modal_distance)
 
 
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
@@ -245,7 +251,7 @@ corecarn = unlist(coremeters[which(names(coremeters) %in% carnivores)], use.name
   corecarn_brkpt = expm1(mean(log1p(corecarn)) + sd(log1p(corecarn)))
 
 
-#make a new matrix with the breakpoint for each granivore species
+#make a new matrix with the breakpoint for each granivore species   #TODO: May not need all these steps, see above
 graniv_dist = meterlist[which(names(meterlist) %in% granivores)]
 
 brkpt_out<-sapply(graniv_dist,function(x){
@@ -517,7 +523,8 @@ grid.arrange(COREplot, INTERplot, TRANSplot, nrow=1)
 
 
 #------------------------ PCA biplot of species traits and estimates
-#MAKE SURE YOU HAVE RUN THE MARK_analyses.R code first! **
+
+#MAKE SURE YOU HAVE RUN THE MARK_analyses.R code first and saved .csv files! **
 #assign all transient species the same MARK estimates (for now)
 estimates2 = estimates[16,]
 transgran = granivores[which(granivores %in% transientspecies)]
@@ -526,10 +533,11 @@ for (i in 1:length(transgran)){
   estimates=rbind(estimates, estimates2)
 }
 
+estimates[which(estimates$species == "AO"),1] = "NAO" 
 m = merge(granivdata, estimates)
 
-pcagraniv = m[,c(1, 3, 6, 8, 9, 13, 15, 17)]
-catgraniv = m[,c(1,2)]
+pcagraniv = m[,c(1, 3, 6, 7, 8, 10, 11, 15, 17, 19)]
+catgraniv = m[,c(1, 2, 9)]
 
 rownames(pcagraniv) = pcagraniv$species
 pcagraniv = pcagraniv[,-1]
@@ -543,15 +551,86 @@ zscore <- apply(pcagraniv, 2, function(x) {
 rownames(zscore) <- rownames(pcagraniv)
 
 #run pca analysis
+trait_pc = prcomp(zscore)
+
+#Use dev libary to ggplot PCA, color by clades
+#Try the ggplot biplot to color by clades (or later, behavioral roles)
+toCol = catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status"]
+
+#Label species names and clades, circles cover normal distribuiton of groups
+ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
+
+
+#----------- PCA biplot for all the species
+m2 = merge(persistence, estimates, by = c("species", "species"))
+m2=m2[,-18]
+
+pcadat = m2[,c(1, 2, 5, 6, 7, 10, 11, 12, 14, 16)]
+catdat = m2[,c(1, 8, 9)]
+
+rownames(pcadat) = pcadat$species
+pcadat = pcadat[,-1]
+
+# Standard the matrix to correct for different units by subtracting the
+# means and dividing by sd
+zscore <- apply(pcadat, 2, function(x) {
+  y <- (x - mean(x))/sd(x)
+  return(y)
+})
+rownames(zscore) <- rownames(pcadat)
+
+#run pca analysis
 trait_pc<-prcomp(zscore)
 
 #Use dev libary to ggplot PCA, color by clades
 #Try the ggplot biplot to color by clades (or later, behavioral roles)
-toCol<-catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status"]
+toCol = catdat[catdat$species %in% rownames(trait_pc$x),"status.x"]
+toColGuild = catdat[catdat$species %in% rownames(trait_pc$x),"guild"]
 
-#Label species names and clades, circles cover normal distribuiton of groups TODO: Ellipse doesn't work here - why?
-ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 4, varname.size = 4) + theme_classic() +
+#Label species names and clades, ellipses cover normal distribuiton of temporal groups
+ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
   theme(text = element_text(size=20))
+
+#Label species names and clades, circles cover normal distribuiton of guilds
+ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
+
+
+#-------------------------- Comparing the CMR analysis estimates
+ggplot(m2, aes(Psi, S)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(Psi, p)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(Psi, reprod)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(propyrs, Psi)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(propyrs, S)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(propyrs, modal_distance)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(bodysize, Psi)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(propyrs, bodysize)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(propyrs, breakpoint)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(propyrs, maxabun)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
+ggplot(m2, aes(propyrs, reprod)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20))
+
 
 #------------------------- attempting to build up to making bean plots
 # ggplot(data=data.frame(value=DOmeters)) +
