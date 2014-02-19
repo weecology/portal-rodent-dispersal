@@ -217,7 +217,7 @@ for (i in 1:length(spplist)){
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
     print (paste(spplist[i], length(tags), sep = " "))
-    print (paste(spplist[i], mean(spdata$wgt, na.rm=T, sep = " ")))
+    print (paste(spplist[i], round(mean(spdata$wgt, na.rm=T),2), sep = " "))
     mtrs = distance_moved(spdata, tags)
     meterlist[i] = list(mtrs)
     taglist[i] = list(tags)
