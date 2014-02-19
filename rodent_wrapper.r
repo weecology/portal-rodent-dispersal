@@ -223,7 +223,7 @@ for (i in 1:length(spplist)){
     taglist[i] = list(tags)
 }
 
-#Identify breakpoint and modal distance for all species in meterlist
+#Identify breakpoint, modal, mean and max distance for all species in meterlist
 breakpoint = sapply(meterlist,function(x){
   expm1(mean(log1p(x)) + sd(log1p(x)))
 })
@@ -232,7 +232,15 @@ modal_distance = sapply(meterlist,function(x){
   as.numeric(names(sort(-table(x)))[1])
 })
 
-persistence = cbind(persistence, breakpoint, modal_distance)
+mean_distance <-sapply(meterlist,function(x){
+  as.numeric(mean(x))
+})
+
+max_distance <-sapply(meterlist,function(x){
+  as.numeric(max(x))
+})
+
+persistence = cbind(persistence, breakpoint, modal_distance, mean_distance, max_distance)
 
 
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
@@ -253,31 +261,10 @@ corecarn = unlist(coremeters[which(names(coremeters) %in% carnivores)], use.name
   corefoli_brkpt = expm1(mean(log1p(corefoli)) + sd(log1p(corefoli)))
   corecarn_brkpt = expm1(mean(log1p(corecarn)) + sd(log1p(corecarn)))
 
-
-#make a new matrix with the breakpoint for each granivore species   #TODO: May not need all these steps, see above
-graniv_dist = meterlist[which(names(meterlist) %in% granivores)]
-
-brkpt_out<-sapply(graniv_dist,function(x){
-  expm1(mean(log1p(x)) + sd(log1p(x)))
-})
-
-mode_out <-sapply(graniv_dist,function(x){
-  as.numeric(names(sort(-table(x)))[1])
-})
-
-mean_out <-sapply(graniv_dist,function(x){
-  as.numeric(mean(x))
-})
-
-max_out <-sapply(graniv_dist,function(x){
-  as.numeric(max(x))
-})
-
 #concatenate data for granivores only, and 
 #add in the transition, modal, mean, and max distances traveled by each species for later plotting
 graniv_persist = persistence[which(persistence$species %in% granivores),] 
-granivdata = cbind(graniv_persist, brkpt_out, mode_out, mean_out, max_out)
-granivdata$oneval = granivdata$propyrs * granivdata$propmos
+graniv_persist$oneval = graniv_persist$propyrs * graniv_persist$propmos
 
 
 #----------------------------------------------------------------------
