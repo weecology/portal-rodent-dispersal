@@ -9,6 +9,7 @@ library(stringr)
 library(plyr)
 library(gridExtra)
 library(ggbiplot)
+library(stringr)
 
 #---------------------------------------------------------------------------------
 #          setup - select wd, import data, source code,  file to collect results
@@ -407,7 +408,7 @@ write.table(olmark, file = "mark_datafiles//ol_mark.txt", sep=" ", row.names = F
 #-----------------------------------------------------------------------------------
 #        Make a table of total capture/recapture and gaps in data for each species
 #-----------------------------------------------------------------------------------
-# right now, this code only uses the most recently generated MARK data table, 
+# this code only uses the most recently generated MARK data table, 
 # so would need to run separately for granivores, folivores, and carnivores 
 spplist = unique(MARK[,2])
 TableDat = data.frame("species"=1, "numindiv"=1, "numindivrecap"=1, "nocaps"=1, "norecaps"=1)
@@ -457,6 +458,29 @@ for (i in 1:length(spplist)){
 }
 
 print(TableDat)
+
+
+#-----------------------------------------------------------------------------------
+#        If MARK_analyses.r has already been run, and results saved as .csv files
+#          analyze the data from the Program Mark analysis
+#-----------------------------------------------------------------------------------
+#---------- concatenate results
+#grab all the .csv files to loop over and summarize results
+rfiles = list.files(paste(getwd(), "/mark_output", sep=""), pattern = "real", full.name=T)
+
+# loop thru the files to make a new dataframe with the estimated parameters
+estimates = data.frame(species=NA, S=1, S_se=1, p=1, p_se=1, Psi=1, Psi_se = 1)
+outcount = 1
+
+for (f in 1:length(rfiles)){
+  dat = read.csv(rfiles[f], header=T, sep=",")
+  spname = str_sub(rfiles[f],-6,-5)
+  estimates[outcount,1] = spname
+  estimates[outcount,2:7] = c(dat[1,2], dat[1,3], dat[2,2], dat[2,3], dat[3,2], dat[3,3])
+  outcount = outcount + 1
+}
+
+
 
 
 #---------------------------------------------------------------------------------
