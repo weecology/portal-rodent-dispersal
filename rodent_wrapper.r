@@ -523,6 +523,27 @@ TRANSplot = ggplot(trans, aes(trans)) + geom_histogram() + theme_bw() +
 grid.arrange(COREplot, INTERplot, TRANSplot, nrow=1)
 
 #------------------------ plot histograms of each of the species movements
+splist = names(meterlist)
+breaks = c(0, seq(3,600, by=6))
+i = 1
+plot = list() 
+
+for (i in 1:length(splist)){
+  df = data.frame(meterlist[i])
+  names(df) = "spp"
+  plot[[i]] = ggplot(df, aes(spp)) + geom_histogram(breaks=breaks, position="dodge") + theme_classic() + ggtitle(splist[i]) +
+    theme(text = element_text(size=20)) + xlab("recapture distance")
+  i = i + 1
+}
+
+#core histograms
+grid.arrange(plot[[3]], plot[[10]], plot[[21]], plot[[12]], plot[[13]], 
+             plot[[8]], plot[[4]], plot[[7]], plot[[1]], plot[[11]], ncol = 4)
+#intermediate histograms
+grid.arrange(plot[[9]], plot[[2]], plot[[5]], plot[[16]], ncol = 4)
+#transient histograms
+grid.arrange(plot[[15]], plot[[19]], plot[[20]], plot[[14]], plot[[6]], 
+             plot[[17]], plot[[17]], ncol = 4)
 
 
 #------------------------ PCA biplot of species traits and estimates
