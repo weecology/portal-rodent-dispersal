@@ -9,6 +9,7 @@ library(stringr)
 library(plyr)
 library(gridExtra)
 library(ggbiplot)
+library(stringr)
 
 #---------------------------------------------------------------------------------
 #          setup - select wd, import data, source code,  file to collect results
@@ -217,13 +218,13 @@ for (i in 1:length(spplist)){
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
     print (paste(spplist[i], length(tags), sep = " "))
-    print (paste(spplist[i], mean(spdata$wgt, na.rm=T, sep = " ")))
+    print (paste(spplist[i], round(mean(spdata$wgt, na.rm=T),2), sep = " "))
     mtrs = distance_moved(spdata, tags)
     meterlist[i] = list(mtrs)
     taglist[i] = list(tags)
 }
 
-#Identify breakpoint and modal distance for all species in meterlist
+#Identify breakpoint, modal, mean and max distance for all species in meterlist
 breakpoint = sapply(meterlist,function(x){
   expm1(mean(log1p(x)) + sd(log1p(x)))
 })
@@ -232,7 +233,15 @@ modal_distance = sapply(meterlist,function(x){
   as.numeric(names(sort(-table(x)))[1])
 })
 
-persistence = cbind(persistence, breakpoint, modal_distance)
+mean_distance <-sapply(meterlist,function(x){
+  as.numeric(mean(x))
+})
+
+max_distance <-sapply(meterlist,function(x){
+  as.numeric(max(x))
+})
+
+persistence = cbind(persistence, breakpoint, modal_distance, mean_distance, max_distance)
 
 
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
@@ -253,31 +262,10 @@ corecarn = unlist(coremeters[which(names(coremeters) %in% carnivores)], use.name
   corefoli_brkpt = expm1(mean(log1p(corefoli)) + sd(log1p(corefoli)))
   corecarn_brkpt = expm1(mean(log1p(corecarn)) + sd(log1p(corecarn)))
 
-
-#make a new matrix with the breakpoint for each granivore species   #TODO: May not need all these steps, see above
-graniv_dist = meterlist[which(names(meterlist) %in% granivores)]
-
-brkpt_out<-sapply(graniv_dist,function(x){
-  expm1(mean(log1p(x)) + sd(log1p(x)))
-})
-
-mode_out <-sapply(graniv_dist,function(x){
-  as.numeric(names(sort(-table(x)))[1])
-})
-
-mean_out <-sapply(graniv_dist,function(x){
-  as.numeric(mean(x))
-})
-
-max_out <-sapply(graniv_dist,function(x){
-  as.numeric(max(x))
-})
-
 #concatenate data for granivores only, and 
 #add in the transition, modal, mean, and max distances traveled by each species for later plotting
 graniv_persist = persistence[which(persistence$species %in% granivores),] 
-granivdata = cbind(graniv_persist, brkpt_out, mode_out, mean_out, max_out)
-granivdata$oneval = granivdata$propyrs * granivdata$propmos
+graniv_persist$oneval = graniv_persist$propyrs * graniv_persist$propmos
 
 
 #----------------------------------------------------------------------
@@ -420,7 +408,7 @@ write.table(olmark, file = "mark_datafiles//ol_mark.txt", sep=" ", row.names = F
 #-----------------------------------------------------------------------------------
 #        Make a table of total capture/recapture and gaps in data for each species
 #-----------------------------------------------------------------------------------
-# right now, this code only uses the most recently generated MARK data table, 
+# this code only uses the most recently generated MARK data table, 
 # so would need to run separately for granivores, folivores, and carnivores 
 spplist = unique(MARK[,2])
 TableDat = data.frame("species"=1, "numindiv"=1, "numindivrecap"=1, "nocaps"=1, "norecaps"=1)
@@ -472,35 +460,182 @@ for (i in 1:length(spplist)){
 print(TableDat)
 
 
-#---------------------------------------------------------------------------------
-#          plot results
-#---------------------------------------------------------------------------------
-#----------------------------- plot abundance vs. years, ala core v. transient literature
+#-----------------------------------------------------------------------------------
+#        If MARK_analyses.r has already been run, and results saved as .csv files
+#          analyze the data from the Program Mark analysis
+#-----------------------------------------------------------------------------------
+#---------- concatenate results
+#grab all the .csv files to loop over and summarize results
+rfiles = list.files(paste(getwd(), "/mark_output", sep=""), pattern = "real", full.name=T)
 
-status_plot = ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(size = meanabun, col=status, shape=guild)) + 
-  theme_bw() + xlab("proportion years present") +
+# loop thru the files to make a new dataframe with the estimated parameters
+estimates = data.frame(species=NA, S=1, S_se=1, p=1, p_se=1, Psi=1, Psi_se = 1)
+outcount = 1
+
+for (f in 1:length(rfiles)){
+  dat = read.csv(rfiles[f], header=T, sep=",")
+  spname = str_sub(rfiles[f],-6,-5)
+  estimates[outcount,1] = spname
+  estimates[outcount,2:7] = c(dat[1,2], dat[1,3], dat[2,2], dat[2,3], dat[3,2], dat[3,3])
+  outcount = outcount + 1
+}
+
+#assign all transient species the same MARK estimates (for now)
+estimates2 = estimates[16,]
+transgran = granivores[which(granivores %in% transientspecies)]
+for (i in 1:length(transgran)){
+  estimates2$species = transgran[i]
+  estimates=rbind(estimates, estimates2)
+}
+#change "AO" to "NAO" to match naming schema - shortened in MARK_analyses.r
+estimates[which(estimates$species == "AO"),1] = "NAO" 
+
+# merge GRANIVORE data for analysis and pca plots 
+mgran = merge(graniv_persist, estimates)
+
+pcagraniv = mgran[,c(1, 2, 5, 6, 7, 10, 11, 15, 17, 19)]
+catgraniv = mgran[,c(1, 8, 9)]
+rownames(pcagraniv) = pcagraniv$species
+pcagraniv = pcagraniv[,-1]
+
+# merge ALL data for analysis and pca plots
+mall = merge(persistence, estimates, by = c("species", "species"))
+mall = merge(mall, species_table)
+
+pcadat = mall[,c(1, 2, 5, 6, 7, 10, 11, 14, 16, 18)]
+catdat = mall[,c(1, 8, 9, 20)]
+rownames(pcadat) = pcadat$species
+pcadat = pcadat[,-1]
+
+
+#---------------------------------------------------------------------------------
+#                                  plot results
+#---------------------------------------------------------------------------------
+
+#------------------------ PCA biplot of species traits and estimates
+
+# Standardize the matrix to correct for different units by subtracting the
+# means and dividing by sd
+zscore <- apply(pcagraniv, 2, function(x) {
+  y <- (x - mean(x))/sd(x)
+  return(y)
+  })
+rownames(zscore) <- rownames(pcagraniv)
+
+#run pca analysis
+trait_pc = prcomp(zscore)
+
+#Use ggplot biplot to color by grouped categories
+toCol = catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status"]
+
+#Label species names and clades, circles cover normal distribuiton of groups
+ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
+
+
+#------------------------ PCA biplot for all the species
+
+# Standardize the matrix to correct for different units by subtracting the
+# means and dividing by sd
+zscore <- apply(pcadat, 2, function(x) {
+  y <- (x - mean(x))/sd(x)
+  return(y)
+  })
+rownames(zscore) <- rownames(pcadat)
+
+#run pca analysis
+trait_pc<-prcomp(zscore)
+
+#Use dev libary to ggplot PCA, color by clades
+#Try the ggplot biplot to color by clades (or later, behavioral roles)
+toCol = catdat[catdat$species %in% rownames(trait_pc$x),"status"]
+toColGuild = catdat[catdat$species %in% rownames(trait_pc$x),"guild"]
+toColFam = catdat[catdat$species %in% rownames(trait_pc$x),"family"]
+
+#Label species names and clades, ellipses cover normal distribuiton of temporal groups
+ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
+
+#Label species names and clades, circles cover normal distribuiton of guilds
+ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
+
+#Label species names and clades, circles cover normal distribuiton of families
+ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
+
+
+#------------------------ plot the Mark results for all the species
+
+# Use only the real estimates, where transient granivores were lumped
+est = estimates[c(1:16),]
+
+# Add status 
+toStatus = catdat[catdat$species %in% est$species,"status"]
+toStatus = append(toStatus, "transient") #since TR is a group instead of an actual "species"
+
+est = cbind(est,toStatus)
+
+SbyPsi = ggplot(est, aes(Psi, S, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
+  theme(text = element_text(size=20)) + scale_colour_hue(guide = "none") +
+  xlab("Long-distance movement probability") + ylab("Survival probability") + 
+  geom_errorbar(aes(x = Psi, ymin = S - S_se, ymax = S + S_se), width=0.01) +
+  geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
+
+Sbyp = ggplot(est, aes(p, S, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
+  theme(text = element_text(size=20)) + scale_colour_hue(guide = "none")+
+  xlab("recapture probability") + ylab("Survival probability") + 
+  geom_errorbar(aes(x = p, ymin = S - S_se, ymax = S + S_se), width=0.01) +
+  geom_errorbarh(aes(xmin = p - p_se, xmax = p + p_se)) + ggtitle("all species")
+
+Psibyp =  ggplot(est, aes(Psi, p, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
+  theme(text = element_text(size=20)) + scale_colour_hue(guide = "none") +
+  xlab("long-distance movement probability") + ylab("recapture probability") + 
+  geom_errorbar(aes(x = Psi, ymin = p - p_se, ymax = p + p_se), width=0.01) +
+  geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
+
+grid.arrange(SbyPsi, Sbyp, Psibyp, nrow=1)
+
+
+#------------------------ plot abundance vs. years, ala core v. transient literature
+
+status_plot = ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(shape=guild), size = 3) + 
+  theme_classic() + xlab("proportion years present") +
   ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
   geom_vline(xintercept=0.66, linetype="dotted", col = "red", size = 1.5) + 
   geom_vline(xintercept=0.33, linetype="dotted", col = "red", size = 1.5) + 
   ggtitle("Rodents 1989 - 2009") + geom_text(aes(label = species), hjust=0, vjust=0) +
   theme(text = element_text(size=20))
 
+
 #------------------------- plot abundance for all species across timeseries
 ggplot(yrcontrolabuns, aes(x=year, y=abun, group=species)) + 
   geom_line(aes(col=status), size=1.5) + theme_bw() +
   theme(text = element_text(size=20))
 
+
 #------------------------- plot monthly reproduction
 ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() + theme_bw() +
   geom_line() + facet_wrap(~species)
 
+
 #------------------------- plot meters traveled by all species
 #plot modal distance by persistence for all granivores, color code points by status
-modal_dist = ggplot(granivdata, aes(propyrs, mode_out)) + theme_bw() +
+modal_dist = ggplot(graniv_persist, aes(propyrs, modal_distance)) + theme_classic() +
   geom_point(aes(col=as.factor(status), shape = as.factor(status)), size=5)  + 
   xlab("proportion of years present") + ylab("Modal Distance between trap locations") +
   geom_text(aes(label=species), hjust=0, vjust=0) +
   theme(text = element_text(size=20))
+
+#plot modal distance by persistence for all granivores, color code points by status
+modal_all = ggplot(persistence, aes(propyrs, modal_distance)) + theme_classic() +
+  geom_point(aes(col=as.factor(status), shape = as.factor(status)), size=5)  + 
+  xlab("proportion of years present") + ylab("Modal Distance between trap locations") +
+#  geom_text(aes(label=species), hjust=0, vjust=0) +
+  theme(text = element_text(size=20))
+
+grid.arrange(modal_dist, modal_all, nrow = 1)
+
 
 #------------------------ plot histograms of each of the groups (by status) movements
 
@@ -546,130 +681,84 @@ grid.arrange(plot[[15]], plot[[19]], plot[[20]], plot[[14]], plot[[6]],
              plot[[17]], plot[[17]], ncol = 4)
 
 
-#------------------------ PCA biplot of species traits and estimates
-
-#MAKE SURE YOU HAVE RUN THE MARK_analyses.R code first and saved .csv files! **
-#assign all transient species the same MARK estimates (for now)
-estimates2 = estimates[16,]
-transgran = granivores[which(granivores %in% transientspecies)]
-for (i in 1:length(transgran)){
-  estimates2$species = transgran[i]
-  estimates=rbind(estimates, estimates2)
-}
-
-estimates[which(estimates$species == "AO"),1] = "NAO" 
-m = merge(granivdata, estimates)
-
-pcagraniv = m[,c(1, 3, 6, 7, 8, 10, 11, 15, 17, 19)]
-catgraniv = m[,c(1, 2, 9)]
-
-rownames(pcagraniv) = pcagraniv$species
-pcagraniv = pcagraniv[,-1]
-
-# Standard the matrix to correct for different units by subtracting the
-# means and dividing by sd
-zscore <- apply(pcagraniv, 2, function(x) {
-  y <- (x - mean(x))/sd(x)
-  return(y)
-})
-rownames(zscore) <- rownames(pcagraniv)
-
-#run pca analysis
-trait_pc = prcomp(zscore)
-
-#Use dev libary to ggplot PCA, color by clades
-#Try the ggplot biplot to color by clades (or later, behavioral roles)
-toCol = catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status"]
-
-#Label species names and clades, circles cover normal distribuiton of groups
-ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
-
-
-#----------- PCA biplot for all the species
-m2 = merge(persistence, estimates, by = c("species", "species"))
-m2=m2[,-18]
-
-m2 = merge(m2, species_table)
-
-pcadat = m2[,c(1, 2, 5, 6, 7, 10, 11, 12, 14, 16)]
-catdat = m2[,c(1, 8, 9, 18)]
-
-rownames(pcadat) = pcadat$species
-pcadat = pcadat[,-1]
-
-# Standard the matrix to correct for different units by subtracting the
-# means and dividing by sd
-zscore <- apply(pcadat, 2, function(x) {
-  y <- (x - mean(x))/sd(x)
-  return(y)
-})
-rownames(zscore) <- rownames(pcadat)
-
-#run pca analysis
-trait_pc<-prcomp(zscore)
-
-#Use dev libary to ggplot PCA, color by clades
-#Try the ggplot biplot to color by clades (or later, behavioral roles)
-toCol = catdat[catdat$species %in% rownames(trait_pc$x),"status.x"]
-toColGuild = catdat[catdat$species %in% rownames(trait_pc$x),"guild"]
-toColFam = catdat[catdat$species %in% rownames(trait_pc$x),"family"]
-
-#Label species names and clades, ellipses cover normal distribuiton of temporal groups
-ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
-
-#Label species names and clades, circles cover normal distribuiton of guilds
-ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
-
-#Label species names and clades, circles cover normal distribuiton of families
-ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
-
 #-------------------------- Comparing the CMR analysis estimates
-ggplot(m2, aes(Psi, S)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+lm1 = lm(S ~ Psi, data = mall)
+PsiS = ggplot(mall, aes(Psi, S)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20)) + ggtitle(paste("r2 =", round(summary(lm1)$r.squared,2)))
+
+lm1 = lm(p ~ Psi, data = mall)
+Psip = ggplot(mall, aes(Psi, p)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20)) + ggtitle(paste("r2 =", round(summary(lm1)$r.squared,2)))
+
+lm1 = lm(Psi ~ propyrs, data = mall)
+yrsPsi = ggplot(mall, aes(propyrs, Psi)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20)) + ggtitle(paste("r2 =", round(summary(lm1)$r.squared,2)))
+
+lm1 = lm(S ~ propyrs, data = mall)
+yrsS = ggplot(mall, aes(propyrs, S)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20)) + ggtitle(paste("r2 =", round(summary(lm1)$r.squared,2)))
+
+lm1 = lm(modal_distance ~ propyrs, data = mall)
+yrsdist = ggplot(mall, aes(propyrs, modal_distance)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20)) + ggtitle(paste("r2 =", round(summary(lm1)$r.squared,2)))
+
+lm1 = lm(maxabun ~ propyrs, data = mall)
+yrsabun = ggplot(mall, aes(propyrs, maxabun)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20)) + ggtitle(paste("r2 =", round(summary(lm1)$r.squared,2)))
+
+lm1 = lm(meanabun ~ propyrs, data = mall)
+yrsmean = ggplot(mall, aes(propyrs, meanabun)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
+  theme(text = element_text(size=20)) + ggtitle(paste("r2 =", round(summary(lm1)$r.squared,2)))
+
+yrsreprod = ggplot(mall, aes(propyrs, reprod)) + geom_point(size = 2) + theme_classic() + 
   theme(text = element_text(size=20))
 
-ggplot(m2, aes(Psi, p)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+yrssd = ggplot(mall, aes(propyrs, breakpoint)) + geom_point(size = 2) + theme_classic() + 
   theme(text = element_text(size=20))
 
-ggplot(m2, aes(Psi, reprod)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+grid.arrange(PsiS, Psip, yrsPsi, yrsS, yrsdist, yrssd, yrsabun, yrsmean, yrsreprod, nrow = 3)
+
+
+# other plots
+ggplot(mall, aes(Psi, reprod)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
   theme(text = element_text(size=20))
 
-ggplot(m2, aes(propyrs, Psi)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+ggplot(mall, aes(bodysize, Psi)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
   theme(text = element_text(size=20))
 
-ggplot(m2, aes(propyrs, S)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
-  theme(text = element_text(size=20))
-
-ggplot(m2, aes(propyrs, modal_distance)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
-  theme(text = element_text(size=20))
-
-ggplot(m2, aes(bodysize, Psi)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
-  theme(text = element_text(size=20))
-
-ggplot(m2, aes(propyrs, bodysize)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
-  theme(text = element_text(size=20))
-
-ggplot(m2, aes(propyrs, breakpoint)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
-  theme(text = element_text(size=20))
-
-ggplot(m2, aes(propyrs, maxabun)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
-  theme(text = element_text(size=20))
-
-ggplot(m2, aes(propyrs, reprod)) + geom_point() + stat_smooth(method = "lm") + theme_classic() + 
+ggplot(mall, aes(bodysize, S)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
   theme(text = element_text(size=20))
 
 
-#---------- Output summary info
-core_m = m[which(m$species %in% corespecies),]
-inter_m = m[which(m$species %in% intermediatespecies),]
-trans_m = m[which(m$species %in% transientspecies),]
+#-------------------------- Output summary info for all species
+core_m = mall[which(mall$species %in% corespecies),]
+inter_m = mall[which(mall$species %in% intermediatespecies),]
+trans_m = mall[which(mall$species %in% transientspecies),]
 
-mean(core_m$brkpt_out)
-mean(inter_m$brkpt_out)
-mean(trans_m$brkpt_out)
+mean(core_m$breakpoint)
+mean(inter_m$breakpoint)
+mean(trans_m$breakpoint)
+
+mean(core_m$Psi)
+mean(inter_m$Psi)
+mean(trans_m$Psi)
+
+mean(core_m$p)
+mean(inter_m$p)
+mean(trans_m$p)
+
+mean(core_m$S)
+mean(inter_m$S)
+mean(trans_m$S)
+
+#-------------------------- Output summary info for GRANIVORES only
+core_m = mgran[which(mgran$species %in% corespecies),]
+inter_m = mgran[which(mgran$species %in% intermediatespecies),]
+trans_m = mgran[which(mgran$species %in% transientspecies),]
+
+mean(core_m$breakpoint)
+mean(inter_m$breakpoint)
+mean(trans_m$breakpoint)
 
 mean(core_m$Psi)
 mean(inter_m$Psi)
@@ -684,7 +773,7 @@ mean(inter_m$S)
 mean(trans_m$S)
 
 
-#------------------------------------------ Reproduction Figures
+#-------------------------- Reproduction Figures
 pdf("reproductive_events_per_year.pdf")
 par(mfrow=c(3,3))
 
@@ -742,33 +831,33 @@ points(c(0:2), table(OLirep$num_reprod)/sum(table(OLirep$num_reprod)), type = "b
 
 dev.off()
 
-#------------------------------------------ FIGURE - for ESA talk 
-#                                 REQUIRES DATA FROM MARK ANALYSES!
-#             #FIXME: Should be moved since it depends on other results and is thus out of order
 
-#granivore data from dissertation chapter table 2-3
-Psi = c(0.09, 0.13, 0.08, 0.14, 0.48, 0.23, 0.49, 0.41)
-S = c(0.76, 0.78, 0.80, 0.81, 0.67, 0.81, 0.76, 0.62)
-distbench = c(28.36, 32.64, 25.57, 36.22, 93.05, 74.29, 29.12, 93.30)
-littersize = c(2.37, 2, 3.6, 4.72, 2.53, 3.6, 4, 4.29) #from Mammals of Arizona - Hoffmeister
-
-lm1 = lm(S~Psi)
-lm2 = lm(S~distbench)
-lm3 = lm(littersize~S)
-lm4 = lm(littersize~distbench)
-
-# S vs. Psi
-plot(Psi, S, pch = 19, xlim = c(0:1), ylim = c(0:1), bty = "n", cex.axis = 1.5, cex.lab = 1.5, cex = 1.5,
-     ylab = "survival probability", xlab = "long distance movement probability")
-    abline(lm1, col = "turquoise")
-# S vs. distance benchmark
-plot(distbench, S, pch = 19, bty = "n", xlab = "transition distance (meters)", ylab = "survival", 
-     xlim = c(0,100), ylim = c(0,1), cex.axis = 1.5, cex.lab = 1.5, cex = 1.5)
-    abline(lm2, col = "turquoise")
-# littersize vs. S
-plot(S, littersize, pch = 19, bty = "n", xlab = "survival probability", ylab = "mean litter size",
-     xlim = c(0,1), ylim = c(1,6))
-#littersize vs. distance benchmark
-plot(distbench, littersize, pch = 19)
-
-  
+# #------------------------------------------ FIGURE - for ESA talk 
+# #                                 REQUIRES DATA FROM MARK ANALYSES!
+# 
+# #granivore data from dissertation chapter table 2-3 #FIXME - should use data from estimates (above)
+# Psi = c(0.09, 0.13, 0.08, 0.14, 0.48, 0.23, 0.49, 0.41)
+# S = c(0.76, 0.78, 0.80, 0.81, 0.67, 0.81, 0.76, 0.62)
+# distbench = c(28.36, 32.64, 25.57, 36.22, 93.05, 74.29, 29.12, 93.30)
+# littersize = c(2.37, 2, 3.6, 4.72, 2.53, 3.6, 4, 4.29) #from Mammals of Arizona - Hoffmeister
+# 
+# lm1 = lm(S~Psi)
+# lm2 = lm(S~distbench)
+# lm3 = lm(littersize~S)
+# lm4 = lm(littersize~distbench)
+# 
+# # S vs. Psi
+# plot(Psi, S, pch = 19, xlim = c(0:1), ylim = c(0:1), bty = "n", cex.axis = 1.5, cex.lab = 1.5, cex = 1.5,
+#      ylab = "survival probability", xlab = "long distance movement probability")
+#     abline(lm1, col = "turquoise")
+# # S vs. distance benchmark
+# plot(distbench, S, pch = 19, bty = "n", xlab = "transition distance (meters)", ylab = "survival", 
+#      xlim = c(0,100), ylim = c(0,1), cex.axis = 1.5, cex.lab = 1.5, cex = 1.5)
+#     abline(lm2, col = "turquoise")
+# # littersize vs. S
+# plot(S, littersize, pch = 19, bty = "n", xlab = "survival probability", ylab = "mean litter size",
+#      xlim = c(0,1), ylim = c(1,6))
+# #littersize vs. distance benchmark
+# plot(distbench, littersize, pch = 19)
+# 
+#   
