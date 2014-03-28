@@ -28,7 +28,7 @@ species_table = read.csv('rawdata/species.csv', sep = ',', header = TRUE)
 
 #import cleaned data, if next step (clean up the data) has previously been run
 allclean = read.csv('rawdata/cleaned_1989-2009.csv', sep = ',', header = TRUE)
-  #all7 == allclean, if have allclean, can skip the datacleaning steps
+  # NOTE: all7 == allclean, if have allclean, can skip the datacleaning steps
   all7=allclean
 
 #---------------------------------------------------------------------------------
@@ -348,6 +348,9 @@ rmmark = MARK[which(MARK[,3]=="RM"),]
 transmark = MARK[which(MARK[,3] %in% transientspecies),]
   transmark[,3] = "TR"
   levels(transmark[,3]) = "TR"
+transmark2 = MARK[which(MARK[,3] %in% transientspecies2),]
+  transmark2[,3] = "TR2"
+  levels(transmark2[,3]) = "TR2"
 
 write.table(domark, file = "mark_datafiles//do_mark.txt", sep=" ", row.names = F)
 write.table(dmmark, file = "mark_datafiles//dm_mark.txt", sep=" ", row.names = F)
@@ -359,6 +362,7 @@ write.table(pemark, file = "mark_datafiles//pe_mark.txt", sep=" ", row.names = F
 write.table(pmmark, file = "mark_datafiles//pm_mark.txt", sep=" ", row.names = F)
 write.table(rmmark, file = "mark_datafiles//rm_mark.txt", sep=" ", row.names = F)
 write.table(transmark, file = "mark_datafiles//trans_mark.txt", sep=" ", row.names = F)
+write.table(transmark2, file = "mark_datafiles//trans_mark2.txt", sep=" ", row.names = F)
 
 #write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
 
