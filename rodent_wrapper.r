@@ -235,7 +235,8 @@ for (i in 1:length(spplist)){
   
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
-    print (paste(spplist[i], "has", length(tags), "individuals", sep = " "))
+    print (paste(spplist[i], "has", length(tags), "individuals, and avg mass is:", 
+                 round(mean(spdata$wgt, na.rm=T),2), sep = " "))
     print (paste(spplist[i], "avg mass is:", round(mean(spdata$wgt, na.rm=T),2), sep = " "))
     mtrs = distance_moved(spdata, tags)
     meterlist[i] = list(mtrs)
@@ -265,8 +266,12 @@ persistence = cbind(persistence, breakpoint, modal_distance, mean_distance, max_
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
 #------------------------ Granivores, Folivores, and Carnivores (on METHOD 1)
 
+#check for differences when all the guilds are lumped
+coreall = unlist(meterlist[which(names(meterlist) %in% corespecies)], use.names=F)
+intermedall = unlist(meterlist[which(names(meterlist) %in% intermediatespecies)], use.names=F)
+transall = unlist(meterlist[which(names(meterlist) %in% transientspecies)], use.names=F)
+
 # concatenate core guild data - used to ask if these species behave differently from others
-# Check that the definition of "core" is still the same, need to change this chunk of code by hand, if necessary
 coremeters = meterlist[which(names(meterlist) %in% corespecies)]
 coregran = unlist(coremeters[which(names(coremeters) %in% granivores)], use.names=F) 
 corefoli = unlist(coremeters[which(names(coremeters) %in% folivores)], use.names=F)
@@ -291,9 +296,6 @@ corefoli2 = unlist(coremeters2[which(names(coremeters2) %in% folivores)], use.na
 corecarn2 = unlist(coremeters2[which(names(coremeters2) %in% carnivores)], use.names=F)
 
 # find breakpoints to use in MARK data structure for future analyses
-# data reasonably well fits a lognormal distribution (eyeball and J. Powell)
-# breakpoint = mean(logdata) + sd(logdata) of all the distances traveled by recaptured individuals    
-# using log1p, and back transforming using expm1 should solve the problem of lots of zeros 
 coregran_brkpt2 = expm1(mean(log1p(coregran2)) + sd(log1p(coregran2)))
 corefoli_brkpt2 = expm1(mean(log1p(corefoli2)) + sd(log1p(corefoli2)))
 corecarn_brkpt2 = expm1(mean(log1p(corecarn2)) + sd(log1p(corecarn2)))
@@ -305,7 +307,7 @@ graniv_persist = persistence[which(persistence$species %in% granivores),]
 
 
 #----------------------------------------------------------------------
-#             Get MARK capture histories for granivores
+#             Get MARK capture histories for granivores - Uses METHOD 1
 #----------------------------------------------------------------------
 spplist = granivores
 periods = c(130:380) # all sampling periods 1989-2009
@@ -367,7 +369,7 @@ write.table(transmark2, file = "mark_datafiles//trans_mark2.txt", sep=" ", row.n
 #write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
 
 
-#--------------- Get MARK capture histories for folivores
+#--------------- Get MARK capture histories for folivores - METHOD 1
 #------------------------------
 spplist = folivores
 periods = c(130:380) #1989-2009
@@ -408,7 +410,7 @@ write.table(somark, file = "mark_datafiles//so_mark.txt", sep=" ", row.names = F
 #write.table(MARK, file = "mark_datafiles//foli_mark.inp", row.names = F, col.names = F, quote = F)
 
 
-#-----------------Get MARK capture histories for carnivores
+#-----------------Get MARK capture histories for carnivores - METHOD 1
 #------------------------------
 spplist = carnivores
 periods = c(130:380) #1989-2009
@@ -917,6 +919,31 @@ points(c(0:3), table(OTirep$num_reprod)/sum(table(OTirep$num_reprod)), type = "b
 points(c(0:2), table(OLirep$num_reprod)/sum(table(OLirep$num_reprod)), type = "b", pch = 15, col = "black")
 
 dev.off()
+
+
+#-------------------------- Boxplots for all species
+ggplot(mall, aes(status, S)) + geom_boxplot() + theme_classic()
+ggplot(mall, aes(status, p)) + geom_boxplot() + theme_classic()
+ggplot(mall, aes(status, Psi)) + geom_boxplot() + theme_classic()
+ggplot(mall, aes(status, bodysize)) + geom_boxplot() + theme_classic()
+ggplot(mall, aes(status, modal_distance)) + geom_boxplot() + theme_classic()
+ggplot(mall, aes(status, breakpoint)) + geom_boxplot() + theme_classic()
+ggplot(mall, aes(status, reprod)) + geom_boxplot() + theme_classic()
+ggplot(mall, aes(status, meanabun)) + geom_boxplot() + theme_classic()
+
+
+# --------------------------------- plot the movement histograms for status groups
+coregrp = ggplot(data.frame(coreall), aes(coreall)) + geom_histogram(binwidth=6) + 
+  theme_classic() + xlab("distance between recaptures") + ggtitle("core") + 
+  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
+intermedgrp = ggplot(data.frame(intermedall), aes(intermedall)) + geom_histogram(binwidth=6) +
+  theme_classic() + xlab("distance between recaptures") + ggtitle("intermediate") + 
+  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
+transgrp = ggplot(data.frame(transall), aes(transall)) + geom_histogram(binwidth=6) + 
+  theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + 
+  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
+
+grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
 
 
 # #------------------------------------------ FIGURE - for ESA talk 
