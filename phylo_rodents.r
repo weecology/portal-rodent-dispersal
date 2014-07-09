@@ -4,9 +4,14 @@
 
 library(ape)
 library(geiger)
+library(ggplot2)
 library(picante)
 library(PhyloOrchard)
 #if PhyloOrchard not already installed, for mac use the terminal: svn checkout svn://scm.r-forge.r-project.org/svnroot/phyloorchard/
+
+wd = "/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
+setwd(wd)
+load(".Rdata") #load saved Rdata
 
 # read in species trait data from earlier analysis/research/etc.
 traits=read.csv("traits.csv", row.names=1) #comes from mgran in rodent_wrapper
@@ -42,16 +47,27 @@ trx["Dipodomys_merriami", "Chaetodipus_baileyi"]
 traitDF = traits[,c(6,7,11,12,16,18,20)]
 traitDF <- traitDF[tree.p$tip.label, ] 
 
+# Standardize the matrix to correct for different units by subtracting means and dividing by sd
+zscore = apply(traitDF, 2, function(x) {
+  y = (x - mean(x))/sd(x)
+  return(y)
+})
+rownames(zscore) <- rownames(traitDF)
+zscore = as.data.frame(zscore)
+
+# make a pairs plot to look at correlation structure of standardized data
+pairs(zscore, pch = 19)
+
 # the correlation structure expected if traits evolve by Brownian motion 
 # and fit a generalized least squares model assuming this correlation structure.
 bmRodents <- corBrownian(phy=tree.p) 
-bm.gls <- gls(Psi ~ S, correlation = bmRodents, data = traitDF) 
+bm.gls <- gls(Psi ~ S, correlation = bmRodents, data = zscore) 
 summary(bm.gls)
 
 # Again we will first build the correlation structure, this time assuming if  
 # traits evolve as expected under the Ornstein-Uhlenbeck process with a variance-restraining 
 # parameter, alpha. Ape automatically estimates the best fitting value of alpha for your data.
 ouRodents <- corMartins(1,phy=tree.p) 
-ou.gls<-gls(Psi ~ S, correlation=ouRodents, data=traitDF) 
+ou.gls<-gls(Psi ~ S, correlation=ouRodents, data=zscore) 
 summary(ou.gls)
 
