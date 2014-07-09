@@ -556,6 +556,15 @@ catdat = mall[,names(mall) %in% keepdesc]
 rownames(pcadat) = pcadat$species
 pcadat = pcadat[,-1]
 
+#save mall for later analyses
+row.names(mall) = c("Baiomys_taylori", "Dipodomys_merriami", "Dipodomys_ordii", "Dipodomys_spectabilis",
+                    "Neotoma_albigula", "Onychomys_leucogaster", "Onychomys_torridus", "Chaetodipus_baileyi",
+                    "Peromyscus_eremicus", "Perognathus_flavus", "Chaetodipus_hispidus", "Chaetodipus_intermedius",
+                    "Peromyscus_leucopus", "Peromyscus_maniculatus", "Chaetodipus_penicillatus", 
+                    "Reithrodontomys_fulvescens", "Reithrodontomys_megalotis", "Reithrodontomys_montanus",
+                    "Sigmodon_fulviventer", "Sigmodon_hispidus", "Sigmodon_ochrognathus")
+write.csv(mall, "traits.csv")
+
 #---------------------------------------------------------------------------------
 #                                 summarize results
 #---------------------------------------------------------------------------------
