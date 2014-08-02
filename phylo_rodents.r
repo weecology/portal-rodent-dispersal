@@ -1,5 +1,5 @@
 # code to build a phylogenetic tree for the 21 species at Portal
-# use the tree from Bininda-Emonds et al. 2007. The delayed rise of present-day mamals. 
+# use the tree from Bininda-Emonds et al. 2007. The delayed rise of present-day mammals. 
 #                   Nature. 446: 507-512
 
 library(ape)
