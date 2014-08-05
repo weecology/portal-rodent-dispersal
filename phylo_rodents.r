@@ -44,7 +44,7 @@ trx["Dipodomys_merriami", "Chaetodipus_baileyi"]
 
 # Lets use a subset of the traits we are interested in and order by the tree tips
 #TODO: Need to translate the traits into z-scores so they are on the same scale
-traitDF = traits[,c(6,7,11,12,16,18,20)]
+traitDF = traits[,c(2,4,5,6,7,11,12,13,16,18,20)]
 traitDF <- traitDF[tree.p$tip.label, ] 
 
 # Standardize the matrix to correct for different units by subtracting means and dividing by sd
@@ -56,18 +56,27 @@ rownames(zscore) <- rownames(traitDF)
 zscore = as.data.frame(zscore)
 
 # make a pairs plot to look at correlation structure of standardized data
-pairs(zscore, pch = 19)
+pairs(zscore[,c(1,4,9,11)], pch = 19)
 
 # the correlation structure expected if traits evolve by Brownian motion 
 # and fit a generalized least squares model assuming this correlation structure.
 bmRodents <- corBrownian(phy=tree.p) 
-bm.gls <- gls(Psi ~ S, correlation = bmRodents, data = zscore) 
+
+bm.gls <- gls(meanabun ~ propyrs, correlation = bmRodents, data = zscore) 
 summary(bm.gls)
+
+bm.gls <- gls(S ~ Psi, correlation = bmRodents, data = zscore) 
+summary(bm.gls)
+
+bm.gls <- gls(modal_distance ~ propyrs, correlation = bmRodents, data = zscore) 
+summary(bm.gls)
+
+
 
 # Again we will first build the correlation structure, this time assuming if  
 # traits evolve as expected under the Ornstein-Uhlenbeck process with a variance-restraining 
 # parameter, alpha. Ape automatically estimates the best fitting value of alpha for your data.
 ouRodents <- corMartins(1,phy=tree.p) 
-ou.gls<-gls(Psi ~ S, correlation=ouRodents, data=zscore) 
+ou.gls<-gls(S ~ Psi, correlation=ouRodents, data=zscore) 
 summary(ou.gls)
 

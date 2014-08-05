@@ -942,14 +942,14 @@ ggplot(mall, aes(status, meanabun)) + geom_boxplot() + theme_classic()
 
 
 # --------------------------------- plot the movement histograms for status groups
-coregrp = ggplot(data.frame(coreall), aes(coreall)) + geom_histogram(binwidth=6) + 
-  theme_classic() + xlab("distance between recaptures") + ggtitle("core") + 
+coregrp = ggplot(data.frame(coreall), aes(coreall)) + geom_histogram(binwidth=6, aes(y = ..ncount..)) + 
+  theme_classic() + xlab("distance between recaptures") + ggtitle("core") + ylab("proportion") +
   scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-intermedgrp = ggplot(data.frame(intermedall), aes(intermedall)) + geom_histogram(binwidth=6) +
-  theme_classic() + xlab("distance between recaptures") + ggtitle("intermediate") + 
+intermedgrp = ggplot(data.frame(intermedall), aes(intermedall)) + geom_histogram(binwidth=6, aes(y = ..ncount..)) +
+  theme_classic() + xlab("distance between recaptures") + ggtitle("intermediate")  + ylab("proportion") +
   scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-transgrp = ggplot(data.frame(transall), aes(transall)) + geom_histogram(binwidth=6) + 
-  theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + 
+transgrp = ggplot(data.frame(transall), aes(transall)) + geom_histogram(binwidth=6, aes(y = ..ncount..)) + 
+  theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + ylab("proportion") + 
   scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
 
 grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
