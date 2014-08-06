@@ -942,14 +942,20 @@ ggplot(mall, aes(status, meanabun)) + geom_boxplot() + theme_classic()
 
 
 # --------------------------------- plot the movement histograms for status groups
-coregrp = ggplot(data.frame(coreall), aes(coreall)) + geom_histogram(binwidth=6, aes(y = ..ncount..)) + 
-  theme_classic() + xlab("distance between recaptures") + ggtitle("core") + ylab("proportion") +
+coregrp = ggplot(data.frame(coreall), aes(coreall)) + 
+  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
+  scale_y_continuous(labels = percent_format(), limits=c(0,0.30)) +
+  theme_classic() + xlab("distance between recaptures") + ggtitle("core") + ylab("percent") +
   scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-intermedgrp = ggplot(data.frame(intermedall), aes(intermedall)) + geom_histogram(binwidth=6, aes(y = ..ncount..)) +
-  theme_classic() + xlab("distance between recaptures") + ggtitle("intermediate")  + ylab("proportion") +
+intermedgrp = ggplot(data.frame(intermedall), aes(intermedall)) + 
+  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
+  scale_y_continuous(labels = percent_format(), limits=c(0,0.30)) +
+  theme_classic() + xlab("distance between recaptures") + ggtitle("intermediate")  + ylab("percent") +
   scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-transgrp = ggplot(data.frame(transall), aes(transall)) + geom_histogram(binwidth=6, aes(y = ..ncount..)) + 
-  theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + ylab("proportion") + 
+transgrp = ggplot(data.frame(transall), aes(transall)) + 
+  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
+  scale_y_continuous(labels = percent_format(), limits=c(0,0.30))+
+  theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + ylab("percent") + 
   scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
 
 grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
