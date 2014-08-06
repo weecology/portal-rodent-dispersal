@@ -48,27 +48,27 @@ traitDF = traits[,c(2,4,5,6,7,11,12,13,16,18,20)]
 traitDF <- traitDF[tree.p$tip.label, ] 
 
 # Standardize the matrix to correct for different units by subtracting means and dividing by sd
-zscore = apply(traitDF, 2, function(x) {
+zscoret = apply(traitDF, 2, function(x) {
   y = (x - mean(x))/sd(x)
   return(y)
 })
-rownames(zscore) <- rownames(traitDF)
-zscore = as.data.frame(zscore)
+rownames(zscoret) <- rownames(traitDF)
+zscoret = as.data.frame(zscoret)
 
 # make a pairs plot to look at correlation structure of standardized data
-pairs(zscore[,c(1,4,9,11)], pch = 19)
+pairs(zscoret[,c(1,4,9,11)], pch = 19)
 
 # the correlation structure expected if traits evolve by Brownian motion 
 # and fit a generalized least squares model assuming this correlation structure.
 bmRodents <- corBrownian(phy=tree.p) 
 
-bm.gls <- gls(meanabun ~ propyrs, correlation = bmRodents, data = zscore) 
+bm.gls <- gls(meanabun ~ propyrs, correlation = bmRodents, data = zscoret) 
 summary(bm.gls)
 
-bm.gls <- gls(S ~ Psi, correlation = bmRodents, data = zscore) 
+bm.gls <- gls(S ~ Psi, correlation = bmRodents, data = zscoret) 
 summary(bm.gls)
 
-bm.gls <- gls(modal_distance ~ propyrs, correlation = bmRodents, data = zscore) 
+bm.gls <- gls(modal_distance ~ propyrs, correlation = bmRodents, data = zscoret) 
 summary(bm.gls)
 
 
@@ -77,6 +77,6 @@ summary(bm.gls)
 # traits evolve as expected under the Ornstein-Uhlenbeck process with a variance-restraining 
 # parameter, alpha. Ape automatically estimates the best fitting value of alpha for your data.
 ouRodents <- corMartins(1,phy=tree.p) 
-ou.gls<-gls(S ~ Psi, correlation=ouRodents, data=zscore) 
+ou.gls<-gls(S ~ Psi, correlation=ouRodents, data=zscoret) 
 summary(ou.gls)
 

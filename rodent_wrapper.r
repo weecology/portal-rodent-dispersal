@@ -537,7 +537,7 @@ for (i in 1:length(transgran)){
 mgran = merge(graniv_persist, estimates)
 mgran2 = merge(mgran, species_table, by="species")
 
-keepcols = c("species", "propyrs", "maxabun", "reprod", "bodysize", 
+keepcols = c("species", "propyrs", "maxabun", "meanabun","reprod", "bodysize", 
              "breakpoint", "modal_distance", "oneval", "S", "p", "Psi")
 keepdesc = c("species", "family", "guild", "status", "status2")
 
@@ -622,6 +622,8 @@ ggbiplot(trait_pc, groups=toCol2, labels=rownames(trait_pc$x), label.size = 3, v
 
 # Standardize the matrix to correct for different units by subtracting the
 # means and dividing by sd
+names(pcadat) <- c("persistence", "mean_abundance", "max_abundance", "fecundity", "mass", 
+                   "persistence_moyr", "benchmark", "modal_distance", "Phi", "p", "Psi")
 zscore <- apply(pcadat, 2, function(x) {
   y <- (x - mean(x))/sd(x)
   return(y)
@@ -629,30 +631,67 @@ zscore <- apply(pcadat, 2, function(x) {
 rownames(zscore) <- rownames(pcadat)
 
 #run pca analysis
-trait_pc<-prcomp(zscore)
+trait_pc<-prcomp(zscore[,c(1,2,4,7,9,10,11)])
 
 #Use dev libary to ggplot PCA, color by clades
 #Try the ggplot biplot to color by clades (or later, behavioral roles)
 toCol = catdat[catdat$species %in% rownames(trait_pc$x),"status"]
-toCol2 = catdat[catdat$species %in% rownames(trait_pc$x),"status2"]
+# toCol2 = catdat[catdat$species %in% rownames(trait_pc$x),"status2"] #uses months + years for designation
 toColGuild = catdat[catdat$species %in% rownames(trait_pc$x),"guild"]
 toColFam = catdat[catdat$species %in% rownames(trait_pc$x),"family"]
 
 #Label species names and clades, ellipses cover normal distribuiton of temporal groups
-ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
-
-#Label species names and clades, ellipses cover normal distribuiton of temporal groups
-ggbiplot(trait_pc, groups=toCol2, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
-
-#Label species names and clades, circles cover normal distribuiton of guilds
-ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
+# FIGURE 4
+ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), 
+         ellipse=TRUE, label.size = 3, varname.size = 4) + 
+  theme_classic() + guides(color=guide_legend(title="")) +
+  theme(text = element_text(size=14), legend.direction = "horizontal", 
+        legend.position = "bottom", legend.box = "vertical") + 
+  scale_y_continuous(limits=c(-2,3)) + scale_x_continuous(limits=c(-2,3))
 
 #Label species names and clades, circles cover normal distribuiton of families
-ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
+# FIGURE A3
+ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), 
+         ellipse=TRUE, label.size = 3, varname.size = 4) + 
+  theme_classic() + guides(color=guide_legend(title="")) +
+  theme(text = element_text(size=14), legend.direction = "horizontal", 
+        legend.position = "bottom", legend.box = "vertical") + 
+  scale_y_continuous(limits=c(-2,3)) + scale_x_continuous(limits=c(-2,3))
+
+# #Label species names and clades, ellipses cover normal distribuiton of temporal groups
+# ggbiplot(trait_pc, groups=toCol2, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+#   theme(text = element_text(size=20))
+
+#Label species names and clades, circles cover normal distribuiton of guilds
+# ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+#   theme(text = element_text(size=20))
+
+
+# Figure A4. Survival-Movement tradeoffs
+zscoredf = data.frame(zscore)
+zscoredf$status = catdat$status
+zscoredf$family = catdat$family
+
+PhiPsi = ggplot(zscoredf, aes(Psi, Phi)) + geom_point(aes(shape=status, col=status, size=2)) + 
+  stat_smooth(method="lm", fill="gray80") + 
+  theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
+
+PhiBench = ggplot(zscoredf, aes(benchmark, Phi)) + geom_point(aes(shape=status, col=status, size=2)) + 
+  stat_smooth(method="lm", fill="gray80") + 
+  theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
+
+grid.arrange(PhiBench, PhiPsi, nrow = 1)
+
+# Figure A5
+PsiReprod = ggplot(zscoredf, aes(Psi, fecundity)) + geom_point(aes(shape=status, col=status, size=2)) + 
+  stat_smooth(method="lm", fill="gray80") + 
+  theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
+
+BenchReprod = ggplot(zscoredf, aes(benchmark, fecundity)) + geom_point(aes(shape=status, col=status, size=2)) + 
+  stat_smooth(method="lm", fill="gray80") + 
+  theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
+
+grid.arrange(PsiReprod, BenchReprod, nrow = 1)
 
 
 #------------------------ plot the Mark results for all the species
