@@ -185,8 +185,8 @@ for (f in 1:length(files)){
 #---------------------------------------------------------------------------------
 #          Write result data to csv files
 #---------------------------------------------------------------------------------
-  write.csv(movemodel$results$beta, paste("movemodel_beta_", spname, ".csv", sep=""))
-  write.csv(movemodel$results$real, paste("movemodel_real_", spname, ".csv", sep=""))
+  write.csv(paste(movemodel$results$beta, paste(wd, "movemodel_beta_", spname, ".csv", sep=""))
+  write.csv(movemodel$results$real, paste(wd, "movemodel_real_", spname, ".csv", sep=""))
   
   cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=TRUE)
   print( paste(spname, " is done.", sep = ""))
