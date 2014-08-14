@@ -488,7 +488,7 @@ ggsave("Fig4-PCA_status.png", dpi=600, height=5.4, width=7, units="in")
 ggsave("FigA3-PCA_family.png", dpi=600, height=5.4, width=7, units="in")
 
 
-#------------------------ FIGURE 1 - persistence, ala core v. transient literature
+#------------------------ FIGURE 2 - persistence, ala core v. transient literature
 status_plot = ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(shape=guild), size = 3) + 
   theme_classic() + xlab("proportion years present") +
   ylab("proportion months present") + xlim(0,1) + ylim(0,1) + 
@@ -498,6 +498,28 @@ status_plot = ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(shape=
   theme(text = element_text(size=14), legend.direction = "horizontal", 
         legend.position = "bottom", legend.box = "vertical")
 ggsave("Fig1_persistence.png", dpi=600, height=5.5, width=7.3, units="in")
+
+
+# ----------------------------- FIGURE 3 - plot the movement histograms for status groups
+png("Fig3-histograms.png", res=600, width=11.4, height=3.7, units="in")
+coregrp = ggplot(data.frame(coreall), aes(coreall)) + 
+  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
+  scale_y_continuous(labels = percent_format(), limits=c(0,0.30)) +
+  theme_classic() + xlab("distance between recaptures") + ggtitle("core") + ylab("percent") +
+  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=14))
+intermedgrp = ggplot(data.frame(intermedall), aes(intermedall)) + 
+  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
+  scale_y_continuous(labels = percent_format(), limits=c(0,0.30)) +
+  theme_classic() + xlab("distance between recaptures") + ggtitle("intermediate")  + ylab("percent") +
+  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=14))
+transgrp = ggplot(data.frame(transall), aes(transall)) + 
+  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
+  scale_y_continuous(labels = percent_format(), limits=c(0,0.30))+
+  theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + ylab("percent") + 
+  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=14))
+
+grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
+dev.off()
 
 
 #--------------------------- Figure A4. Survival-Movement tradeoffs
@@ -592,25 +614,6 @@ modal_all = ggplot(persistence, aes(propyrs, modal_distance)) + theme_classic() 
 grid.arrange(modal_dist, modal_all, nrow = 1)
 
 
-#------------------------ plot histograms of each of the groups (by status) movements
-
-core = data.frame(core = c(meterlist$DO, meterlist$DM, meterlist$RM, meterlist$PE, meterlist$PP, meterlist$PB, meterlist$PF))
-interm = data.frame(interm = c(meterlist$PM, meterlist$DS))
-trans = data.frame(trans=c(meterlist$RF, meterlist$BA, meterlist$PH, meterlist$PI, meterlist$PL, meterlist$RO))
-
-COREplot = ggplot(core, aes(core)) + geom_histogram() + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("distance (m) between recaptures") + ggtitle("Core") +
-  xlim(0,550)
-
-INTERplot = ggplot(interm, aes(interm)) + geom_histogram() + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("distance (m) between recaptures") + ggtitle("Intermediate") +
-  xlim(0,550)
-
-TRANSplot = ggplot(trans, aes(trans)) + geom_histogram() + theme_bw() + 
-  theme(text = element_text(size=20)) + xlab("distance (m) between recaptures") + ggtitle("Transient") +
-  xlim(0,550)
-
-grid.arrange(COREplot, INTERplot, TRANSplot, nrow=1)
 
 #------------------------ plot histograms of each of the species movements
 splist = names(meterlist)
@@ -802,24 +805,6 @@ ggplot(mall, aes(status, reprod)) + geom_boxplot() + theme_classic()
 ggplot(mall, aes(status, meanabun)) + geom_boxplot() + theme_classic()
 
 
-# --------------------------------- plot the movement histograms for status groups
-coregrp = ggplot(data.frame(coreall), aes(coreall)) + 
-  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
-  scale_y_continuous(labels = percent_format(), limits=c(0,0.30)) +
-  theme_classic() + xlab("distance between recaptures") + ggtitle("core") + ylab("percent") +
-  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-intermedgrp = ggplot(data.frame(intermedall), aes(intermedall)) + 
-  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
-  scale_y_continuous(labels = percent_format(), limits=c(0,0.30)) +
-  theme_classic() + xlab("distance between recaptures") + ggtitle("intermediate")  + ylab("percent") +
-  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-transgrp = ggplot(data.frame(transall), aes(transall)) + 
-  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
-  scale_y_continuous(labels = percent_format(), limits=c(0,0.30))+
-  theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + ylab("percent") + 
-  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-
-grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
 
 
 # #------------------------------------------ FIGURE - for ESA talk 
