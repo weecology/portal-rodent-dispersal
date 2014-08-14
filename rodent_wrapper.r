@@ -308,9 +308,9 @@ coreallsp = unlist(coremeters, use.names=F)
 graniv_persist = persistence[which(persistence$species %in% granivores),] 
 
 
-#----------------------------------------------------------------------
-#             Get MARK capture histories for all species - Uses METHOD 1
-#----------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------
+#      Get MARK capture histories for all species - Uses METHOD 1 (year-based temporal persistence)
+#-------------------------------------------------------------------------------------------
 spplist = c(granivores, folivores, carnivores)
 periods = c(130:380) # all sampling periods 1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
@@ -394,6 +394,10 @@ mall = merge(persistence, estimates, by = c("species", "species"))
 mall = merge(mall, species_table, by="species")
 names(mall)[22] = "family"
 
+keepcols = c("species", "propyrs", "meanabun", "reprod", 
+             "breakpoint", "S", "p", "Psi")
+keepdesc = c("species", "family", "guild", "status", "status2")
+
 pcadat = mall[,names(mall) %in% keepcols]
 catdat = mall[,names(mall) %in% keepdesc]
 rownames(pcadat) = pcadat$species
@@ -447,6 +451,8 @@ zscore <- apply(pcadat, 2, function(x) {
   return(y)
   })
 rownames(zscore) <- rownames(pcadat)
+#make prettier labels, change colnames of zscore
+colnames(zscore) = c("persistence", "mean N", "fecundity", "benchmark (m)", "Phi", "p", "Psi")
 
 #run pca analysis
 trait_pc<-prcomp(zscore)
@@ -458,21 +464,28 @@ toCol2 = catdat[catdat$species %in% rownames(trait_pc$x),"status2"]
 toColGuild = catdat[catdat$species %in% rownames(trait_pc$x),"guild"]
 toColFam = catdat[catdat$species %in% rownames(trait_pc$x),"family"]
 
-#Label species names and clades, ellipses cover normal distribuiton of temporal groups
-ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
 
-#Label species names and clades, ellipses cover normal distribuiton of temporal groups
-ggbiplot(trait_pc, groups=toCol2, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
+#---------------------------- FIGURE 4
+  ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), 
+            ellipse=TRUE, label.size = 3, varname.size = 4) + 
+  theme_classic() + guides(color=guide_legend(title="")) +
+  theme(text = element_text(size=14), legend.direction = "horizontal", 
+        legend.position = "bottom", legend.box = "vertical") + 
+  scale_y_continuous(limits=c(-2.5,3)) + scale_x_continuous(limits=c(-3,3))
 
-#Label species names and clades, circles cover normal distribuiton of guilds
-ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
+ggsave("PCA_status.png", dpi=600, height=5.4, width=7, units="in")
 
+
+#---------------------------- FIGURE A3
 #Label species names and clades, circles cover normal distribuiton of families
-ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
+  ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), 
+            ellipse=TRUE, label.size = 3, varname.size = 4) + 
+  theme_classic() + guides(color=guide_legend(title="")) +
+  theme(text = element_text(size=14), legend.direction = "horizontal", 
+          legend.position = "bottom", legend.box = "vertical") + 
+    scale_y_continuous(limits=c(-2,3)) + scale_x_continuous(limits=c(-2,3))
+
+
 
 
 #------------------------ plot the Mark results for all the species
