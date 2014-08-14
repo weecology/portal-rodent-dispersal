@@ -415,7 +415,7 @@ write.csv(mall, "traits.csv")
 #---------------------------------------------------------------------------------
 #                                 summarize results
 #---------------------------------------------------------------------------------
-#------------------------ compare medians for all the species
+#------------------------ compare means/medians for all the species
 
 c = mall[which(mall$status == "core"),]
 i = mall[which(mall$status == "intermediate"),]
