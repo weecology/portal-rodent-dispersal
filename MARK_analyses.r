@@ -6,18 +6,17 @@
 
 # Do psi and S significantly differ among species/guilds?
 
-
-rm(list=ls(all=TRUE))   # clears the memory
+runRMARK = function(wd){
+  
 
 #---------------------------------------------------------------------------------
 #          bring in the data and source files
 #---------------------------------------------------------------------------------
-#set working directory and import source code
-setwd("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_datafiles//")
-#setwd("~/portal-rodent-dispersal/")
 
-#grab all the .inp files to loop over for analysis
-files = list.files(getwd(), pattern = "mark.txt", full.name=T, recursive=T)
+#grab all the .txt files to loop over for analysis
+files = list.files(wd, pattern = "mark.txt", full.name=T, recursive=T)
+
+rm(list=ls()[!ls() %in% c("files")])   # clears the memory of everything except the file list, since R MARK is very memory hungry
 
 for (f in 1:length(files)){
   
@@ -192,5 +191,8 @@ for (f in 1:length(files)){
   cat("End Code. Look for your csv files.", sep="\n", file="outfile.txt", append=TRUE)
   print( paste(spname, " is done.", sep = ""))
   
-  rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list
+  rm(list=ls()[!ls() %in% c("f", "files")])   # clears the memory of everything except the file list and iterator
+}
+
+#END OF FUNCTION
 }

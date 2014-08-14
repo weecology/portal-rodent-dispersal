@@ -476,6 +476,15 @@ print(TableDat)
 
 
 #-----------------------------------------------------------------------------------
+#         Run R MARK analysis
+#           This should run through all the Mark tables and generate output as 
+#           saved .csv files
+#-----------------------------------------------------------------------------------
+source("MARK_analyses.r")
+runRMARK("C://Users//sarah//Documents//GitHub//portal-rodent-dispersal//mark_datafiles//") #if run on server: "~/portal-rodent-dispersal/"
+
+
+#-----------------------------------------------------------------------------------
 #        If MARK_analyses.r has already been run, and results saved as .csv files
 #          analyze the data from the Program Mark analysis
 #-----------------------------------------------------------------------------------
