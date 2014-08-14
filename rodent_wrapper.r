@@ -473,7 +473,7 @@ toColFam = catdat[catdat$species %in% rownames(trait_pc$x),"family"]
         legend.position = "bottom", legend.box = "vertical") + 
   scale_y_continuous(limits=c(-2.5,3)) + scale_x_continuous(limits=c(-3,3))
 
-ggsave("PCA_status.png", dpi=600, height=5.4, width=7, units="in")
+ggsave("Fig4-PCA_status.png", dpi=600, height=5.4, width=7, units="in")
 
 
 #---------------------------- FIGURE A3
@@ -484,6 +484,48 @@ ggsave("PCA_status.png", dpi=600, height=5.4, width=7, units="in")
   theme(text = element_text(size=14), legend.direction = "horizontal", 
           legend.position = "bottom", legend.box = "vertical") + 
     scale_y_continuous(limits=c(-2,3)) + scale_x_continuous(limits=c(-2,3))
+
+ggsave("FigA3-PCA_family.png", dpi=600, height=5.4, width=7, units="in")
+
+
+# Figure A4. Survival-Movement tradeoffs
+colnames(zscore) = c("persistence", "mean_N", "fecundity", "benchmark", "Phi", "p", "Psi")
+zscoredf = data.frame(zscore)
+zscoredf$status = catdat$status
+zscoredf$family = catdat$family
+
+png("FigA4-survival-movment.png", res=600, height=3.7, width=7.7, units="in")
+  PhiPsi = ggplot(zscoredf, aes(Psi, Phi)) + geom_point(aes(shape=status, col=status, size=2)) + 
+    stat_smooth(method="lm", fill="gray80") + 
+    theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
+
+  PhiBench = ggplot(zscoredf, aes(benchmark, Phi)) + geom_point(aes(shape=status, col=status, size=2)) + 
+    stat_smooth(method="lm", fill="gray80") + 
+    theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
+
+  grid.arrange(PhiBench, PhiPsi, nrow = 1)
+dev.off()
+
+
+
+#------------------------Figure A5. Movement-reproduction trade-offs
+
+
+png("FigA5-movment-reproduction.png", res=600, height=3.7, width=7.7, units="in")
+PsiReprod = ggplot(zscoredf, aes(Psi, fecundity)) + geom_point(aes(shape=status, col=status, size=2)) + 
+    stat_smooth(method="lm", fill="gray80") + 
+    theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
+
+  BenchReprod = ggplot(zscoredf, aes(benchmark, fecundity)) + geom_point(aes(shape=status, col=status, size=2)) + 
+    stat_smooth(method="lm", fill="gray80") + 
+    theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
+
+  grid.arrange(PsiReprod, BenchReprod, nrow = 1)
+dev.off()
+
+
+
+
 
 
 
