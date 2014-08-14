@@ -507,13 +507,6 @@ for (f in 1:length(rfiles)){
 #change "AO" to "NAO" to match naming schema - was shortened in MARK_analyses.r
 estimates[which(estimates$species == "AO"),1] = "NAO" 
 
-#assign all transient species the same MARK estimates (for now)
-estimates2 = estimates[16,]
-transgran = granivores[which(granivores %in% transientspecies)]
-for (i in 1:length(transgran)){
-  estimates2$species = transgran[i]
-  estimates=rbind(estimates, estimates2)
-}
 
 # merge GRANIVORE data for analysis and pca plots 
 mgran = merge(graniv_persist, estimates)
