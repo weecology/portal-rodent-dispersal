@@ -488,7 +488,19 @@ ggsave("Fig4-PCA_status.png", dpi=600, height=5.4, width=7, units="in")
 ggsave("FigA3-PCA_family.png", dpi=600, height=5.4, width=7, units="in")
 
 
-# Figure A4. Survival-Movement tradeoffs
+#------------------------ FIGURE 1 - persistence, ala core v. transient literature
+status_plot = ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(shape=guild), size = 3) + 
+  theme_classic() + xlab("proportion years present") +
+  ylab("proportion months present") + xlim(0,1) + ylim(0,1) + 
+  geom_vline(xintercept=0.66, linetype="dashed", col = "grey50", size = 0.5) + 
+  geom_vline(xintercept=0.33, linetype="dashed", col = "grey50", size = 0.5) + # ggtitle("Rodents 1989 - 2009") + 
+  geom_text(aes(label = species), hjust=0, vjust=0) +
+  theme(text = element_text(size=14), legend.direction = "horizontal", 
+        legend.position = "bottom", legend.box = "vertical")
+ggsave("Fig1_persistence.png", dpi=600, height=5.5, width=7.3, units="in")
+
+
+#--------------------------- Figure A4. Survival-Movement tradeoffs
 colnames(zscore) = c("persistence", "mean_N", "fecundity", "benchmark", "Phi", "p", "Psi")
 zscoredf = data.frame(zscore)
 zscoredf$status = catdat$status
@@ -507,10 +519,7 @@ png("FigA4-survival-movment.png", res=600, height=3.7, width=7.7, units="in")
 dev.off()
 
 
-
 #------------------------Figure A5. Movement-reproduction trade-offs
-
-
 png("FigA5-movment-reproduction.png", res=600, height=3.7, width=7.7, units="in")
 PsiReprod = ggplot(zscoredf, aes(Psi, fecundity)) + geom_point(aes(shape=status, col=status, size=2)) + 
     stat_smooth(method="lm", fill="gray80") + 
@@ -524,57 +533,34 @@ PsiReprod = ggplot(zscoredf, aes(Psi, fecundity)) + geom_point(aes(shape=status,
 dev.off()
 
 
+#------------------------ Figure A6 - plot the Mark results as potential trade-offs
+# Add status, Method 1
+toStatus = catdat[catdat$species %in% estimates$species,"status"]
+estimates = cbind(estimates, toStatus)
 
-
-
-
-
-
-#------------------------ plot the Mark results for all the species
-
-# Use only the real estimates, where transient granivores were lumped
-est = estimates[c(1:16),]
-
-# Add status, Method 1 and Method 2
-toStatus = catdat[catdat$species %in% est$species,"status"]
-toStatus = append(toStatus, "transient") #since TR is a group instead of an actual "species"
-toStatus2 = catdat[catdat$species %in% est$species,"status2"]
-toStatus2 = append(toStatus2, "transient") #since TR is a group instead of an actual "species"
-
-est = cbind(est, toStatus)
-est = cbind(est, toStatus2)
-
-
-SbyPsi = ggplot(est, aes(Psi, S, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
-  theme(text = element_text(size=20)) + scale_colour_hue(guide = "none") +
-  xlab("Long-distance movement probability") + ylab("Survival probability") + 
+png("FigA6-MARK-results.png", res=600, height=3.5, width=11.1, units="in")
+SbyPsi = ggplot(estimates, aes(Psi, S, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
+  theme(text = element_text(size=14)) + scale_colour_hue(guide = "none") +
+  xlab("Psi") + ylab("Phi") + 
   geom_errorbar(aes(x = Psi, ymin = S - S_se, ymax = S + S_se), width=0.01) +
   geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
 
-Sbyp = ggplot(est, aes(p, S, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
-  theme(text = element_text(size=20)) + scale_colour_hue(guide = "none")+
-  xlab("recapture probability") + ylab("Survival probability") + 
+Sbyp = ggplot(estimates, aes(p, S, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
+  theme(text = element_text(size=14)) + scale_colour_hue(guide = "none")+
+  xlab("p") + ylab("Phi") + 
   geom_errorbar(aes(x = p, ymin = S - S_se, ymax = S + S_se), width=0.01) +
-  geom_errorbarh(aes(xmin = p - p_se, xmax = p + p_se)) + ggtitle("all species")
+  geom_errorbarh(aes(xmin = p - p_se, xmax = p + p_se))
 
-Psibyp =  ggplot(est, aes(Psi, p, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
-  theme(text = element_text(size=20)) + scale_colour_hue(guide = "none") +
-  xlab("long-distance movement probability") + ylab("recapture probability") + 
+Psibyp =  ggplot(estimates, aes(Psi, p, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
+  theme(text = element_text(size=14)) + scale_colour_hue(guide = "none") +
+  xlab("Psi") + ylab("p") + 
   geom_errorbar(aes(x = Psi, ymin = p - p_se, ymax = p + p_se), width=0.01) +
   geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
 
-grid.arrange(SbyPsi, Sbyp, Psibyp, nrow=1)
+  grid.arrange(SbyPsi, Sbyp, Psibyp, nrow=1)
+dev.off
 
 
-#------------------------ plot abundance vs. years, ala core v. transient literature
-
-status_plot = ggplot(persistence, aes(propyrs, propmos)) + geom_point(aes(shape=guild), size = 3) + 
-  theme_classic() + xlab("proportion years present") +
-  ylab("proportion of months present") + xlim(0,1) + ylim(0,1) + 
-  geom_vline(xintercept=0.66, linetype="dotted", col = "red", size = 1.5) + 
-  geom_vline(xintercept=0.33, linetype="dotted", col = "red", size = 1.5) + 
-  ggtitle("Rodents 1989 - 2009") + geom_text(aes(label = species), hjust=0, vjust=0) +
-  theme(text = element_text(size=20))
 
 
 #------------------------- plot abundance for all species across timeseries
