@@ -28,7 +28,7 @@ species_table = read.csv('rawdata/species.csv', sep = ',', header = TRUE)
 
 #import cleaned data, if next step (clean up the data) has previously been run
 allclean = read.csv('rawdata/cleaned_1989-2009.csv', sep = ',', header = TRUE)
-  # NOTE: all7 == allclean, if have allclean, can skip the datacleaning steps
+  #all7 == allclean, if have allclean, can skip the datacleaning steps
   all7=allclean
 
 #---------------------------------------------------------------------------------
@@ -158,16 +158,11 @@ reprod_mo_yr = reprod_mo_yr[-1,]
 yrcontrolabuns = melt(yearly_control_abundance, id.vars=c("year"))
 names(yrcontrolabuns) = c("year", "species", "abun")
 
-# TEMPORAL PERSISTENCE CAN BE BASED ON TWO METHODS:
-# (1) Identify Core species based on annual persistence, following Coyle et al. 2013 (American Naturalist)
+
+#Identify Core species based on annual persistence, following Coyle et al. 2013 (American Naturalist)
 corespecies = persistence[which(persistence$propyrs >= 0.666),1]
 intermediatespecies = persistence[which(persistence$propyrs > 0.333 & persistence$propyrs < 0.666),1]
 transientspecies = persistence[which(persistence$propyrs <= 0.333),1]
-
-# (2) Identify Core species based on annual AND seasonal persistence
-corespecies2 = persistence[which(persistence$propyrs >= 0.666 & persistence$propmos >= 0.666),1]
-transientspecies2 = persistence[which(persistence$propyrs <= 0.333 & persistence$propmos <= 0.333),1]
-intermediatespecies2 = persistence[-which(persistence$species %in% c(corespecies2, transientspecies2)),1]
 
 #Categorize species by feeding guild
 granivores = c("DO", "DM", "DS", "PB", "PP", "PF", "PH", "PI",
@@ -178,7 +173,6 @@ carnivores = c("OT", "OL")
 #add columns to persistence (for later plotting) for status and guild
 persistence$guild = rep(NA, nrow(persistence))
 persistence$status = rep(NA, nrow(persistence))
-persistence$status2 = rep(NA, nrow(persistence))
 
 for (row in 1:nrow(persistence)){
   if (persistence[row,]$species %in% granivores){ persistence[row,]$guild = "granivore" }
@@ -188,19 +182,11 @@ for (row in 1:nrow(persistence)){
   if (persistence[row,]$species %in% corespecies){ persistence[row,]$status = "core" }
   else if (persistence[row,]$species %in% intermediatespecies) { persistence[row,]$status = "intermediate" }
   else { persistence[row,]$status = "transient" }
-  
-  if (persistence[row,]$species %in% corespecies2){ persistence[row,]$status2 = "core" }
-  else if (persistence[row,]$species %in% intermediatespecies2) { persistence[row,]$status2 = "intermediate" }
-  else { persistence[row,]$status2 = "transient" }
 }
-
-#add a single value for proportion of years * average proportion of months
-persistence$oneval = persistence$propyrs * persistence$propmos
 
 #add status and guild to yrcontrolabuns
 yrcontrolabuns$guild = rep(NA, nrow(yrcontrolabuns))
 yrcontrolabuns$status = rep(NA, nrow(yrcontrolabuns))
-yrcontrolabuns$status2 = rep(NA, nrow(yrcontrolabuns))
 
 for (row in 1:nrow(yrcontrolabuns)){
   if (yrcontrolabuns[row,]$species %in% granivores){ yrcontrolabuns[row,]$guild = "granivore" }
@@ -210,10 +196,6 @@ for (row in 1:nrow(yrcontrolabuns)){
   if (yrcontrolabuns[row,]$species %in% corespecies){ yrcontrolabuns[row,]$status = "core" }
   else if (yrcontrolabuns[row,]$species %in% intermediatespecies) { yrcontrolabuns[row,]$status = "intermediate" }
   else { yrcontrolabuns[row,]$status = "transient" }
-  
-  if (yrcontrolabuns[row,]$species %in% corespecies2){ yrcontrolabuns[row,]$status2 = "core" }
-  else if (yrcontrolabuns[row,]$species %in% intermediatespecies2) { yrcontrolabuns[row,]$status2 = "intermediate" }
-  else { yrcontrolabuns[row,]$status2 = "transient" }
 }
 
 
@@ -235,9 +217,8 @@ for (i in 1:length(spplist)){
   
     # get a vector unique tags, then get a vector of distances moved for all recaptured individuals, by SPECIES
     tags = unique(spdata$tag)
-    print (paste(spplist[i], "has", length(tags), "individuals, and avg mass is:", 
-                 round(mean(spdata$wgt, na.rm=T),2), sep = " "))
-    print (paste(spplist[i], "avg mass is:", round(mean(spdata$wgt, na.rm=T),2), sep = " "))
+    print (paste(spplist[i], length(tags), sep = " "))
+    print (paste(spplist[i], round(mean(spdata$wgt, na.rm=T),2), sep = " "))
     mtrs = distance_moved(spdata, tags)
     meterlist[i] = list(mtrs)
     taglist[i] = list(tags)
@@ -264,14 +245,10 @@ persistence = cbind(persistence, breakpoint, modal_distance, mean_distance, max_
 
 
 #---------------------------------- From this point on, the analysis will be separated by foraging guild
-#------------------------ Granivores, Folivores, and Carnivores (on METHOD 1)
-
-#check for differences when all the guilds are lumped
-coreall = unlist(meterlist[which(names(meterlist) %in% corespecies)], use.names=F)
-intermedall = unlist(meterlist[which(names(meterlist) %in% intermediatespecies)], use.names=F)
-transall = unlist(meterlist[which(names(meterlist) %in% transientspecies)], use.names=F)
+#------------------------ Granivores, Folivores, and Carnivores
 
 # concatenate core guild data - used to ask if these species behave differently from others
+# Check that the definition of "core" is still the same, need to change this chunk of code by hand, if necessary
 coremeters = meterlist[which(names(meterlist) %in% corespecies)]
 coregran = unlist(coremeters[which(names(coremeters) %in% granivores)], use.names=F) 
 corefoli = unlist(coremeters[which(names(coremeters) %in% folivores)], use.names=F)
@@ -285,29 +262,14 @@ corecarn = unlist(coremeters[which(names(coremeters) %in% carnivores)], use.name
   corefoli_brkpt = expm1(mean(log1p(corefoli)) + sd(log1p(corefoli)))
   corecarn_brkpt = expm1(mean(log1p(corecarn)) + sd(log1p(corecarn)))
 
-
-#------------------------ Granivores, Folivores, and Carnivores (on METHOD 2)
-
-# concatenate core guild data - used to ask if these species behave differently from others
-# Check that the definition of "core" is still the same, need to change this chunk of code by hand, if necessary
-coremeters2 = meterlist[which(names(meterlist) %in% corespecies2)]
-coregran2 = unlist(coremeters2[which(names(coremeters2) %in% granivores)], use.names=F) 
-corefoli2 = unlist(coremeters2[which(names(coremeters2) %in% folivores)], use.names=F)
-corecarn2 = unlist(coremeters2[which(names(coremeters2) %in% carnivores)], use.names=F)
-
-# find breakpoints to use in MARK data structure for future analyses
-coregran_brkpt2 = expm1(mean(log1p(coregran2)) + sd(log1p(coregran2)))
-corefoli_brkpt2 = expm1(mean(log1p(corefoli2)) + sd(log1p(corefoli2)))
-corecarn_brkpt2 = expm1(mean(log1p(corecarn2)) + sd(log1p(corecarn2)))
-
-
 #concatenate data for granivores only, and 
 #add in the transition, modal, mean, and max distances traveled by each species for later plotting
 graniv_persist = persistence[which(persistence$species %in% granivores),] 
+graniv_persist$oneval = graniv_persist$propyrs * graniv_persist$propmos
 
 
 #----------------------------------------------------------------------
-#             Get MARK capture histories for granivores - Uses METHOD 1
+#             Get MARK capture histories for granivores
 #----------------------------------------------------------------------
 spplist = granivores
 periods = c(130:380) # all sampling periods 1989-2009
@@ -350,9 +312,6 @@ rmmark = MARK[which(MARK[,3]=="RM"),]
 transmark = MARK[which(MARK[,3] %in% transientspecies),]
   transmark[,3] = "TR"
   levels(transmark[,3]) = "TR"
-transmark2 = MARK[which(MARK[,3] %in% transientspecies2),]
-  transmark2[,3] = "TR2"
-  levels(transmark2[,3]) = "TR2"
 
 write.table(domark, file = "mark_datafiles//do_mark.txt", sep=" ", row.names = F)
 write.table(dmmark, file = "mark_datafiles//dm_mark.txt", sep=" ", row.names = F)
@@ -364,12 +323,11 @@ write.table(pemark, file = "mark_datafiles//pe_mark.txt", sep=" ", row.names = F
 write.table(pmmark, file = "mark_datafiles//pm_mark.txt", sep=" ", row.names = F)
 write.table(rmmark, file = "mark_datafiles//rm_mark.txt", sep=" ", row.names = F)
 write.table(transmark, file = "mark_datafiles//trans_mark.txt", sep=" ", row.names = F)
-write.table(transmark2, file = "mark_datafiles//trans_mark2.txt", sep=" ", row.names = F)
 
 #write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
 
 
-#--------------- Get MARK capture histories for folivores - METHOD 1
+#--------------- Get MARK capture histories for folivores
 #------------------------------
 spplist = folivores
 periods = c(130:380) #1989-2009
@@ -410,7 +368,7 @@ write.table(somark, file = "mark_datafiles//so_mark.txt", sep=" ", row.names = F
 #write.table(MARK, file = "mark_datafiles//foli_mark.inp", row.names = F, col.names = F, quote = F)
 
 
-#-----------------Get MARK capture histories for carnivores - METHOD 1
+#-----------------Get MARK capture histories for carnivores
 #------------------------------
 spplist = carnivores
 periods = c(130:380) #1989-2009
@@ -522,9 +480,6 @@ for (f in 1:length(rfiles)){
   outcount = outcount + 1
 }
 
-#change "AO" to "NAO" to match naming schema - was shortened in MARK_analyses.r
-estimates[which(estimates$species == "AO"),1] = "NAO" 
-
 #assign all transient species the same MARK estimates (for now)
 estimates2 = estimates[16,]
 transgran = granivores[which(granivores %in% transientspecies)]
@@ -532,62 +487,26 @@ for (i in 1:length(transgran)){
   estimates2$species = transgran[i]
   estimates=rbind(estimates, estimates2)
 }
+#change "AO" to "NAO" to match naming schema - shortened in MARK_analyses.r
+estimates[which(estimates$species == "AO"),1] = "NAO" 
 
 # merge GRANIVORE data for analysis and pca plots 
 mgran = merge(graniv_persist, estimates)
-mgran2 = merge(mgran, species_table, by="species")
 
-keepcols = c("species", "propyrs", "maxabun", "meanabun","reprod", "bodysize", 
-             "breakpoint", "modal_distance", "oneval", "S", "p", "Psi")
-keepdesc = c("species", "family", "guild", "status", "status2")
-
-pcagraniv = mgran[,names(mgran) %in% keepcols]
-catgraniv = mgran[,names(mgran) %in% keepdesc]
+pcagraniv = mgran[,c(1, 2, 5, 6, 7, 10, 11, 15, 17, 19)]
+catgraniv = mgran[,c(1, 8, 9)]
 rownames(pcagraniv) = pcagraniv$species
 pcagraniv = pcagraniv[,-1]
 
 # merge ALL data for analysis and pca plots
 mall = merge(persistence, estimates, by = c("species", "species"))
-mall = merge(mall, species_table, by="species")
-names(mall)[22] = "family"
+mall = merge(mall, species_table)
 
-pcadat = mall[,names(mall) %in% keepcols]
-catdat = mall[,names(mall) %in% keepdesc]
+pcadat = mall[,c(1, 2, 5, 6, 7, 10, 11, 14, 16, 18)]
+catdat = mall[,c(1, 8, 9, 20)]
 rownames(pcadat) = pcadat$species
 pcadat = pcadat[,-1]
 
-#save mall for later analyses
-row.names(mall) = c("Baiomys_taylori", "Dipodomys_merriami", "Dipodomys_ordii", "Dipodomys_spectabilis",
-                    "Neotoma_albigula", "Onychomys_leucogaster", "Onychomys_torridus", "Chaetodipus_baileyi",
-                    "Peromyscus_eremicus", "Perognathus_flavus", "Chaetodipus_hispidus", "Chaetodipus_intermedius",
-                    "Peromyscus_leucopus", "Peromyscus_maniculatus", "Chaetodipus_penicillatus", 
-                    "Reithrodontomys_fulvescens", "Reithrodontomys_megalotis", "Reithrodontomys_montanus",
-                    "Sigmodon_fulviventer", "Sigmodon_hispidus", "Sigmodon_ochrognathus")
-write.csv(mall, "traits.csv")
-
-#---------------------------------------------------------------------------------
-#                                 summarize results
-#---------------------------------------------------------------------------------
-
-c = mgran[which(mgran$status == "core"),]
-i = mgran[which(mgran$status == "intermediate"),]
-t = mgran[which(mgran$status == "transient"),]
-
-print (paste("median breakpoint for core:", round(median(c$breakpoint),2)))
-print (paste("median breakpoint for intermediate:", round(median(i$breakpoint),2)))
-print (paste("median breakpoint for transient:", round(median(t$breakpoint),2)))
-
-print (paste("mean Psi for core:", round(mean(c$Psi),2)))
-print (paste("mean Psi for intermediate:", round(mean(i$Psi),2)))
-print (paste("mean Psi for transient:", round(mean(t$Psi),2)))
-
-print (paste("mean p for core:", round(mean(c$p),2)))
-print (paste("mean p for intermediate:", round(mean(i$p),2)))
-print (paste("mean p for transient:", round(mean(t$p),2)))
-
-print (paste("mean S for core:", round(mean(c$S),2)))
-print (paste("mean S for intermediate:", round(mean(i$S),2)))
-print (paste("mean S for transient:", round(mean(t$S),2)))
 
 #---------------------------------------------------------------------------------
 #                                  plot results
@@ -608,22 +527,16 @@ trait_pc = prcomp(zscore)
 
 #Use ggplot biplot to color by grouped categories
 toCol = catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status"]
-toCol2 =  catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status2"]
 
 #Label species names and clades, circles cover normal distribuiton of groups
 ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
   theme(text = element_text(size=20))
 
-#Label species names and clades, circles cover normal distribuiton of groups
-ggbiplot(trait_pc, groups=toCol2, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
 
 #------------------------ PCA biplot for all the species
 
 # Standardize the matrix to correct for different units by subtracting the
 # means and dividing by sd
-names(pcadat) <- c("persistence", "mean_abundance", "max_abundance", "fecundity", "mass", 
-                   "persistence_moyr", "benchmark", "modal_distance", "Phi", "p", "Psi")
 zscore <- apply(pcadat, 2, function(x) {
   y <- (x - mean(x))/sd(x)
   return(y)
@@ -631,67 +544,25 @@ zscore <- apply(pcadat, 2, function(x) {
 rownames(zscore) <- rownames(pcadat)
 
 #run pca analysis
-trait_pc<-prcomp(zscore[,c(1,2,4,7,9,10,11)])
+trait_pc<-prcomp(zscore)
 
 #Use dev libary to ggplot PCA, color by clades
 #Try the ggplot biplot to color by clades (or later, behavioral roles)
 toCol = catdat[catdat$species %in% rownames(trait_pc$x),"status"]
-# toCol2 = catdat[catdat$species %in% rownames(trait_pc$x),"status2"] #uses months + years for designation
 toColGuild = catdat[catdat$species %in% rownames(trait_pc$x),"guild"]
 toColFam = catdat[catdat$species %in% rownames(trait_pc$x),"family"]
 
 #Label species names and clades, ellipses cover normal distribuiton of temporal groups
-# FIGURE 4
-ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), 
-         ellipse=TRUE, label.size = 3, varname.size = 4) + 
-  theme_classic() + guides(color=guide_legend(title="")) +
-  theme(text = element_text(size=14), legend.direction = "horizontal", 
-        legend.position = "bottom", legend.box = "vertical") + 
-  scale_y_continuous(limits=c(-2,3)) + scale_x_continuous(limits=c(-2,3))
-
-#Label species names and clades, circles cover normal distribuiton of families
-# FIGURE A3
-ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), 
-         ellipse=TRUE, label.size = 3, varname.size = 4) + 
-  theme_classic() + guides(color=guide_legend(title="")) +
-  theme(text = element_text(size=14), legend.direction = "horizontal", 
-        legend.position = "bottom", legend.box = "vertical") + 
-  scale_y_continuous(limits=c(-2,3)) + scale_x_continuous(limits=c(-2,3))
-
-# #Label species names and clades, ellipses cover normal distribuiton of temporal groups
-# ggbiplot(trait_pc, groups=toCol2, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-#   theme(text = element_text(size=20))
+ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
 
 #Label species names and clades, circles cover normal distribuiton of guilds
-# ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
-#   theme(text = element_text(size=20))
+ggbiplot(trait_pc, groups=toColGuild, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
 
-
-# Figure A4. Survival-Movement tradeoffs
-zscoredf = data.frame(zscore)
-zscoredf$status = catdat$status
-zscoredf$family = catdat$family
-
-PhiPsi = ggplot(zscoredf, aes(Psi, Phi)) + geom_point(aes(shape=status, col=status, size=2)) + 
-  stat_smooth(method="lm", fill="gray80") + 
-  theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
-
-PhiBench = ggplot(zscoredf, aes(benchmark, Phi)) + geom_point(aes(shape=status, col=status, size=2)) + 
-  stat_smooth(method="lm", fill="gray80") + 
-  theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
-
-grid.arrange(PhiBench, PhiPsi, nrow = 1)
-
-# Figure A5
-PsiReprod = ggplot(zscoredf, aes(Psi, fecundity)) + geom_point(aes(shape=status, col=status, size=2)) + 
-  stat_smooth(method="lm", fill="gray80") + 
-  theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
-
-BenchReprod = ggplot(zscoredf, aes(benchmark, fecundity)) + geom_point(aes(shape=status, col=status, size=2)) + 
-  stat_smooth(method="lm", fill="gray80") + 
-  theme_classic() + theme(text = element_text(size=14)) + theme(legend.position = "none")
-
-grid.arrange(PsiReprod, BenchReprod, nrow = 1)
+#Label species names and clades, circles cover normal distribuiton of families
+ggbiplot(trait_pc, groups=toColFam, labels=rownames(trait_pc$x), ellipse=TRUE, label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
 
 
 #------------------------ plot the Mark results for all the species
@@ -699,29 +570,25 @@ grid.arrange(PsiReprod, BenchReprod, nrow = 1)
 # Use only the real estimates, where transient granivores were lumped
 est = estimates[c(1:16),]
 
-# Add status, Method 1 and Method 2
+# Add status 
 toStatus = catdat[catdat$species %in% est$species,"status"]
 toStatus = append(toStatus, "transient") #since TR is a group instead of an actual "species"
-toStatus2 = catdat[catdat$species %in% est$species,"status2"]
-toStatus2 = append(toStatus2, "transient") #since TR is a group instead of an actual "species"
 
-est = cbind(est, toStatus)
-est = cbind(est, toStatus2)
+est = cbind(est,toStatus)
 
-
-SbyPsi = ggplot(est, aes(Psi, S, col=toStatus2)) + geom_point(size = 3) + theme_classic() + 
+SbyPsi = ggplot(est, aes(Psi, S, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
   theme(text = element_text(size=20)) + scale_colour_hue(guide = "none") +
   xlab("Long-distance movement probability") + ylab("Survival probability") + 
   geom_errorbar(aes(x = Psi, ymin = S - S_se, ymax = S + S_se), width=0.01) +
   geom_errorbarh(aes(xmin = Psi - Psi_se, xmax = Psi + Psi_se))
 
-Sbyp = ggplot(est, aes(p, S, col=toStatus2)) + geom_point(size = 3) + theme_classic() + 
+Sbyp = ggplot(est, aes(p, S, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
   theme(text = element_text(size=20)) + scale_colour_hue(guide = "none")+
   xlab("recapture probability") + ylab("Survival probability") + 
   geom_errorbar(aes(x = p, ymin = S - S_se, ymax = S + S_se), width=0.01) +
   geom_errorbarh(aes(xmin = p - p_se, xmax = p + p_se)) + ggtitle("all species")
 
-Psibyp =  ggplot(est, aes(Psi, p, col=toStatus2)) + geom_point(size = 3) + theme_classic() + 
+Psibyp =  ggplot(est, aes(Psi, p, col=toStatus)) + geom_point(size = 3) + theme_classic() + 
   theme(text = element_text(size=20)) + scale_colour_hue(guide = "none") +
   xlab("long-distance movement probability") + ylab("recapture probability") + 
   geom_errorbar(aes(x = Psi, ymin = p - p_se, ymax = p + p_se), width=0.01) +
@@ -749,7 +616,8 @@ ggplot(yrcontrolabuns, aes(x=year, y=abun, group=species)) +
 
 #------------------------- plot monthly reproduction
 ggplot(avg_mo_reprod, aes(month, proprepro)) + geom_point() + theme_bw() +
-  geom_line() + facet_wrap(~species)
+  geom_line() + facet_wrap(~species) + scale_x_continuous(limit=c(1,12), breaks=c(1:12)) +
+  ylab("proportion reproductive")
 
 
 #------------------------- plot meters traveled by all species
@@ -862,10 +730,6 @@ ggplot(mall, aes(bodysize, Psi)) + geom_point(size = 2) + stat_smooth(method = "
 ggplot(mall, aes(bodysize, S)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
   theme(text = element_text(size=20))
 
-lm2 = lm(Psi~family, data = mall)
-lm3 = lm(S~family, data = mall)
-lm4 = lm(meanabun~family, data=mall)
-lm5 = lm(propyrs~family, data=mall)
 
 #-------------------------- Output summary info for all species
 core_m = mall[which(mall$species %in% corespecies),]
@@ -967,37 +831,6 @@ points(c(0:3), table(OTirep$num_reprod)/sum(table(OTirep$num_reprod)), type = "b
 points(c(0:2), table(OLirep$num_reprod)/sum(table(OLirep$num_reprod)), type = "b", pch = 15, col = "black")
 
 dev.off()
-
-
-#-------------------------- Boxplots for all species
-ggplot(mall, aes(status, S)) + geom_boxplot() + theme_classic()
-ggplot(mall, aes(status, p)) + geom_boxplot() + theme_classic()
-ggplot(mall, aes(status, Psi)) + geom_boxplot() + theme_classic()
-ggplot(mall, aes(status, bodysize)) + geom_boxplot() + theme_classic()
-ggplot(mall, aes(status, modal_distance)) + geom_boxplot() + theme_classic()
-ggplot(mall, aes(status, breakpoint)) + geom_boxplot() + theme_classic()
-ggplot(mall, aes(status, reprod)) + geom_boxplot() + theme_classic()
-ggplot(mall, aes(status, meanabun)) + geom_boxplot() + theme_classic()
-
-
-# --------------------------------- plot the movement histograms for status groups
-coregrp = ggplot(data.frame(coreall), aes(coreall)) + 
-  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
-  scale_y_continuous(labels = percent_format(), limits=c(0,0.30)) +
-  theme_classic() + xlab("distance between recaptures") + ggtitle("core") + ylab("percent") +
-  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-intermedgrp = ggplot(data.frame(intermedall), aes(intermedall)) + 
-  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
-  scale_y_continuous(labels = percent_format(), limits=c(0,0.30)) +
-  theme_classic() + xlab("distance between recaptures") + ggtitle("intermediate")  + ylab("percent") +
-  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-transgrp = ggplot(data.frame(transall), aes(transall)) + 
-  geom_histogram(binwidth=6, aes(y = ..count../sum(..count..))) + 
-  scale_y_continuous(labels = percent_format(), limits=c(0,0.30))+
-  theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + ylab("percent") + 
-  scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=20))
-
-grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
 
 
 # #------------------------------------------ FIGURE - for ESA talk 
