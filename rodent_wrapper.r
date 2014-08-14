@@ -518,8 +518,32 @@ transgrp = ggplot(data.frame(transall), aes(transall)) +
   theme_classic() + xlab("distance between recaptures") + ggtitle("transient") + ylab("percent") + 
   scale_x_continuous(breaks = seq(0,550, by=100), limits = c(0,550)) + theme(text = element_text(size=14))
 
-grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
+  grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
 dev.off()
+
+
+#------------------------ FIGURE A1 - plot histograms of each of the species movements
+splist = names(meterlist)
+breaks = c(0, seq(3,600, by=6))
+i = 1
+plot = list() 
+
+for (i in 1:length(splist)){
+  df = data.frame(meterlist[i])
+  names(df) = "spp"
+  plot[[i]] = ggplot(df, aes(spp)) + geom_histogram(breaks=breaks, position="dodge") + theme_classic() + ggtitle(splist[i]) +
+    theme(text = element_text(size=20)) + xlab("recapture distance")
+  i = i + 1
+}
+
+#core 
+grid.arrange(plot[[3]], plot[[10]], plot[[21]], plot[[12]], plot[[13]], 
+             plot[[8]], plot[[4]], plot[[7]], plot[[1]], plot[[11]], ncol = 4)
+#intermediate 
+grid.arrange(plot[[9]], plot[[2]], plot[[5]], plot[[16]], ncol = 4)
+#transient 
+grid.arrange(plot[[15]], plot[[19]], plot[[20]], plot[[14]], plot[[6]], 
+             plot[[17]], plot[[17]], ncol = 4)
 
 
 #--------------------------- Figure A4. Survival-Movement tradeoffs
@@ -614,29 +638,6 @@ modal_all = ggplot(persistence, aes(propyrs, modal_distance)) + theme_classic() 
 grid.arrange(modal_dist, modal_all, nrow = 1)
 
 
-
-#------------------------ plot histograms of each of the species movements
-splist = names(meterlist)
-breaks = c(0, seq(3,600, by=6))
-i = 1
-plot = list() 
-
-for (i in 1:length(splist)){
-  df = data.frame(meterlist[i])
-  names(df) = "spp"
-  plot[[i]] = ggplot(df, aes(spp)) + geom_histogram(breaks=breaks, position="dodge") + theme_classic() + ggtitle(splist[i]) +
-    theme(text = element_text(size=20)) + xlab("recapture distance")
-  i = i + 1
-}
-
-#core histograms
-grid.arrange(plot[[3]], plot[[10]], plot[[21]], plot[[12]], plot[[13]], 
-             plot[[8]], plot[[4]], plot[[7]], plot[[1]], plot[[11]], ncol = 4)
-#intermediate histograms
-grid.arrange(plot[[9]], plot[[2]], plot[[5]], plot[[16]], ncol = 4)
-#transient histograms
-grid.arrange(plot[[15]], plot[[19]], plot[[20]], plot[[14]], plot[[6]], 
-             plot[[17]], plot[[17]], ncol = 4)
 
 
 #-------------------------- Comparing the CMR analysis estimates
