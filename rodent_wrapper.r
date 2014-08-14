@@ -24,7 +24,7 @@ source("movement_fxns.R")
 all = read.table('rawdata/all_1980-2009.txt', sep = ',', header = TRUE)
 
 #import species information
-species_table = read.csv('rawdata/species.csv', sep = ',', header = TRUE)
+species_table = read.csv('rawdata/species_table.csv', sep = ',', header = TRUE)
 
 #import cleaned data, if next step (clean up the data) has previously been run
 allclean = read.csv('rawdata/cleaned_1989-2009.csv', sep = ',', header = TRUE)
@@ -392,11 +392,11 @@ estimates[which(estimates$species == "AO"),1] = "NAO"
 # merge ALL data for analysis and pca plots
 mall = merge(persistence, estimates, by = c("species", "species"))
 mall = merge(mall, species_table, by="species")
-names(mall)[22] = "family"
+names(mall)[22] = "sciname"
 
 keepcols = c("species", "propyrs", "meanabun", "reprod", 
              "breakpoint", "S", "p", "Psi")
-keepdesc = c("species", "family", "guild", "status", "status2")
+keepdesc = c("species", "family", "guild", "status")
 
 pcadat = mall[,names(mall) %in% keepcols]
 catdat = mall[,names(mall) %in% keepdesc]
@@ -404,12 +404,7 @@ rownames(pcadat) = pcadat$species
 pcadat = pcadat[,-1]
 
 #save mall for later analyses
-row.names(mall) = c("Baiomys_taylori", "Dipodomys_merriami", "Dipodomys_ordii", "Dipodomys_spectabilis",
-                    "Neotoma_albigula", "Onychomys_leucogaster", "Onychomys_torridus", "Chaetodipus_baileyi",
-                    "Peromyscus_eremicus", "Perognathus_flavus", "Chaetodipus_intermedius",
-                    "Peromyscus_leucopus", "Peromyscus_maniculatus", "Chaetodipus_penicillatus", 
-                    "Reithrodontomys_fulvescens", "Reithrodontomys_megalotis", "Reithrodontomys_montanus",
-                    "Sigmodon_fulviventer", "Sigmodon_hispidus", "Sigmodon_ochrognathus")
+row.names(mall) = mall$sciname
 write.csv(mall, "traits.csv")
 
 #---------------------------------------------------------------------------------
@@ -460,7 +455,6 @@ trait_pc<-prcomp(zscore)
 #Use dev libary to ggplot PCA, color by clades
 #Try the ggplot biplot to color by clades (or later, behavioral roles)
 toCol = catdat[catdat$species %in% rownames(trait_pc$x),"status"]
-toCol2 = catdat[catdat$species %in% rownames(trait_pc$x),"status2"]
 toColGuild = catdat[catdat$species %in% rownames(trait_pc$x),"guild"]
 toColFam = catdat[catdat$species %in% rownames(trait_pc$x),"family"]
 
@@ -483,7 +477,7 @@ ggsave("Fig4-PCA_status.png", dpi=600, height=5.4, width=7, units="in")
   theme_classic() + guides(color=guide_legend(title="")) +
   theme(text = element_text(size=14), legend.direction = "horizontal", 
           legend.position = "bottom", legend.box = "vertical") + 
-    scale_y_continuous(limits=c(-2,3)) + scale_x_continuous(limits=c(-2,3))
+    scale_y_continuous(limits=c(-3,3)) + scale_x_continuous(limits=c(-3,3))
 
 ggsave("FigA3-PCA_family.png", dpi=600, height=5.4, width=7, units="in")
 
@@ -607,6 +601,24 @@ Psibyp =  ggplot(estimates, aes(Psi, p, col=toStatus)) + geom_point(size = 3) + 
 dev.off
 
 
+#--------------------- Results for the manuscript text
+lm2 = lm(Psi~family, data = mall)
+lm3 = lm(S~family, data = mall)
+lm4 = lm(meanabun~family, data=mall)
+lm5 = lm(propyrs~family, data=mall)
+
+lm6 = lm(S~Psi, data=mall)
+
+zmodal = (mall$modal_distance - mean(mall$modal_distance))/sd(mall$modal_distance)
+cbind(zscore,zmodal)
+
+lm7 = lm(zmodal~persistence, data.frame(zscore))
+lm8 = lm(fecundity~Psi, data.frame(zscore))
+
+
+
+
+
 
 
 #------------------------- plot abundance for all species across timeseries
@@ -636,8 +648,6 @@ modal_all = ggplot(persistence, aes(propyrs, modal_distance)) + theme_classic() 
   theme(text = element_text(size=20))
 
 grid.arrange(modal_dist, modal_all, nrow = 1)
-
-
 
 
 #-------------------------- Comparing the CMR analysis estimates
@@ -688,52 +698,7 @@ ggplot(mall, aes(bodysize, Psi)) + geom_point(size = 2) + stat_smooth(method = "
 ggplot(mall, aes(bodysize, S)) + geom_point(size = 2) + stat_smooth(method = "lm") + theme_classic() + 
   theme(text = element_text(size=20))
 
-lm2 = lm(Psi~family, data = mall)
-lm3 = lm(S~family, data = mall)
-lm4 = lm(meanabun~family, data=mall)
-lm5 = lm(propyrs~family, data=mall)
 
-#-------------------------- Output summary info for all species
-core_m = mall[which(mall$species %in% corespecies),]
-inter_m = mall[which(mall$species %in% intermediatespecies),]
-trans_m = mall[which(mall$species %in% transientspecies),]
-
-mean(core_m$breakpoint)
-mean(inter_m$breakpoint)
-mean(trans_m$breakpoint)
-
-mean(core_m$Psi)
-mean(inter_m$Psi)
-mean(trans_m$Psi)
-
-mean(core_m$p)
-mean(inter_m$p)
-mean(trans_m$p)
-
-mean(core_m$S)
-mean(inter_m$S)
-mean(trans_m$S)
-
-#-------------------------- Output summary info for GRANIVORES only
-core_m = mgran[which(mgran$species %in% corespecies),]
-inter_m = mgran[which(mgran$species %in% intermediatespecies),]
-trans_m = mgran[which(mgran$species %in% transientspecies),]
-
-mean(core_m$breakpoint)
-mean(inter_m$breakpoint)
-mean(trans_m$breakpoint)
-
-mean(core_m$Psi)
-mean(inter_m$Psi)
-mean(trans_m$Psi)
-
-mean(core_m$p)
-mean(inter_m$p)
-mean(trans_m$p)
-
-mean(core_m$S)
-mean(inter_m$S)
-mean(trans_m$S)
 
 
 #-------------------------- Reproduction Figures
