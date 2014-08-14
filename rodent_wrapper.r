@@ -309,9 +309,9 @@ graniv_persist = persistence[which(persistence$species %in% granivores),]
 
 
 #----------------------------------------------------------------------
-#             Get MARK capture histories for granivores - Uses METHOD 1
+#             Get MARK capture histories for all species - Uses METHOD 1
 #----------------------------------------------------------------------
-spplist = granivores
+spplist = c(granivores, folivores, carnivores)
 periods = c(130:380) # all sampling periods 1989-2009
 all_excl = c(5, 7, 10, 16, 23, 24) 
 krat_excl = c(5, 7, 10, 16, 23, 24, 3, 6, 13, 15, 18, 19, 20, 21)
@@ -324,87 +324,20 @@ for (i in 1:length(spplist)){
   if (spplist[i] %in% list("DM", "DS", "DO")) { exclosures = krat_excl} 
   else { exclosures = all_excl} 
   
+  #use different benchmarks based on feeding guild (since home range size differs based on food needs)
+  if (spplist[i] %in% list(granivores)){ benchmark = coregran_brkpt }
+  else if(spplist[i] %in% list(folivores)){ benchmark = corefoli_brkpt }
+  else { benchmark = corecarn_brkpt }
+  
   #the first species begins the new data matrix for MARK
   if (i == 1) {
-  MARK = noplacelikehome(spdata, periods, exclosures, coregran_brkpt)
+  MARK = noplacelikehome(spdata, periods, exclosures, benchmark)
   }
   
   #all subsequent species are appended onto the end of the existing MARK data matrix
   else {
-  nextMARK = noplacelikehome(spdata, periods, exclosures, coregran_brkpt)
+  nextMARK = noplacelikehome(spdata, periods, exclosures, benchmark)
   MARK = rbind(MARK, nextMARK)
-  }
-}
-
-MARK = as.data.frame(MARK[,1:3])
-names(MARK) = c("ch", "freq", "species")
-
-#separate into files based on species
-for (s in spplist){
-  data = MARK[which(MARK[,3] == spplist[s]),]
-  if(nrow(data) > 10){
-    write.table(data, file = paste("mark_datafiles//", spplist[s], "_mark.txt", sep=""), sep=" ", row.names=F)
-  }
-}
-
-
-#--------------- Get MARK capture histories for folivores - METHOD 1
-#------------------------------
-spplist = folivores
-periods = c(130:380) #1989-2009
-all_excl = c(5, 7, 10, 16, 23, 24) 
-
-for (i in 1:length(spplist)){
-  
-  #subset species data, for each species in turn
-  spdata = subset(all7, species == spplist[i])
-   exclosures = all_excl
-  
-  #the first species begins the new data matrix for MARK
-  if (i == 1) {
-    MARK = noplacelikehome(spdata, periods, exclosures, corefoli_brkpt)
-  }
-  
-  #all subsequent species are appended onto the end of the existing MARK data matrix
-  else {
-    nextMARK = noplacelikehome(spdata, periods, exclosures, corefoli_brkpt)
-    MARK = rbind(MARK, nextMARK)
-  }
-}
-
-MARK = as.data.frame(MARK[,1:3])
-names(MARK) = c("ch", "freq", "species")
-
-#separate into files based on species
-for (s in spplist){
-  data = MARK[which(MARK[,3] == spplist[s]),]
-  if(nrow(data) > 10){
-    write.table(data, file = paste("mark_datafiles//", spplist[s], "_mark.txt", sep=""), sep=" ", row.names=F)
-  }
-}
-
-
-#-----------------Get MARK capture histories for carnivores - METHOD 1
-#------------------------------
-spplist = carnivores
-periods = c(130:380) #1989-2009
-all_excl = c(5, 7, 10, 16, 23, 24) 
-
-for (i in 1:length(spplist)){
-  
-  #subset species data, for each species in turn
-  spdata = subset(all7, species == spplist[i])
-  exclosures = all_excl
-  
-  #the first species begins the new data matrix for MARK
-  if (i == 1) {
-    MARK = noplacelikehome(spdata, periods, exclosures, corecarn_brkpt)
-  }
-  
-  #all subsequent species are appended onto the end of the existing MARK data matrix
-  else {
-    nextMARK = noplacelikehome(spdata, periods, exclosures, corecarn_brkpt)
-    MARK = rbind(MARK, nextMARK)
   }
 }
 
