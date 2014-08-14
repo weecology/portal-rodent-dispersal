@@ -425,7 +425,7 @@ for (s in spplist){
 #-----------------------------------------------------------------------------------
 # this code only uses the most recently generated MARK data table, 
 # so would need to run separately for granivores, folivores, and carnivores 
-spplist = unique(MARK[,2])
+spplist = unique(MARK[,3])
 TableDat = data.frame("species"=1, "numindiv"=1, "numindivrecap"=1, "nocaps"=1, "norecaps"=1)
 
 for (i in 1:length(spplist)){
@@ -507,19 +507,9 @@ for (f in 1:length(rfiles)){
 #change "AO" to "NAO" to match naming schema - was shortened in MARK_analyses.r
 estimates[which(estimates$species == "AO"),1] = "NAO" 
 
-
-# merge GRANIVORE data for analysis and pca plots 
-mgran = merge(graniv_persist, estimates)
-mgran2 = merge(mgran, species_table, by="species")
-
-keepcols = c("species", "propyrs", "maxabun", "reprod", "bodysize", 
-             "breakpoint", "modal_distance", "oneval", "S", "p", "Psi")
-keepdesc = c("species", "family", "guild", "status", "status2")
-
-pcagraniv = mgran[,names(mgran) %in% keepcols]
-catgraniv = mgran[,names(mgran) %in% keepdesc]
-rownames(pcagraniv) = pcagraniv$species
-pcagraniv = pcagraniv[,-1]
+#---------------------------------------------------------------------------------
+#       compare medians among groups and PCA plot results
+#---------------------------------------------------------------------------------
 
 # merge ALL data for analysis and pca plots
 mall = merge(persistence, estimates, by = c("species", "species"))
@@ -534,7 +524,7 @@ pcadat = pcadat[,-1]
 #save mall for later analyses
 row.names(mall) = c("Baiomys_taylori", "Dipodomys_merriami", "Dipodomys_ordii", "Dipodomys_spectabilis",
                     "Neotoma_albigula", "Onychomys_leucogaster", "Onychomys_torridus", "Chaetodipus_baileyi",
-                    "Peromyscus_eremicus", "Perognathus_flavus", "Chaetodipus_hispidus", "Chaetodipus_intermedius",
+                    "Peromyscus_eremicus", "Perognathus_flavus", "Chaetodipus_intermedius",
                     "Peromyscus_leucopus", "Peromyscus_maniculatus", "Chaetodipus_penicillatus", 
                     "Reithrodontomys_fulvescens", "Reithrodontomys_megalotis", "Reithrodontomys_montanus",
                     "Sigmodon_fulviventer", "Sigmodon_hispidus", "Sigmodon_ochrognathus")
@@ -543,84 +533,35 @@ write.csv(mall, "traits.csv")
 #---------------------------------------------------------------------------------
 #                                 summarize results
 #---------------------------------------------------------------------------------
-
-c = mgran[which(mgran$status == "core"),]
-i = mgran[which(mgran$status == "intermediate"),]
-t = mgran[which(mgran$status == "transient"),]
-
-print (paste("median breakpoint for core:", round(median(c$breakpoint),2)))
-print (paste("median breakpoint for intermediate:", round(median(i$breakpoint),2)))
-print (paste("median breakpoint for transient:", round(median(t$breakpoint),2)))
-
-print (paste("mean Psi for core:", round(mean(c$Psi),2)))
-print (paste("mean Psi for intermediate:", round(mean(i$Psi),2)))
-print (paste("mean Psi for transient:", round(mean(t$Psi),2)))
-
-print (paste("mean p for core:", round(mean(c$p),2)))
-print (paste("mean p for intermediate:", round(mean(i$p),2)))
-print (paste("mean p for transient:", round(mean(t$p),2)))
-
-print (paste("mean S for core:", round(mean(c$S),2)))
-print (paste("mean S for intermediate:", round(mean(i$S),2)))
-print (paste("mean S for transient:", round(mean(t$S),2)))
-
-#---------------------------------------------------------------------------------
-#                                  plot results
-#---------------------------------------------------------------------------------
-
-#------------------------ PCA biplot of species traits and estimates
-
-# Standardize the matrix to correct for different units by subtracting the
-# means and dividing by sd
-zscore <- apply(pcagraniv, 2, function(x) {
-  y <- (x - mean(x))/sd(x)
-  return(y)
-  })
-rownames(zscore) <- rownames(pcagraniv)
-
-#run pca analysis
-trait_pc = prcomp(zscore)
-
-#Use ggplot biplot to color by grouped categories
-toCol = catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status"]
-toCol2 =  catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status2"]
-
-#Label species names and clades, circles cover normal distribuiton of groups
-ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
-
-#Label species names and clades, circles cover normal distribuiton of groups
-ggbiplot(trait_pc, groups=toCol2, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
-  theme(text = element_text(size=20))
-
-#------------------------ PCA biplot and means for all the species
-
+#------------------------ compare medians for all the species
 
 c = mall[which(mall$status == "core"),]
 i = mall[which(mall$status == "intermediate"),]
 t = mall[which(mall$status == "transient"),]
 nc = mall[which(mall$status %in% c("intermediate", "transient")),]
 
-print (paste("median breakpoint for core:", round(median(c$breakpoint),2)))
-print (paste("median breakpoint for non-core:", round(median(nc$breakpoint),2)))
+print (paste("median breakpoint for core:", round(median(c$breakpoint),2), "range", range(c$breakpoint)[1],"to",range(c$breakpoint)[2]))
+print (paste("median breakpoint for non-core:", round(median(nc$breakpoint),2), "range",  range(nc$breakpoint)[1], "to", range(nc$breakpoint)[2]))
 print (paste("median breakpoint for intermediate:", round(median(i$breakpoint),2)))
 print (paste("median breakpoint for transient:", round(median(t$breakpoint),2)))
 
-print (paste("mean Psi for core:", round(mean(c$Psi),2)))
-print (paste("mean Psi for non-core:", round(mean(nc$Psi),2)))
+print (paste("mean Psi for core:", round(mean(c$Psi),2), "range", range(c$Psi)[1],"to",range(c$Psi)[2]))
+print (paste("mean Psi for non-core:", round(mean(nc$Psi),2), "range",  range(nc$Psi)[1], "to", range(nc$Psi)[2]))
 print (paste("mean Psi for intermediate:", round(mean(i$Psi),2)))
 print (paste("mean Psi for transient:", round(mean(t$Psi),2)))
 
-print (paste("mean p for core:", round(mean(c$p),2)))
-print (paste("mean p for non-core:", round(mean(nc$p),2)))
+print (paste("mean p for core:", round(mean(c$p),2),  "range", range(c$p)[1], "to",range(c$p)[2]))
+print (paste("mean p for non-core:", round(mean(nc$p),2),  "range", range(nc$p)[1], "to", range(nc$p)[2]))
 print (paste("mean p for intermediate:", round(mean(i$p),2)))
 print (paste("mean p for transient:", round(mean(t$p),2)))
 
-print (paste("mean S for core:", round(mean(c$S),2)))
-print (paste("mean S for non-core:", round(mean(nc$S),2)))
+print (paste("mean S for core:", round(mean(c$S),2),  "range", range(c$S)[1], "to",range(c$S)[2]))
+print (paste("mean S for non-core:", round(mean(nc$S),2),  "range", range(nc$S)[1],"to",range(nc$S)[2]))
 print (paste("mean S for intermediate:", round(mean(i$S),2)))
 print (paste("mean S for transient:", round(mean(t$S),2)))
 
+
+#------------------------ PCA biplot for all the species
 # Standardize the matrix to correct for different units by subtracting the
 # means and dividing by sd
 zscore <- apply(pcadat, 2, function(x) {
@@ -989,5 +930,68 @@ grid.arrange(coregrp, intermedgrp, transgrp, nrow = 1)
 #      xlim = c(0,1), ylim = c(1,6))
 # #littersize vs. distance benchmark
 # plot(distbench, littersize, pch = 19)
-# 
-#   
+
+
+#------------------------------------------------------------------------------------------------ 
+#         Summarize results for granivores only
+#------------------------------------------------------------------------------------------------
+# merge GRANIVORE data for analysis and pca plots 
+mgran = merge(graniv_persist, estimates)
+mgran2 = merge(mgran, species_table, by="species")
+
+keepcols = c("species", "propyrs", "maxabun", "reprod", "bodysize", 
+             "breakpoint", "modal_distance", "oneval", "S", "p", "Psi")
+keepdesc = c("species", "family", "guild", "status", "status2")
+
+pcagraniv = mgran[,names(mgran) %in% keepcols]
+catgraniv = mgran[,names(mgran) %in% keepdesc]
+rownames(pcagraniv) = pcagraniv$species
+pcagraniv = pcagraniv[,-1]
+
+c = mgran[which(mgran$status == "core"),]
+i = mgran[which(mgran$status == "intermediate"),]
+t = mgran[which(mgran$status == "transient"),]
+
+print (paste("median breakpoint for core:", round(median(c$breakpoint),2)))
+print (paste("median breakpoint for intermediate:", round(median(i$breakpoint),2)))
+print (paste("median breakpoint for transient:", round(median(t$breakpoint),2)))
+
+print (paste("mean Psi for core:", round(mean(c$Psi),2)))
+print (paste("mean Psi for intermediate:", round(mean(i$Psi),2)))
+print (paste("mean Psi for transient:", round(mean(t$Psi),2)))
+
+print (paste("mean p for core:", round(mean(c$p),2)))
+print (paste("mean p for intermediate:", round(mean(i$p),2)))
+print (paste("mean p for transient:", round(mean(t$p),2)))
+
+print (paste("mean S for core:", round(mean(c$S),2)))
+print (paste("mean S for intermediate:", round(mean(i$S),2)))
+print (paste("mean S for transient:", round(mean(t$S),2)))
+
+
+
+#------------------------ PCA biplot of species traits and estimates
+
+# Standardize the matrix to correct for different units by subtracting the
+# means and dividing by sd
+zscore <- apply(pcagraniv, 2, function(x) {
+  y <- (x - mean(x))/sd(x)
+  return(y)
+})
+rownames(zscore) <- rownames(pcagraniv)
+
+#run pca analysis
+trait_pc = prcomp(zscore)
+
+#Use ggplot biplot to color by grouped categories
+toCol = catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status"]
+toCol2 =  catgraniv[catgraniv$species %in% rownames(trait_pc$x),"status2"]
+
+#Label species names and clades, circles cover normal distribuiton of groups
+ggbiplot(trait_pc, groups=toCol, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
+
+#Label species names and clades, circles cover normal distribuiton of groups
+ggbiplot(trait_pc, groups=toCol2, labels=rownames(trait_pc$x), label.size = 3, varname.size = 4) + theme_classic() +
+  theme(text = element_text(size=20))
+
