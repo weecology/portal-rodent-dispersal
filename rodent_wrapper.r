@@ -376,17 +376,12 @@ MARK = as.data.frame(MARK[,1:3])
 names(MARK) = c("ch", "freq", "species")
 
 #separate into files based on species
-naomark = MARK[which(MARK[,3]=="NAO"),]
-shmark = MARK[which(MARK[,3]=="SH"),]
-sfmark = MARK[which(MARK[,3]=="SF"),]
-somark = MARK[which(MARK[,3]=="SO"),]
-
-write.table(naomark, file = "mark_datafiles//nao_mark.txt", sep=" ", row.names = F)
-write.table(shmark, file = "mark_datafiles//sh_mark.txt", sep=" ", row.names = F)
-write.table(sfmark, file = "mark_datafiles//sf_mark.txt", sep=" ", row.names = F)
-write.table(somark, file = "mark_datafiles//so_mark.txt", sep=" ", row.names = F)
-
-#write.table(MARK, file = "mark_datafiles//foli_mark.inp", row.names = F, col.names = F, quote = F)
+for (s in spplist){
+  data = MARK[which(MARK[,3] == spplist[s]),]
+  if(nrow(data) > 10){
+    write.table(data, file = paste("mark_datafiles//", spplist[s], "_mark.txt", sep=""), sep=" ", row.names=F)
+  }
+}
 
 
 #-----------------Get MARK capture histories for carnivores - METHOD 1
@@ -417,13 +412,12 @@ MARK = as.data.frame(MARK[,1:3])
 names(MARK) = c("ch", "freq", "species")
 
 #separate into files based on species
-otmark = MARK[which(MARK[,3]=="OT"),]
-olmark = MARK[which(MARK[,3]=="OL"),]
-
-write.table(otmark, file = "mark_datafiles//ot_mark.txt", sep=" ", row.names = F)
-write.table(olmark, file = "mark_datafiles//ol_mark.txt", sep=" ", row.names = F)
-
-#write.table(MARK, file = "mark_datafiles//carn_mark.inp", row.names = F, col.names = F, quote = F)
+for (s in spplist){
+  data = MARK[which(MARK[,3] == spplist[s]),]
+  if(nrow(data) > 10){
+    write.table(data, file = paste("mark_datafiles//", spplist[s], "_mark.txt", sep=""), sep=" ", row.names=F)
+  }
+}
 
 
 #-----------------------------------------------------------------------------------
