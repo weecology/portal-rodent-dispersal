@@ -421,61 +421,6 @@ for (s in spplist){
 
 
 #-----------------------------------------------------------------------------------
-#        Make a table of total capture/recapture and gaps in data for each species
-#-----------------------------------------------------------------------------------
-# this code only uses the most recently generated MARK data table, 
-# so would need to run separately for granivores, folivores, and carnivores 
-spplist = unique(MARK[,3])
-TableDat = data.frame("species"=1, "numindiv"=1, "numindivrecap"=1, "nocaps"=1, "norecaps"=1)
-
-for (i in 1:length(spplist)){
-  
-  #subset species data, for each species in turn
-  spdata = MARK[which(MARK[,2]==spplist[i]),]
-  
-  sp = spplist[i]
-  numindiv = nrow(spdata)
-  
-  #break MARK data out into a list
-  list.all = list()
-  for (row in 1:nrow(spdata)){
-    dat = spdata[row,1]
-    list.all[row] = dat
-  }
-  
-  #make a new matrix with each period as a value
-  out<-t(sapply(list.all,function(x){
-    as.numeric(as.vector(strsplit(x,"")[[1]]))
-  }))
-  
-  #For each row find the sum things that are not 0
-  recaps<-apply(out,1,function(x){
-    length(which(!x %in% 0))-1
-  })
-  
-  numinds_recaps = length(recaps[recaps>0])
-  
-  #count the num of captures per period
-  caps = apply(out,2,function(x) {
-    length(which(!x %in% 0))
-  })
-
-  #count the num of recaptures per period
-  recaps2 = apply(out,2,function(x) {
-    length(which(x %in% 2))
-  })
-  
-  nummos_nocaps = length(caps[caps == 0])
-  nummos_norecaps = length(recaps2[recaps2 == 0])
-  
-  results = c(sp, numindiv, numinds_recaps, nummos_nocaps, nummos_norecaps)
-  TableDat[i,] <- results
-}
-
-print(TableDat)
-
-
-#-----------------------------------------------------------------------------------
 #         Run R MARK analysis
 #           This should run through all the Mark tables and generate output as 
 #           saved .csv files
