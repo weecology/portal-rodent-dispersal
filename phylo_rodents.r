@@ -8,13 +8,14 @@ library(ggplot2)
 library(picante)
 library(PhyloOrchard)
 #if PhyloOrchard not already installed, for mac use the terminal: svn checkout svn://scm.r-forge.r-project.org/svnroot/phyloorchard/
+#                                       for windows use: install.packages("PhyloOrchard", repos="http://R-Forge.R-project.org")
 
 wd = "/Users/sarah/Documents/GitHub/portal-rodent-dispersal"
 setwd(wd)
 load(".Rdata") #load saved Rdata
 
 # read in species trait data from earlier analysis/research/etc.
-traits=read.csv("traits.csv", row.names=1) #comes from mgran in rodent_wrapper
+traits=read.csv("traits.csv", row.names=1) #comes from mall in rodent_wrapper
 
 # get phylo data from the published mammal tree
 data(BinindaEmondsEtAl2007)

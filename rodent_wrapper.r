@@ -616,6 +616,77 @@ lm7 = lm(zmodal~persistence, data.frame(zscore))
 lm8 = lm(fecundity~Psi, data.frame(zscore))
 
 
+#-------------------------------------------------------------------------------------------
+#               PHYLOGENETIC Analyses
+#-------------------------------------------------------------------------------------------
+# get phylo data from the published mammal tree
+data(BinindaEmondsEtAl2007)
+tree = BinindaEmondsEtAl2007[[1]]
+
+# see prune.sample, normally this takes in a siteXspp matrix, have to fool it here
+d <- matrix(nrow = 1, ncol = 21)
+colnames(d) <- c("Dipodomys_merriami", "Dipodomys_ordii", "Dipodomys_spectabilis",
+                 "Chaetodipus_penicillatus", "Chaetodipus_baileyi", "Perognathus_flavus",
+                 "Peromyscus_maniculatus", "Peromyscus_eremicus", "Peromyscus_leucopus",
+                 "Reithrodontomys_megalotis", "Reithrodontomys_montanus", "Reithrodontomys_fulvescens",
+                 "Baiomys_taylori", "Chaetodipus_hispidus", "Chaetodipus_intermedius",
+                 "Sigmodon_hispidus", "Sigmodon_fulviventer", "Sigmodon_ochrognathus",
+                 "Neotoma_albigula", "Onychomys_torridus", "Onychomys_leucogaster")
+
+# prune the tree
+tree.p <- prune.sample(samp=d, phylo=tree)
+plot(tree.p)
+
+#prune again, removing PH, since we don't have enough of this species for analysis
+d <- matrix(nrow = 1, ncol = 20)
+colnames(d) = c("Dipodomys_merriami", "Dipodomys_ordii", "Dipodomys_spectabilis",
+                "Chaetodipus_penicillatus", "Chaetodipus_baileyi", "Perognathus_flavus",
+                "Peromyscus_maniculatus", "Peromyscus_eremicus", "Peromyscus_leucopus",
+                "Reithrodontomys_megalotis", "Reithrodontomys_montanus", "Reithrodontomys_fulvescens",
+                "Baiomys_taylori", "Chaetodipus_intermedius",
+                "Sigmodon_hispidus", "Sigmodon_fulviventer", "Sigmodon_ochrognathus",
+                "Neotoma_albigula", "Onychomys_torridus", "Onychomys_leucogaster")
+tree.p <- prune.sample(samp=d, phylo=tree)
+
+# get distance matrix for all species pairs
+trx <- cophenetic(tree.p)
+
+# Lets use a subset of the traits we are interested in and order by the tree tips
+#TODO: Need to translate the traits into z-scores so they are on the same scale
+keepcols = c("propyrs", "meanabun", "maxabun", "reprod", "bodysize", "breakpoint", "modal_distance", "S", "p", "Psi")
+traitDF = mall[,names(mall) %in% keepcols] 
+traitDF = traitDF[tree.p$tip.label, ] 
+traitDF = traitDF[complete.cases(traitDF),]
+
+# Standardize the matrix to correct for different units by subtracting means and dividing by sd
+zscoret = apply(traitDF, 2, function(x) {
+  y = (x - mean(x))/sd(x)
+  return(y)
+})
+rownames(zscoret) <- rownames(traitDF)
+zscoret = as.data.frame(zscoret)
+
+# make a pairs plot to look at correlation structure of standardized data
+pairs(zscoret[,names(zscoret) %in% c("propyrs", "meanabun", "reprod", "S", "Psi", "breakpoint")], pch = 19,
+      diag.panel=panel.hist, upper.panel=panel.cor)
+
+# the correlation structure expected if traits evolve by Brownian motion 
+# and fit a generalized least squares model assuming this correlation structure.
+bmRodents <- corBrownian(phy=tree.p) 
+
+bm.gls <- gls(meanabun ~ propyrs, correlation = bmRodents, data = zscoret) 
+summary(bm.gls)
+
+bm.gls <- gls(S ~ Psi, correlation = bmRodents, data = zscoret) 
+summary(bm.gls)
+
+bm.gls <- gls(modal_distance ~ propyrs, correlation = bmRodents, data = zscoret) 
+summary(bm.gls)
+
+bm.gls <- gls(reprod ~ Psi, correlation = bmRodents, data = zscoret) 
+summary(bm.gls)
+
+
 #-----------------------------------------FIGURE A3 - Reproduction
 #-------------------------- Reproduction Figures
 pdf("reproductive_events_per_year.pdf")
