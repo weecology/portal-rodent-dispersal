@@ -340,35 +340,12 @@ MARK = as.data.frame(MARK[,1:3])
 names(MARK) = c("ch", "freq", "species")
 
 #separate into files based on species
-domark = MARK[which(MARK[,3]=="DO"),]
-dmmark = MARK[which(MARK[,3]=="DM"),]
-dsmark = MARK[which(MARK[,3]=="DS"),]
-pbmark = MARK[which(MARK[,3]=="PB"),]
-ppmark = MARK[which(MARK[,3]=="PP"),]
-pfmark = MARK[which(MARK[,3]=="PF"),]
-pemark = MARK[which(MARK[,3]=="PE"),]
-pmmark = MARK[which(MARK[,3]=="PM"),]
-rmmark = MARK[which(MARK[,3]=="RM"),]
-transmark = MARK[which(MARK[,3] %in% transientspecies),]
-  transmark[,3] = "TR"
-  levels(transmark[,3]) = "TR"
-transmark2 = MARK[which(MARK[,3] %in% transientspecies2),]
-  transmark2[,3] = "TR2"
-  levels(transmark2[,3]) = "TR2"
-
-write.table(domark, file = "mark_datafiles//do_mark.txt", sep=" ", row.names = F)
-write.table(dmmark, file = "mark_datafiles//dm_mark.txt", sep=" ", row.names = F)
-write.table(dsmark, file = "mark_datafiles//ds_mark.txt", sep=" ", row.names = F)
-write.table(pbmark, file = "mark_datafiles//pb_mark.txt", sep=" ", row.names = F)
-write.table(ppmark, file = "mark_datafiles//pp_mark.txt", sep=" ", row.names = F)
-write.table(pfmark, file = "mark_datafiles//pf_mark.txt", sep=" ", row.names = F)
-write.table(pemark, file = "mark_datafiles//pe_mark.txt", sep=" ", row.names = F)
-write.table(pmmark, file = "mark_datafiles//pm_mark.txt", sep=" ", row.names = F)
-write.table(rmmark, file = "mark_datafiles//rm_mark.txt", sep=" ", row.names = F)
-write.table(transmark, file = "mark_datafiles//trans_mark.txt", sep=" ", row.names = F)
-write.table(transmark2, file = "mark_datafiles//trans_mark2.txt", sep=" ", row.names = F)
-
-#write.table(MARK, file = "mark_datafiles//gran_mark.inp", row.names = F, col.names = F, quote = F)
+for (s in spplist){
+  data = MARK[which(MARK[,3] == spplist[s]),]
+  if(nrow(data) > 10){
+    write.table(data, file = paste("mark_datafiles//", spplist[s], "_mark.txt", sep=""), sep=" ", row.names=F)
+  }
+}
 
 
 #--------------- Get MARK capture histories for folivores - METHOD 1
