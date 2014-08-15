@@ -19,7 +19,7 @@ NOTE: The project and code in this repository is still under development.
 
 **Requirements:** R 2.x, Python 2.7 or higher, Program MARK (http://www.phidot.org/software/mark/) and the files
 containing data and functions specific to this code, `movement_fxns.R`. 
-**R Packages:** `RMark`, `calibrate`, `fields`, `plyr`, `ggmap`, and `ggplot2`
+**R Packages:** `ape`, `calibrate`, `fields`, `geiger`, `ggbiplot`, `ggmap`, `ggplot2`, `gridExtra`, `picante`, `PhyloOrchard`, `plyr`, `reshape2`, `RMark`
 
 The analyses can be replicated by changing the working directory at the top of the file `rodent_wrapper.R` to the 
 location on your computer where you have stored the `.R` and `.csv` files.
