@@ -9,7 +9,11 @@ library(stringr)
 library(plyr)
 library(gridExtra)
 library(ggbiplot)
-library(stringr)
+library(ape)
+library(geiger)
+library(ggplot2)
+library(picante)
+library(PhyloOrchard)
 
 #---------------------------------------------------------------------------------
 #          setup - select wd, import data, source code,  file to collect results
